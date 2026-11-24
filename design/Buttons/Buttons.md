@@ -57,9 +57,11 @@ The default variant of a button is a label with an optional icon positioned eith
 
 Icon-only buttons must always have a label supplied for accessibility reasons. That label is reused for the tooltip.
 
-All icon-only buttons will show a tooltip after 500ms of being hovered by default. This can be made instant, or the tooltip can be hidden entirely in space-constrained situations or where labels are unnecessary.
+All icon-only buttons will show a tooltip after 500ms of being hovered by default. This can be made instant, or the tooltip can be hidden entirely in space-constrained situations or where labels are unnecessary. If an icon-only button is being hovered and is displaying its tooltip, then hover moves to a new icon-only button within 200ms, the tooltip should immediately display on the new button.
 
-If an icon-only button is being hovered and is displaying its tooltip, then hover moves to a new icon-only button within 200ms, the tooltip should immediately display on the new button.
+The position of the tooltip (above or below) should be selectable by the developer, with it defaulting to above. Where the system does not have the room to properly display the tooltip, it should automatically change the position such that the tooltip is visible.
+
+The developer may also choose to disable the tooltip entirely, however the system should place tooltips on icon buttons by default.
 
 ### Row Variant
 
