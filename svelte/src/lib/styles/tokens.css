@@ -71,6 +71,10 @@
 
 	/* Focus indicator: instant in, fades out like hover (Focus.md). */
 	--og-duration-focus-out: 500ms;
+
+	/* Menus: a quick grow-and-fade in, a longer one out (Animations.md). */
+	--og-duration-menu-in: 100ms;
+	--og-duration-menu-out: 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -79,5 +83,7 @@
 		--og-duration-press-out: 0ms;
 		--og-duration-movement: 0ms;
 		--og-duration-focus-out: 0ms;
+		--og-duration-menu-in: 0ms;
+		--og-duration-menu-out: 0ms;
 	}
 }

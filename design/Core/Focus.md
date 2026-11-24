@@ -10,8 +10,8 @@ A focused control shows a **1px Thick Glass border just outside its edge** and a
 
 This is the text input's designed active state, used throughout the system.
 
-1. **Buttons and switches** show it for keyboard (and other non-pointer) focus only, not when focused by clicking or tapping.
-2. **Text inputs** show it whenever they're focused, however focus arrived, because it is their active state. Subtle text inputs show only the outer border.
+1. **Buttons, switches and select inputs** (without typeahead) show it for keyboard (and other non-pointer) focus only, not when focused by clicking or tapping.
+2. **Text inputs**, and select inputs with typeahead, show it whenever they're focused, however focus arrived, because it is their active state. Subtle inputs show only the outer border.
 
 ### Color
 

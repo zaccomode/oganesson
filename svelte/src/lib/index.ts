@@ -7,6 +7,7 @@ export { default as IconButton } from './buttons/IconButton.svelte';
 export { default as RowButton } from './buttons/RowButton.svelte';
 export { default as TextInput } from './inputs/TextInput.svelte';
 export { default as Switch } from './inputs/Switch.svelte';
+export { default as Select } from './inputs/Select.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
 export type {
@@ -15,6 +16,7 @@ export type {
 	ButtonCommonProps,
 	IconComponent
 } from './buttons/types.js';
+export type { SelectOption } from './inputs/select.js';
 export {
 	setOganessonIcons,
 	getOganessonIcons,

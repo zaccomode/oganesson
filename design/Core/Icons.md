@@ -16,4 +16,4 @@ Icons are decorative by default and hidden from assistive technology, since a vi
 
 ## System Icons
 
-Some components draw icons of their own, such as the chevron on a select input or the close button on a sheet modal. These use Lucide by default, and developers can replace them app-wide so an app using another icon library stays consistent.
+Some components draw icons of their own, such as the up-and-down chevron on a select input, the check beside its selected option, or the close button on a sheet modal. These use Lucide by default, and developers can replace them app-wide so an app using another icon library stays consistent.

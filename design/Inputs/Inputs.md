@@ -33,11 +33,31 @@ Developers may choose if a select input has typeahead capability, thus allowing 
 
 _See also: Select Input.sketchframe and Select Input Menu Item.sketchframe_
 
-Where too many items are present in a select input's menu, the dropdown menu should scroll. Developers should be able to select a maximum pixel height, maximum number of items, or by default allow the menu to extend to the full height of the page and scroll once it reaches the top or bottom of the page.
+Where too many items are present in a select input's menu, the dropdown menu should scroll. By default the menu shows up to **five** options and scrolls beyond that; developers can choose a different maximum number of items, or a maximum pixel height instead. Either way, the menu never extends past the top or bottom of the page, and scrolls once it reaches it.
 
 _See also: Select Input Menu Exploration - Scrolling Items.sketchframe_
 
-The default position of the dropdown menu should be selectable by the developer, or beneath the input by default. Where the system does not have sufficient height to display items in the dropdown, it should automatically flip orientation. The minimum height of the dropdown should be configurable by the developer as well, or default to 140px if unset.
+The default position of the dropdown menu should be selectable by the developer, or beneath the input by default. Where the system does not have sufficient height to display items in the dropdown, it should automatically flip orientation. The minimum height of the dropdown should be configurable by the developer as well, or default to 140px if unset: the menu shrinks to fit the space on its side down to this height, and flips to the other side when even that doesn't fit.
+
+### Select Field
+
+The field matches the text input: 28px tall, in the default or subtle style, with an optional 12px icon on the left. On the right is a 12px up-and-down chevron in Dark Secondary, which is a system icon (see _Icons.md_). The placeholder and resting icon use Dark Secondary; the selected option's label uses Dark. The icon turns Dark while the menu is open or the field has keyboard focus.
+
+1. **Without typeahead**, the field is a button. Hover adds a thin glass layer and press a thick glass layer, as on a subtle button, and it shows the focus indicator for keyboard focus only (see _Focus.md_). Clicking it, or pressing Enter, Space or the arrow keys, opens the menu.
+2. **With typeahead**, the field is a text field and follows the text input's states: no press effect, a text cursor, and the focus indicator whenever it's focused. Clicking anywhere in it focuses it and opens the menu. Typing filters the options to those whose label contains the text, ignoring case. When nothing matches, the menu says so in a single Dark Secondary row ("No results" by default). Closing the menu without choosing puts the selected option's label back in the field.
+3. **Disabled** select inputs draw their text and icons in the secondary color and don't open.
+
+### Select Menu
+
+The menu uses the system's elevated Acrylic style (see _Menus.md_) with smooth 12px corners and 4px of padding, 2px from the field. It's at least as wide as the field, and grows to fit options with longer labels. Items are 28px tall and 2px apart.
+
+Each item has a 12px check slot on the left, so labels line up whether or not their option is selected. The selected option shows a check there. Items subscribe to the interaction animations: the item under the pointer, or the one reached with the arrow keys, gains a thin glass layer, and pressing an item a thick glass one. When the menu opens, the selected option (or the first, if there's none) is highlighted, so the arrow keys continue from there. Disabled items are drawn in the secondary color and can't be chosen.
+
+**Empty option:** developers can let users clear a select input. The menu then starts with an empty option, labelled "None" by default, whose label is drawn in Dark Secondary like the placeholder it brings back. Choosing it empties the field, and it holds the check while nothing is selected. With typeahead, it's hidden while the user is filtering.
+
+**Scrolling:** a scrolling menu draws its own scrollbar, a 2px rounded line in Dark at 40% opacity, 4px in from the right edge and inset 12px from the top and bottom. The menu's right padding widens to 8px to make room for it. Whenever there are options hidden above or below, a 20px overflow indicator fades the menu towards white (95% opacity) at that edge to encourage scrolling. These two colors are one-off values for menus, not palette colors.
+
+**Motion:** the menu grows from 90% scale and sharpens from a 4px blur while fading in when it opens, and shrinks back to 90% and blurs while fading out when it closes, scaling from the middle of the edge facing the field: its top edge when it's below the field, its bottom edge when it's above. The entrance takes 100ms (ease-out) and the exit 300ms (the interaction fade-out curve); see _Animations.md — Menu Motion_.
 
 ## Switches
 
