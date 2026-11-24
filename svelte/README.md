@@ -73,7 +73,7 @@ Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms
 />
 ```
 
-`<Select>` shows up to `maxItems` (5) options before scrolling, or set `maxHeight` in pixels. The menu opens on `side` (`bottom` by default) and flips when there's less than `minHeight` (140px) of room. Add `typeahead` to let people type to filter the options.
+`<Select>` shows up to `maxItems` (5) options before scrolling, or set `maxHeight` in pixels. The menu opens on `side` (`bottom` by default) and flips when there's less than `minHeight` (140px) of room. Add `typeahead` to let people type to filter the options. Add `allowEmpty` to put a "None" option at the top that clears the value back to `''` (rename it with `emptyOptionLabel`).
 
 ### Tokens
 

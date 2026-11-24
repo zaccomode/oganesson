@@ -49,6 +49,10 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		typeahead?: boolean;
 		/** Shown in the menu when typeahead filtering leaves no options. */
 		emptyText?: string;
+		/** Add an option at the top of the menu that clears the selection back to empty. */
+		allowEmpty?: boolean;
+		/** The label of the empty option. */
+		emptyOptionLabel?: string;
 		/** Where the menu opens. It flips to the other side when there isn't room. */
 		side?: 'bottom' | 'top';
 		/** The least height the menu needs before it flips to the other side. */
@@ -74,6 +78,8 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		icon,
 		typeahead = false,
 		emptyText = 'No results',
+		allowEmpty = false,
+		emptyOptionLabel = 'None',
 		side = 'bottom',
 		minHeight = 140,
 		maxItems = 5,
@@ -122,6 +128,15 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		if (!typeahead || !needle) return items;
 		return items.filter((item) => item.label.toLowerCase().includes(needle));
 	});
+
+	/** The empty option, which sets the value back to `''`. */
+	const emptyOption = $derived<SelectOption>({ value: '', label: emptyOptionLabel });
+
+	/** What Bits UI knows about, for labels and keyboard typeahead. */
+	const allItems = $derived(allowEmpty ? [emptyOption, ...items] : items);
+
+	/** What the menu shows. The empty option is hidden while filtering, since it matches nothing. */
+	const options = $derived(allowEmpty && !query.trim() ? [emptyOption, ...visible] : visible);
 
 	function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
 		inputText = query = event.currentTarget.value;
@@ -272,12 +287,13 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 						bind:this={list}
 						bind:clientWidth={listWidth}
 					>
-						{#each visible as item (item.value)}
+						{#each options as item (item.value)}
 							<SelectPrimitive.Item
 								class="og-select-item og-label"
 								value={item.value}
 								label={item.label}
 								disabled={item.disabled}
+								data-empty={item.value === '' ? '' : undefined}
 							>
 								{#snippet children({ selected: isSelected })}
 									<span class="og-select-check">
@@ -326,7 +342,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 			type="single"
 			bind:value
 			bind:open
-			{items}
+			items={allItems}
 			{disabled}
 			{required}
 			{name}
@@ -341,7 +357,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 			type="single"
 			bind:value
 			bind:open
-			{items}
+			items={allItems}
 			{disabled}
 			{required}
 			{name}
@@ -624,6 +640,11 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		min-width: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	/* The empty option reads like the placeholder it brings back. */
+	:global(.og-select-item[data-empty] .og-select-item-label) {
+		color: var(--og-color-dark-secondary);
 	}
 
 	:global(.og-select-empty) {

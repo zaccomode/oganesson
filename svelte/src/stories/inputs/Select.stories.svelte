@@ -61,6 +61,7 @@
 	const picked = $state({ value: 'second' });
 	const country = $state({ value: '' });
 	const keyboard = $state({ value: '' });
+	const optional = $state({ value: 'second', country: 'sweden' });
 
 	/** The open menu, which is portalled to the end of the document. */
 	const menu = () => document.querySelector<HTMLElement>('.og-select-menu');
@@ -395,6 +396,82 @@
 			placeholder="Select an option..."
 			aria-label="Keyboard"
 		/>
+	</div>
+</Story>
+
+<Story
+	name="Allow empty"
+	asChild
+	play={async ({ canvasElement }) => {
+		const [plain, search] = canvasElement.querySelectorAll<HTMLElement>('.og-select-field');
+		const value = () => plain.querySelector('.og-select-value')!;
+
+		// The empty option comes first, labelled like a placeholder.
+		await userEvent.click(plain);
+		await waitFor(() => expect(menu()).not.toBeNull());
+		const none = items()[0];
+		await expect(none.textContent?.trim()).toBe('No option');
+		const label = none.querySelector('.og-select-item-label')!;
+		await expect(sameColor(getComputedStyle(label).color, colors['dark-secondary'])).toBe(true);
+		await expect(none.querySelector('.og-select-check svg')).toBeNull();
+
+		// Choosing it clears the value, and the placeholder comes back.
+		await userEvent.click(none);
+		await waitFor(() => expect(menu()).toBeNull());
+		await expect(optional.value).toBe('');
+		await expect(value().textContent?.trim()).toBe('Select an option...');
+		await expect(value().hasAttribute('data-placeholder')).toBe(true);
+
+		// With nothing selected, the empty option holds the check.
+		await userEvent.click(plain);
+		await waitFor(() => expect(menu()).not.toBeNull());
+		await expect(items()[0].querySelector('.og-select-check svg')).not.toBeNull();
+		await closeMenu();
+
+		// With typeahead, it's there until the user starts typing, and clears the field.
+		const input = search.querySelector<HTMLInputElement>('input')!;
+		await userEvent.click(input);
+		await waitFor(() => expect(menu()).not.toBeNull());
+		await expect(items()[0].textContent?.trim()).toBe('None');
+		await userEvent.clear(input);
+		await userEvent.type(input, 'sw');
+		await waitFor(() =>
+			expect(items().map((item) => item.textContent?.trim())).toEqual(['Sweden', 'Switzerland'])
+		);
+		await userEvent.clear(input);
+		await waitFor(() => expect(items()[0].textContent?.trim()).toBe('None'));
+		await userEvent.click(items()[0]);
+		await waitFor(() => expect(menu()).toBeNull());
+		await expect(optional.country).toBe('');
+		await expect(input.value).toBe('');
+		input.blur();
+
+		optional.value = 'second';
+		optional.country = 'sweden';
+	}}
+>
+	<div class="row stage">
+		<div class="field">
+			<Select
+				allowEmpty
+				emptyOptionLabel="No option"
+				bind:value={optional.value}
+				items={options}
+				placeholder="Select an option..."
+				aria-label="Optional option"
+			/>
+		</div>
+		<div class="field">
+			<Select
+				allowEmpty
+				typeahead
+				bind:value={optional.country}
+				items={countries}
+				icon={Globe}
+				placeholder="Search countries..."
+				aria-label="Optional country"
+			/>
+		</div>
 	</div>
 </Story>
 
