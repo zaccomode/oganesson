@@ -37,7 +37,7 @@ The press effect is drawn as a separate layer on top of the element's current ba
 1. **Subtle surfaces** use a thick glass layer, darkening the surface.
 2. **Prominent buttons** use a lightening layer over their gradient.
 
-Disabled surfaces don't show the press effect.
+Disabled surfaces don't show the press effect. Neither do text inputs: pressing one focuses it, and its active state shows that instead (see _Inputs.md_).
 
 ### Reduced Motion
 

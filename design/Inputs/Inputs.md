@@ -20,7 +20,7 @@ _See also: Text Input.sketchframe_
 ### Text Input States
 
 1. **Active:** while focused, a text input shows the focus indicator (see _Focus.md_). Subtle inputs show only its outer border. The icon switches from the secondary color to the solid Dark foreground.
-2. **Hover and press:** text inputs subscribe to the interaction animations (see _Animations.md_). Hover adds a thin glass layer, and pressing (clicking into the field) adds a thick glass layer, on top of the input's own background.
+2. **Hover:** text inputs subscribe to the interaction animations (see _Animations.md_), so hover adds a thin glass layer on top of the input's own background. Text inputs have **no press effect**: clicking into a field focuses it, which the active state already shows.
 3. **Disabled:** the text and icon are drawn in the secondary color, and the input doesn't respond to hover or press. Its background is unchanged.
 
 Placeholder text and the resting icon use Dark Secondary; entered text uses Dark. Clicking anywhere in the input, including its padding and icon, focuses it.

@@ -101,7 +101,9 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 		cursor: text;
 		--og-icon-size: 12px;
 		--og-surface-hover: var(--og-color-dark-thin-glass);
-		--og-surface-press: var(--og-color-dark-thick-glass);
+		/* No press layer: clicking into a field focuses it, which the focus
+		   indicator already shows (Inputs.md). */
+		--og-surface-press: transparent;
 	}
 
 	.og-text-input[data-appearance='default'] > .og-text-input-field {

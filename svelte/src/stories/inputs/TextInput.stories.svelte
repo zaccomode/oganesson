@@ -65,6 +65,11 @@
 		).toBe(true);
 
 		// Focus shows the focus border, with the inner line only on the default style.
+		// No press layer: focusing the field is feedback enough.
+		await expect(getComputedStyle(field('default'), '::after').backgroundColor).toBe(
+			'rgba(0, 0, 0, 0)'
+		);
+
 		await expect(ringOpacity(root('default-icon'))).toBe('0');
 		await userEvent.click(input);
 		await expect(ringOpacity(root('default-icon'))).toBe('1');
