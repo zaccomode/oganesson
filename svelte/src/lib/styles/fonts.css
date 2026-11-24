@@ -1,0 +1,8 @@
+/*
+ * Self-hosted fonts, limited to the weights the spec uses.
+ * Included automatically when you import from 'oganesson-svelte'.
+ */
+@import '@fontsource/instrument-sans/400.css';
+@import '@fontsource/instrument-sans/500.css';
+@import '@fontsource/instrument-sans/600.css';
+@import '@fontsource/geist-mono/400.css';

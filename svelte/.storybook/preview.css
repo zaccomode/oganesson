@@ -1,0 +1,6 @@
+/* Storybook canvas defaults, so stories render like an Oganesson app. */
+body {
+	font-family: var(--og-font-sans);
+	color: var(--og-color-dark);
+	-webkit-font-smoothing: antialiased;
+}

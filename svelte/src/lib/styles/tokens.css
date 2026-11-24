@@ -1,0 +1,70 @@
+/*
+ * Oganesson design tokens.
+ *
+ * Source of truth: design/Core/*.md and the .sketchframe files beside them.
+ * Mirrored for JavaScript in src/lib/tokens.ts (a unit test keeps the two in step).
+ * Light mode only; dark mode is still being designed.
+ */
+
+:root {
+	/* ── Colours ─────────────────────────────────────────────────────────────
+	 * Each colour comes in four opacity steps so surfaces can be layered:
+	 * solid, secondary (60%), thick glass and thin glass. */
+	--og-color-dark: #21252b;
+	--og-color-dark-secondary: rgba(33, 37, 43, 0.6);
+	--og-color-dark-thick-glass: rgba(33, 37, 43, 0.141);
+	--og-color-dark-thin-glass: rgba(33, 37, 43, 0.059);
+	/* Gradient stops for prominent buttons. */
+	--og-color-dark-bright: #3f434a;
+	--og-color-dark-deep: #090a0c;
+
+	--og-color-white: #ffffff;
+	--og-color-white-secondary: rgba(255, 255, 255, 0.6);
+	--og-color-white-thick-glass: rgba(255, 255, 255, 0.141);
+	--og-color-white-thin-glass: rgba(255, 255, 255, 0.059);
+
+	--og-color-primary: #5155ef;
+	--og-color-primary-secondary: rgba(81, 85, 239, 0.6);
+	--og-color-primary-thick-glass: rgba(81, 85, 239, 0.2);
+	--og-color-primary-thin-glass: rgba(81, 85, 239, 0.102);
+
+	--og-color-danger: #ce1e0c;
+	--og-color-danger-secondary: rgba(206, 30, 12, 0.6);
+	--og-color-danger-thick-glass: rgba(206, 30, 12, 0.141);
+	--og-color-danger-thin-glass: rgba(206, 30, 12, 0.078);
+
+	/* ── Backgrounds ───────────────────────────────────────────────────────── */
+	--og-bg-1: #f2f4f4;
+	--og-bg-acrylic: rgba(255, 255, 255, 0.702);
+
+	/* ── Typography ────────────────────────────────────────────────────────── */
+	--og-font-sans:
+		'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--og-font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+	/* ── Shape ─────────────────────────────────────────────────────────────── */
+	--og-radius: 8px;
+
+	/* ── Icons ─────────────────────────────────────────────────────────────── */
+	--og-icon-size: 14px;
+
+	/* ── Elevation ─────────────────────────────────────────────────────────── */
+	--og-shadow-elevated:
+		0px 9px 20px 0px rgba(0, 0, 0, 0.102), 0px 37px 37px 0px rgba(0, 0, 0, 0.09),
+		0px 83px 50px 0px rgba(0, 0, 0, 0.051);
+	--og-acrylic-highlight: inset 0px 1px 6px 0px #ffffff;
+	--og-blur-menu: 10px;
+	--og-blur-dialog: 24px;
+
+	/* ── Motion (Animations.md: Interaction Animations) ────────────────────── */
+	--og-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--og-duration-hover-out: 500ms;
+	--og-duration-press-out: 1000ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--og-duration-hover-out: 0ms;
+		--og-duration-press-out: 0ms;
+	}
+}

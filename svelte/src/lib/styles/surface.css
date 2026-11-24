@@ -1,0 +1,67 @@
+/*
+ * Interaction surface (design/Core/Animations.md: Interaction Animations).
+ *
+ * The shared hover/press behaviour for subtle buttons, inputs and menu items.
+ * Two layers sit between the element's own background and its content:
+ *
+ *   ::before  hover layer, one step of glass
+ *   ::after   press layer
+ *
+ * Because they are separate layers they stack: an active surface (its own
+ * background is thin glass) gains another thin-glass layer on hover, and the
+ * press layer stacks on top of both. Layers appear instantly and fade out
+ * slowly. Durations become 0ms under prefers-reduced-motion (see tokens.css).
+ *
+ * Customise per component with:
+ *   --og-surface-bg            resting background (default transparent)
+ *   --og-surface-bg-active     background when [data-og-active] (default thin glass)
+ *   --og-surface-hover         hover layer colour (default dark thin glass)
+ *   --og-surface-press         press layer colour (default dark thick glass)
+ *
+ * Disabled surfaces (:disabled, [aria-disabled="true"], [data-disabled]) don't respond.
+ */
+
+.og-surface {
+	position: relative;
+	isolation: isolate;
+	background-color: var(--og-surface-bg, transparent);
+	border-radius: var(--og-radius);
+}
+
+.og-surface[data-og-active] {
+	background-color: var(--og-surface-bg-active, var(--og-color-dark-thin-glass));
+}
+
+.og-surface::before,
+.og-surface::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+}
+
+.og-surface::before {
+	background-color: var(--og-surface-hover, var(--og-color-dark-thin-glass));
+	transition: opacity var(--og-duration-hover-out) var(--og-ease-out);
+}
+
+.og-surface::after {
+	background-color: var(--og-surface-press, var(--og-color-dark-thick-glass));
+	transition: opacity var(--og-duration-press-out) var(--og-ease-out);
+}
+
+/* Only devices that can really hover, so touch screens don't get stuck hover. */
+@media (hover: hover) {
+	.og-surface:hover:not(:disabled, [aria-disabled='true'], [data-disabled])::before {
+		opacity: 1;
+		transition-duration: 0s;
+	}
+}
+
+.og-surface:active:not(:disabled, [aria-disabled='true'], [data-disabled])::after {
+	opacity: 1;
+	transition-duration: 0s;
+}
