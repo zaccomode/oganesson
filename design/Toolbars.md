@@ -12,3 +12,5 @@ Toolbars come in two sizes for different situations:
 
 1. **Regular/default:** best used in most circumstances, regular toolbars are the standard appearance for a toolbar.
 2. **Large:** used to emphasise the controls within the toolbar.
+
+Toolbars over scrolling content should typically include a scroll edge effect behind them. See Scroll Edge Effect.md for more details.
