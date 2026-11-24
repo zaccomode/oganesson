@@ -160,6 +160,54 @@
 </Story>
 
 <Story
+	name="Focus"
+	asChild
+	play={async ({ canvasElement }) => {
+		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const expected = {
+			dark: ['dark-thick-glass', 'dark-secondary'],
+			primary: ['primary-thick-glass', 'primary-secondary'],
+			danger: ['danger-thick-glass', 'danger-secondary'],
+			prominent: ['dark-thick-glass', 'dark-secondary']
+		} as const;
+
+		(document.activeElement as HTMLElement | null)?.blur();
+		for (const [name, [outer, inner]] of Object.entries(expected)) {
+			const frame = canvasElement.querySelector(`[data-case="${name}"] .og-button-frame`)!;
+			const ring = frame.querySelector<SVGElement>('.og-focus-ring')!;
+
+			// Keyboard focus shows the indicator instantly, in the colorway's colours.
+			await userEvent.tab();
+			await expect(document.activeElement).toBe(frame.querySelector('.og-button'));
+			await expect(getComputedStyle(ring).transitionDuration).toBe('0s');
+			await expect(getComputedStyle(ring).opacity).toBe('1');
+			const stroke = (part: string) =>
+				getComputedStyle(ring.querySelector(`.og-focus-ring-${part}`)!).stroke;
+			await expect(sameColor(stroke('outer'), colors[outer])).toBe(true);
+			await expect(sameColor(stroke('inner'), colors[inner])).toBe(true);
+		}
+
+		// Leaving focus fades it out slowly.
+		(document.activeElement as HTMLElement).blur();
+		const last = canvasElement.querySelector<SVGElement>('[data-case="prominent"] .og-focus-ring')!;
+		await expect(getComputedStyle(last).transitionDuration).toBe(reduced ? '0s' : '0.5s');
+	}}
+>
+	<div class="column">
+		<Text variant="small-label">
+			Press Tab to move through the buttons (Option-Tab in Safari). The indicator takes the button's
+			colorway, appears instantly and fades out over 500ms.
+		</Text>
+		<div class="row">
+			{#each colorways as colorway (colorway)}
+				<div data-case={colorway}><Button {colorway}>Oganesson</Button></div>
+			{/each}
+			<div data-case="prominent"><Button appearance="prominent">Oganesson</Button></div>
+		</div>
+	</div>
+</Story>
+
+<Story
 	name="Link"
 	asChild
 	play={async ({ canvasElement }) => {

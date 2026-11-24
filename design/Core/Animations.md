@@ -14,6 +14,7 @@ Movement, such as a prominent button rising on hover, is not an interaction anim
 | ----------- | ------- | ------ |
 | Hover       | Instant | 500ms  |
 | Press       | Instant | 1000ms |
+| Focus       | Instant | 500ms  |
 
 All fade-outs use the easing curve `cubic-bezier(0.16, 1, 0.3, 1)`, a strong ease-out that moves most of the way quickly and then settles gently. Fade-ins are instant, so no easing applies to them.
 
@@ -38,6 +39,10 @@ The press effect is drawn as a separate layer on top of the element's current ba
 2. **Prominent buttons** use a lightening layer over their gradient.
 
 Disabled surfaces don't show the press effect. Neither do text inputs: pressing one focuses it, and its active state shows that instead (see _Inputs.md_).
+
+### Focus
+
+The focus indicator follows the same pattern: it appears instantly when a control gains focus and fades out over 500ms when focus leaves (see _Focus.md_).
 
 ### Reduced Motion
 

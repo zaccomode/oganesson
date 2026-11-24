@@ -91,7 +91,7 @@ Disabled buttons don't respond to hover or press and show no tooltip. Subtle but
 
 ### Focus
 
-When a button receives keyboard focus, it shows the standard focus ring (see _Focus.md_). Focus from a pointer press shows no ring.
+When a button receives keyboard focus, it shows the standard focus indicator (see _Focus.md_). Focus from a pointer press shows no indicator. Subtle Primary and Danger buttons draw it in their colorway (Thick Glass outside, Secondary inside). Dark and prominent buttons use the dark indicator.
 
 ---
 

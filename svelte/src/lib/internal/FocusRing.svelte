@@ -7,8 +7,14 @@ sibling of the control, because the control is clipped to its squircle and
 CSS borders and outlines would be cut off.
 
 Place it inside a `position: relative` element exactly the size of the control
-and pass that size in. It's hidden by default; show it from CSS with
-`opacity: 1` (e.g. on `:focus-visible` or `:focus-within`).
+and pass that size in. It's hidden by default and fades out over
+`--og-duration-focus-out`. Show it from CSS (e.g. on `:focus-visible` or
+`:focus-within`) instantly:
+
+    opacity: 1;
+    transition-duration: 0s;
+
+Its colours come from `--og-focus-outer-color` and `--og-focus-inner-color`.
 -->
 <script lang="ts">
 	import { generatePath } from '@lisse/core';
@@ -69,6 +75,7 @@ and pass that size in. It's hidden by default; show it from CSS with
 		overflow: visible;
 		pointer-events: none;
 		opacity: 0;
+		transition: opacity var(--og-duration-focus-out) var(--og-ease-out);
 	}
 
 	path {

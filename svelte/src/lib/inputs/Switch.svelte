@@ -55,6 +55,7 @@ lists of options or where the state may be indeterminate.
 
 	.og-switch:has(> :global(.og-switch-track:focus-visible)) > :global(.og-focus-ring) {
 		opacity: 1;
+		transition-duration: 0s;
 	}
 
 	/* Switch.sketchframe: a 52×24 pill with 4px inset and a 24×16 pill thumb. */

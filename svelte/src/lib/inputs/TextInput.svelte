@@ -86,6 +86,7 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 
 	.og-text-input:focus-within > :global(.og-focus-ring) {
 		opacity: 1;
+		transition-duration: 0s;
 	}
 
 	.og-text-input-field {
