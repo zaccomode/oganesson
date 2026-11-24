@@ -21,12 +21,14 @@ The same timing applies to both background and foreground changes, so an element
 
 ### Hover
 
-When hovered, a subtle surface's background steps up one glass level:
+When hovered, a subtle surface gains a thin glass layer on top of its current background, so hover stacks the same way press does (see _Buttons.md — Subtle Style_ and _Subtle Button State Exploration.sketchframe_):
 
-1. **Inactive surfaces** go from transparent to thin glass.
-2. **Active surfaces** go from thin glass to thick glass.
+1. **Inactive surfaces** go from transparent to one layer of thin glass.
+2. **Active surfaces**, whose background is already thin glass, gain a second thin glass layer on top.
 
-When hover ends, the background fades back over 500ms. Disabled surfaces don't respond to hover.
+When hover ends, the layer fades out over 500ms. Disabled surfaces don't respond to hover.
+
+Hover effects only apply on devices with a pointer that can hover. On touch screens, a tap shows the press effect alone, so no hover state is left behind after the finger lifts.
 
 ### Press
 
