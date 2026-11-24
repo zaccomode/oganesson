@@ -11,8 +11,6 @@ export const colors = {
 	'dark-secondary': 'rgba(33, 37, 43, 0.6)',
 	'dark-thick-glass': 'rgba(33, 37, 43, 0.141)',
 	'dark-thin-glass': 'rgba(33, 37, 43, 0.059)',
-	'dark-bright': '#3f434a',
-	'dark-deep': '#090a0c',
 
 	white: '#ffffff',
 	'white-secondary': 'rgba(255, 255, 255, 0.6)',

@@ -19,16 +19,7 @@ Each color comes in four steps. The solid step is the color itself; the others a
 2. **Secondary** is used for secondary text, such as small labels, subtitles and captions.
 3. **Thick Glass** and **Thin Glass** are used for surface backgrounds and the hover and press layers described in _Animations.md_.
 
-### Gradient Stops
-
-Two further shades of Dark are used only as the gradient stops of prominent buttons (see _Buttons.md — Prominent Style_):
-
-| Name        | Value     |
-| ----------- | --------- |
-| Dark Bright | `#3f434a` |
-| Dark Deep   | `#090a0c` |
-
-These are defined in _Buttons-Button (Prominent).sketchframe_ but are not yet in _Colors.sketchframe_.
+These are the only paletted colors. A few components use one-off values specific to them (for example, the prominent button's black-gray gradient); those are documented with the component, not here.
 
 ## Backgrounds
 

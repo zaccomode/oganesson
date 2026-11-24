@@ -14,9 +14,6 @@
 	--og-color-dark-secondary: rgba(33, 37, 43, 0.6);
 	--og-color-dark-thick-glass: rgba(33, 37, 43, 0.141);
 	--og-color-dark-thin-glass: rgba(33, 37, 43, 0.059);
-	/* Gradient stops for prominent buttons. */
-	--og-color-dark-bright: #3f434a;
-	--og-color-dark-deep: #090a0c;
 
 	--og-color-white: #ffffff;
 	--og-color-white-secondary: rgba(255, 255, 255, 0.6);

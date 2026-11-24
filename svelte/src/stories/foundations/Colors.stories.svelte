@@ -3,7 +3,7 @@
 	import { expect } from 'storybook/test';
 	import { Text, squircle } from '#lib';
 	import { sameColor } from '../color.js';
-	import { backgrounds, colors, type ColorToken } from '#lib/tokens.js';
+	import { backgrounds, colors } from '#lib/tokens.js';
 
 	const { Story } = defineMeta({
 		title: 'Foundations/Colors',
@@ -66,19 +66,12 @@
 				<Text variant="subtitle" as="h2">{family}</Text>
 				<div class="row">
 					{#each steps as step (step)}
-						{@const name = `${family}${step}` as ColorToken}
+						{@const name = `${family}${step}` as const}
 						{@render swatch(name, colors[name], `--og-color-${name}`)}
 					{/each}
 				</div>
 			</section>
 		{/each}
-		<section>
-			<Text variant="subtitle" as="h2">Gradient stops</Text>
-			<div class="row">
-				{@render swatch('dark-bright', colors['dark-bright'], '--og-color-dark-bright')}
-				{@render swatch('dark-deep', colors['dark-deep'], '--og-color-dark-deep')}
-			</div>
-		</section>
 	</div>
 </Story>
 
