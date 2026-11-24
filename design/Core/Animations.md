@@ -47,4 +47,4 @@ When the user has requested reduced motion, every duration is zero: colours chan
 
 1. **Subtle buttons**, in all variants (default, icon, row).
 2. **Prominent buttons**, for their background only. Their raise and push-down movement is specified separately.
-3. **Inputs**, such as the text input and the select input.
+3. **Inputs**, such as the text input, the select input and the switch (whose thumb slide uses movement timing).
