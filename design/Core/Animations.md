@@ -57,4 +57,4 @@ When the user has requested reduced motion, every duration is zero: colours chan
 
 ## Menu Motion
 
-Select input menus grow from 90% scale while fading in when they open, and shrink back to 90% while fading out when they close. Both use movement timing (150ms ease-out each way), and the menu grows out of the corner nearest the control that opened it (see _Inputs.md — Select Menu_).
+Select input menus grow from 90% scale and sharpen from a 4px blur while fading in when they open, and shrink back to 90% and blur back to 4px while fading out when they close, scaling from the middle of the edge facing the control: the top edge when the menu is below it, the bottom edge when it's above. The entrance takes **100ms** with `ease-out` (`cubic-bezier(0, 0, 0.58, 1)`), the movement curve, and the exit **300ms** with the interaction fade-out curve `cubic-bezier(0.16, 1, 0.3, 1)`. The quick entrance keeps opening a menu feeling immediate; the exit moves most of the way at once, so the menu gets out of the way (see _Inputs.md — Select Menu_).

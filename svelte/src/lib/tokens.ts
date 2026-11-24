@@ -63,5 +63,8 @@ export const motion = {
 	movementMs: 150,
 	easeMovement: 'ease-out',
 	/** The focus indicator appears instantly and fades out over this. */
-	focusOutMs: 500
+	focusOutMs: 500,
+	/** Menus grow and fade in quickly, and out more slowly. */
+	menuInMs: 100,
+	menuOutMs: 300
 } as const;

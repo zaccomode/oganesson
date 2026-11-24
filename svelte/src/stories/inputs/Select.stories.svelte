@@ -185,6 +185,13 @@
 		await expect(sameColor(layer.backgroundColor, colors['dark-thin-glass'])).toBe(true);
 		await expect(layer.opacity).toBe('1');
 
+		// Below the field, the menu grows from the middle of its top edge, over 100ms.
+		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const motion = getComputedStyle(menu()!);
+		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s, 0s' : '0.1s, 0.1s, 0.1s');
+		const size = menu()!.getBoundingClientRect();
+		await expect(motion.transformOrigin).toBe(`${size.width / 2}px 0px`);
+
 		// Choosing an option selects it and closes the menu.
 		await userEvent.click(items()[2]);
 		await waitFor(() => expect(menu()).toBeNull());
@@ -268,6 +275,13 @@
 			expect(
 				Math.round(trigger.getBoundingClientRect().top - menu()!.getBoundingClientRect().bottom)
 			).toBe(2)
+		);
+
+		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		// Above the field, it grows from the middle of its bottom edge.
+		const size = menu()!.getBoundingClientRect();
+		await expect(getComputedStyle(menu()!).transformOrigin).toBe(
+			`${size.width / 2}px ${size.height}px`
 		);
 		await closeMenu();
 	}}

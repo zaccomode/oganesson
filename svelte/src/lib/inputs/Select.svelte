@@ -487,17 +487,34 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		);
 		border-radius: 12px;
 		box-shadow: var(--og-shadow-elevated);
-		transform-origin: var(--bits-floating-transform-origin);
+		/* Grows out of the edge facing the field, centred along it. The open state's
+		   transition is the one that runs on entrance. */
+		transform-origin: top center;
 		transition:
-			opacity var(--og-duration-movement) var(--og-ease-movement),
-			scale var(--og-duration-movement) var(--og-ease-movement);
+			opacity var(--og-duration-menu-in) var(--og-ease-movement),
+			scale var(--og-duration-menu-in) var(--og-ease-movement),
+			filter var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 
-	/* Grows from 90% and fades in on open; shrinks back and fades out on close. */
+	/* Above the field (opened or flipped there), it grows from its bottom edge. */
+	:global(.og-select-menu[data-side='top']) {
+		transform-origin: bottom center;
+	}
+
+	/* Grows from 90% and sharpens from a 4px blur while fading in on open; the
+	   reverse on close. */
 	:global(.og-select-menu[data-starting-style]),
 	:global(.og-select-menu[data-ending-style]) {
 		opacity: 0;
 		scale: 0.9;
+		filter: blur(4px);
+	}
+
+	/* Bits UI applies this while closing, so its transition runs on exit. The exit
+	   uses the snappier interaction curve. */
+	:global(.og-select-menu[data-ending-style]) {
+		transition-duration: var(--og-duration-menu-out);
+		transition-timing-function: var(--og-ease-out);
 	}
 
 	:global(.og-select-menu-surface) {
