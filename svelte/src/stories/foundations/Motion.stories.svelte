@@ -25,6 +25,7 @@
 		const [plain, active, disabled] = canvasElement.querySelectorAll<HTMLElement>('.og-surface');
 		const hover = getComputedStyle(plain, '::before');
 		const press = getComputedStyle(plain, '::after');
+		const label = getComputedStyle(plain.firstElementChild!);
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 		await expect(hover.opacity).toBe('0');
@@ -32,6 +33,10 @@
 		await expect(hover.transitionDuration).toBe(reduced ? '0s' : '0.5s');
 		await expect(sameColor(press.backgroundColor, colors['dark-thick-glass'])).toBe(true);
 		await expect(press.transitionDuration).toBe(reduced ? '0s' : '1s');
+
+		// Layers stack above the surface's own background and below its content, with
+		// no negative z-index (Safari paints those under an element's background).
+		await expect([hover.zIndex, press.zIndex, label.zIndex]).toEqual(['0', '0', '1']);
 
 		await expect(getComputedStyle(plain).backgroundColor).toBe('rgba(0, 0, 0, 0)');
 		await expect(
@@ -41,9 +46,11 @@
 	}}
 >
 	<div class="demo">
-		<button class="og-surface og-label" {@attach squircle()}>Hover or press me</button>
-		<button class="og-surface og-label" data-og-active {@attach squircle()}>Active</button>
-		<button class="og-surface og-label" disabled {@attach squircle()}>Disabled</button>
+		<button class="og-surface og-label" {@attach squircle()}><span>Hover or press me</span></button>
+		<button class="og-surface og-label" data-og-active {@attach squircle()}>
+			<span>Active</span>
+		</button>
+		<button class="og-surface og-label" disabled {@attach squircle()}><span>Disabled</span></button>
 	</div>
 	<Text variant="small-label">
 		Move the pointer off a surface to see the slow fade; press and release to see the longer press
