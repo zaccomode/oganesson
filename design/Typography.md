@@ -12,6 +12,10 @@ Large titles are designed largely for stylistic choice: they are impractically l
 
 The standard title for a page, typically equivalent to a `h1`. Like with `h1`, there should only be one standard title visible on a page or modal at a time.
 
+## Second-Tier Title
+
+A smaller title for a page, functionally equivalent to a `h2`. Many second-tier titles may exist on one page.
+
 ## Label
 
 The label text style is used for paragraphs, labels and placeholders across applications. It is the most common form of text style in Oganesson.
