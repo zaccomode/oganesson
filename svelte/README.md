@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces) and buttons. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input and the switch. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -43,6 +43,22 @@ To load only the styles (for example in a page with no Oganesson components), im
 ```
 
 Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms to appear, then immediately when moving to another button within 500ms.
+
+### Inputs
+
+```svelte
+<script>
+	import { TextInput, Switch } from 'oganesson-svelte';
+	import { Search } from '@lucide/svelte';
+	let query = $state('');
+	let notify = $state(false);
+</script>
+
+<TextInput bind:value={query} icon={Search} placeholder="Search items..." aria-label="Search" />
+
+<label for="notify">Notifications</label>
+<Switch id="notify" bind:checked={notify} />
+```
 
 ### Tokens
 

@@ -61,5 +61,7 @@ export const motion = {
 	pressOutMs: 1000,
 	/** Movement such as a prominent button's raise: the same both ways. */
 	movementMs: 150,
-	easeMovement: 'ease-out'
+	easeMovement: 'ease-out',
+	/** The focus indicator appears instantly and fades out over this. */
+	focusOutMs: 500
 } as const;

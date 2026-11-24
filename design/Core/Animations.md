@@ -14,6 +14,7 @@ Movement, such as a prominent button rising on hover, is not an interaction anim
 | ----------- | ------- | ------ |
 | Hover       | Instant | 500ms  |
 | Press       | Instant | 1000ms |
+| Focus       | Instant | 500ms  |
 
 All fade-outs use the easing curve `cubic-bezier(0.16, 1, 0.3, 1)`, a strong ease-out that moves most of the way quickly and then settles gently. Fade-ins are instant, so no easing applies to them.
 
@@ -37,7 +38,11 @@ The press effect is drawn as a separate layer on top of the element's current ba
 1. **Subtle surfaces** use a thick glass layer, darkening the surface.
 2. **Prominent buttons** use a lightening layer over their gradient.
 
-Disabled surfaces don't show the press effect.
+Disabled surfaces don't show the press effect. Neither do text inputs: pressing one focuses it, and its active state shows that instead (see _Inputs.md_).
+
+### Focus
+
+The focus indicator follows the same pattern: it appears instantly when a control gains focus and fades out over 500ms when focus leaves (see _Focus.md_).
 
 ### Reduced Motion
 
@@ -47,4 +52,4 @@ When the user has requested reduced motion, every duration is zero: colours chan
 
 1. **Subtle buttons**, in all variants (default, icon, row).
 2. **Prominent buttons**, for their background only. Their raise and push-down movement is specified separately.
-3. **Inputs**, such as the text input and the select input.
+3. **Inputs**, such as the text input, the select input and the switch (whose thumb slide uses movement timing).

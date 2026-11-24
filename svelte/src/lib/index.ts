@@ -5,6 +5,8 @@ export { default as Icon } from './icons/Icon.svelte';
 export { default as Button } from './buttons/Button.svelte';
 export { default as IconButton } from './buttons/IconButton.svelte';
 export { default as RowButton } from './buttons/RowButton.svelte';
+export { default as TextInput } from './inputs/TextInput.svelte';
+export { default as Switch } from './inputs/Switch.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
 export type {

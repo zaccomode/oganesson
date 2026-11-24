@@ -84,7 +84,12 @@ the button and don't follow transforms applied to the button itself.
 	data-elevated={prominent && elevated ? '' : undefined}
 	data-disabled={disabled ? '' : undefined}
 >
-	<span class="og-button-frame" bind:clientWidth={width} bind:clientHeight={height}>
+	<span
+		class="og-button-frame"
+		data-colorway={prominent ? undefined : colorway}
+		bind:clientWidth={width}
+		bind:clientHeight={height}
+	>
 		<svelte:element
 			this={element}
 			bind:this={ref}
@@ -131,6 +136,20 @@ the button and don't follow transforms applied to the button itself.
 
 	.og-button-frame:has(> .og-button:focus-visible) > :global(.og-focus-ring) {
 		opacity: 1;
+		transition-duration: 0s;
+	}
+
+	/* The focus indicator takes the colorway's colour (Focus.md). Dark and prominent
+	   buttons keep the default dark indicator. Set on the frame, because the ring is
+	   the button's sibling. */
+	.og-button-frame[data-colorway='primary'] {
+		--og-focus-outer-color: var(--og-color-primary-thick-glass);
+		--og-focus-inner-color: var(--og-color-primary-secondary);
+	}
+
+	.og-button-frame[data-colorway='danger'] {
+		--og-focus-outer-color: var(--og-color-danger-thick-glass);
+		--og-focus-inner-color: var(--og-color-danger-secondary);
 	}
 
 	.og-button {

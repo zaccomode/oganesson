@@ -1,19 +1,21 @@
 <!--
 @component
-Keyboard focus ring for a squircled control: a 2px ring 2px outside the
-control, following its smooth corners. CSS outlines can't be used because the
-control is clipped to its squircle.
+The focus indicator for a squircled control (design/Core/Focus.md): a 1px Dark
+Thick Glass border just outside the control's edge and a 0.5px Dark Secondary
+line just inside it, both following its smooth corners. It's drawn here, as a
+sibling of the control, because the control is clipped to its squircle and
+CSS borders and outlines would be cut off.
 
-Place it inside a `position: relative` element that is exactly the size of the
-control and pass that size in. It's hidden by default; show it from CSS with
-`opacity: 1` when the control has `:focus-visible`.
+Place it inside a `position: relative` element exactly the size of the control
+and pass that size in. It's hidden by default and fades out over
+`--og-duration-focus-out`. Show it from CSS (e.g. on `:focus-visible` or
+`:focus-within`) instantly:
+
+    opacity: 1;
+    transition-duration: 0s;
+
+Its colours come from `--og-focus-outer-color` and `--og-focus-inner-color`.
 -->
-<script lang="ts" module>
-	/** Gap between the control and the ring, and the ring's width (Shapes.md / Buttons.md). */
-	export const FOCUS_RING_GAP = 2;
-	export const FOCUS_RING_WIDTH = 2;
-</script>
-
 <script lang="ts">
 	import { generatePath } from '@lisse/core';
 	import { cornerSmoothing, minSquircleRadius } from '../tokens.js';
@@ -23,49 +25,68 @@ control and pass that size in. It's hidden by default; show it from CSS with
 		height: number;
 		/** The control's corner radius. */
 		radius: number;
+		/** Draw the 0.5px inner line as well as the outer border. Default true. */
+		inner?: boolean;
 	}
 
-	let { width, height, radius }: Props = $props();
+	let { width, height, radius, inner = true }: Props = $props();
 
-	// The stroke is centred on the path, so put the path in the middle of the ring.
-	const inset = FOCUS_RING_GAP + FOCUS_RING_WIDTH / 2;
-	const w = $derived(width + inset * 2);
-	const h = $derived(height + inset * 2);
-	const d = $derived(
-		width > 0 && height > 0
-			? generatePath(w, h, {
-					radius: radius + inset,
-					smoothing: radius >= minSquircleRadius ? cornerSmoothing : 0
-				})
-			: ''
-	);
+	const OUTER = 1;
+	const INNER = 0.5;
+
+	/** A smooth-cornered path offset from the control's edge (positive = outwards). */
+	function offsetPath(offset: number): string {
+		return generatePath(width + offset * 2, height + offset * 2, {
+			radius: Math.max(0, radius + offset),
+			smoothing: radius >= minSquircleRadius ? cornerSmoothing : 0
+		});
+	}
+
+	// Strokes are centred on their paths, so offset each path by half its width.
+	const outer = $derived(width > 0 && height > 0 ? offsetPath(OUTER / 2) : '');
+	const innerLine = $derived(width > 0 && height > 0 && inner ? offsetPath(-INNER / 2) : '');
 </script>
 
-{#if d}
-	<svg
-		class="og-focus-ring"
-		aria-hidden="true"
-		width={w}
-		height={h}
-		viewBox="0 0 {w} {h}"
-		style:left="{-inset}px"
-		style:top="{-inset}px"
-	>
-		<path {d} stroke-width={FOCUS_RING_WIDTH} />
+{#if outer}
+	<svg class="og-focus-ring" aria-hidden="true" {width} {height} viewBox="0 0 {width} {height}">
+		<path
+			class="og-focus-ring-outer"
+			d={outer}
+			stroke-width={OUTER}
+			transform="translate({-OUTER / 2} {-OUTER / 2})"
+		/>
+		{#if innerLine}
+			<path
+				class="og-focus-ring-inner"
+				d={innerLine}
+				stroke-width={INNER}
+				transform="translate({INNER / 2} {INNER / 2})"
+			/>
+		{/if}
 	</svg>
 {/if}
 
 <style>
 	.og-focus-ring {
 		position: absolute;
+		left: 0;
+		top: 0;
 		z-index: 2;
 		overflow: visible;
 		pointer-events: none;
 		opacity: 0;
+		transition: opacity var(--og-duration-focus-out) var(--og-ease-out);
 	}
 
 	path {
 		fill: none;
-		stroke: var(--og-focus-ring-color);
+	}
+
+	.og-focus-ring-outer {
+		stroke: var(--og-focus-outer-color);
+	}
+
+	.og-focus-ring-inner {
+		stroke: var(--og-focus-inner-color);
 	}
 </style>
