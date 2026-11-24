@@ -1,0 +1,65 @@
+/*
+ * Oganesson text styles (design/Core/Typography.md, Typography.sketchframe).
+ * Use these classes directly, or the <Text variant="…"> component.
+ */
+
+.og-large-title,
+.og-title,
+.og-title-2,
+.og-label,
+.og-small-label {
+	font-family: var(--og-font-sans);
+	letter-spacing: 0;
+	margin: 0;
+}
+
+.og-subtitle,
+.og-caption {
+	font-family: var(--og-font-mono);
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 0;
+	color: var(--og-color-dark-secondary);
+	margin: 0;
+}
+
+.og-large-title {
+	font-size: 28px;
+	line-height: 34px;
+	font-weight: 600;
+}
+
+.og-title {
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 500;
+}
+
+.og-title-2 {
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: 500;
+}
+
+.og-label {
+	font-size: 13px;
+	line-height: 16px;
+	font-weight: 400;
+}
+
+.og-small-label {
+	font-size: 11px;
+	line-height: 14px;
+	font-weight: 400;
+	color: var(--og-color-dark-secondary);
+}
+
+.og-subtitle {
+	font-size: 9px;
+	line-height: 12px;
+}
+
+.og-caption {
+	font-size: 8px;
+	line-height: 10px;
+}
