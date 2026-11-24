@@ -39,7 +39,7 @@ Prominent buttons are exclusively available in the black-gray gradient appearanc
 
 **Elevated** prominent buttons show the elevated drop shadow at rest. Elevation only controls the shadow: hovering still raises the button by 2px, whether or not it is elevated.
 
-**Movement:** the 2px raise and push-down follow the same timing as interaction animations (see _Animations.md_). They happen instantly when hover or press begins, then settle back with the ease-out curve over 500ms after hover and 1000ms after press. The shadow appears and fades with the raise. Under reduced motion, movement is instant in both directions.
+**Movement:** the 2px raise and push-down, and the shadow that comes with the raise, animate symmetrically over 150ms with an ease-out curve, both when hover or press begins and when it ends. This is deliberately not the asymmetric interaction-animation timing. The press lightening is a color change, so it still follows _Animations.md_. Under reduced motion, movement is instant in both directions.
 
 _See also: Buttons-Button (Prominent).sketchframe_
 
@@ -69,7 +69,7 @@ _See also: Buttons-Icon Button (Subtle).sketchframe, Buttons-Icon Button (Promin
 
 Tooltips are small Acrylic (elevated) pills holding the label in the caption style, drawn in the button colorway's secondary color (dark secondary for prominent buttons), 2px from the button. A tooltip also appears when the button receives keyboard focus.
 
-All icon-only buttons will show a tooltip after 500ms of being hovered by default. This can be made instant, or the tooltip can be hidden entirely in space-constrained situations or where labels are unnecessary. If an icon-only button is being hovered and is displaying its tooltip, then hover moves to a new icon-only button within 200ms, the tooltip should immediately display on the new button.
+All icon-only buttons will show a tooltip after 500ms of being hovered by default. This can be made instant, or the tooltip can be hidden entirely in space-constrained situations or where labels are unnecessary. If an icon-only button is being hovered and is displaying its tooltip, then hover moves to a new icon-only button within 500ms, the tooltip should immediately display on the new button.
 
 The position of the tooltip (above or below) should be selectable by the developer, with it defaulting to above. Where the system does not have the room to properly display the tooltip, it should automatically change the position such that the tooltip is visible.
 

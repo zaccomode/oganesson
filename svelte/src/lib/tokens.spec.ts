@@ -41,6 +41,8 @@ describe('tokens.ts mirrors tokens.css', () => {
 		expect(cssVar('--og-ease-out')).toBe(motion.easeOut);
 		expect(cssVar('--og-duration-hover-out')).toBe(`${motion.hoverOutMs}ms`);
 		expect(cssVar('--og-duration-press-out')).toBe(`${motion.pressOutMs}ms`);
+		expect(cssVar('--og-duration-movement')).toBe(`${motion.movementMs}ms`);
+		expect(cssVar('--og-ease-movement')).toBe(motion.easeMovement);
 	});
 
 	it('declares no colour token missing from tokens.ts', () => {

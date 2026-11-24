@@ -1,7 +1,7 @@
 <!--
 @component
 Shares tooltip timing across everything inside it: tooltips open after 500ms,
-and once one is open, moving to another within 200ms opens it immediately
+and once one is open, moving to another within 500ms opens it immediately
 (Buttons.md, Icon Variant).
 
 Wrap your app (or a toolbar) in it, e.g. in your root `+layout.svelte`. Icon

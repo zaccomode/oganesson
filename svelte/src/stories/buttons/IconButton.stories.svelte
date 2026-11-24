@@ -19,7 +19,7 @@
 			docs: {
 				description: {
 					component:
-						'Icon-only buttons always take a `label`: it names the button for assistive tech and is shown as a tooltip after 500ms of hover. Wrap a group of them (or your app) in `<TooltipProvider>` so moving between buttons within 200ms shows the next tooltip immediately.'
+						'Icon-only buttons always take a `label`: it names the button for assistive tech and is shown as a tooltip after 500ms of hover. Wrap a group of them (or your app) in `<TooltipProvider>` so moving between buttons within 500ms shows the next tooltip immediately.'
 				}
 			}
 		}
@@ -89,15 +89,21 @@
 			).toBe(2)
 		);
 
-		// Moving to another button within 200ms shows its tooltip straight away.
+		// Moving to another button within 500ms shows its tooltip straight away,
+		// even after a 400ms gap.
 		await userEvent.unhover(search);
+		await sleep(400);
 		await userEvent.hover(bell);
 		await waitFor(() => expect(body.getByText('Notifications')).toBeTruthy(), { timeout: 150 });
 
-		// Below, in the danger colourway.
+		// After the hand-off window, the full delay applies again.
 		await userEvent.unhover(bell);
-		await sleep(400);
+		await sleep(800);
 		await userEvent.hover(trash);
+		await sleep(300);
+		await expect(body.queryByText('Delete')).toBeNull();
+
+		// Below, in the danger colourway.
 		const below = await body.findByText('Delete', {}, { timeout: 1000 });
 		await waitFor(() =>
 			expect(

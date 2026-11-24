@@ -42,7 +42,7 @@ To load only the styles (for example in a page with no Oganesson components), im
 <RowButton href="/inbox" secondaryLabel="12" secondaryIcon={ChevronRight}>Inbox</RowButton>
 ```
 
-Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms to appear, then immediately when moving between buttons.
+Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms to appear, then immediately when moving to another button within 500ms.
 
 ### Tokens
 

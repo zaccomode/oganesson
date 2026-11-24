@@ -8,7 +8,7 @@ Internal: the shared structure and styling for Button, IconButton and RowButton
                               overlays and the focus ring so they move with it
         button|a.og-button    squircle-clipped surface with hover/press layers
 
-Movement lives on the wrappers because Lisse's border overlays are siblings of
+Movement (150ms both ways) lives on the wrappers because Lisse's border overlays are siblings of
 the button and don't follow transforms applied to the button itself.
 -->
 <script lang="ts">
@@ -113,7 +113,7 @@ the button and don't follow transforms applied to the button itself.
 		display: inline-flex;
 		vertical-align: middle;
 		max-width: 100%;
-		transition: translate var(--og-duration-hover-out) var(--og-ease-out);
+		transition: translate var(--og-duration-movement) var(--og-ease-movement);
 	}
 
 	.og-button-shell[data-layout='row'] {
@@ -126,7 +126,7 @@ the button and don't follow transforms applied to the button itself.
 		display: flex;
 		flex: 1;
 		min-width: 0;
-		transition: translate var(--og-duration-press-out) var(--og-ease-out);
+		transition: translate var(--og-duration-movement) var(--og-ease-movement);
 	}
 
 	.og-button-frame:has(> .og-button:focus-visible) > :global(.og-focus-ring) {
@@ -247,7 +247,7 @@ the button and don't follow transforms applied to the button itself.
 		box-shadow: var(--og-shadow-elevated);
 		pointer-events: none;
 		opacity: 0;
-		transition: opacity var(--og-duration-hover-out) var(--og-ease-out);
+		transition: opacity var(--og-duration-movement) var(--og-ease-movement);
 	}
 
 	.og-button-shell[data-appearance='prominent'][data-elevated]::before {
@@ -268,18 +268,15 @@ the button and don't follow transforms applied to the button itself.
 	@media (hover: hover) {
 		.og-button-shell[data-appearance='prominent']:not([data-disabled]):hover {
 			translate: 0 -2px;
-			transition-duration: 0s;
 		}
 
 		.og-button-shell[data-appearance='prominent']:not([data-disabled]):hover::before {
 			opacity: 1;
-			transition-duration: 0s;
 		}
 	}
 
 	.og-button-shell[data-appearance='prominent']:not([data-disabled])
 		> .og-button-frame:has(> .og-button:active) {
 		translate: 0 2px;
-		transition-duration: 0s;
 	}
 </style>
