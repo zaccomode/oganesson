@@ -58,7 +58,7 @@ lists of options or where the state may be indeterminate.
 		transition-duration: 0s;
 	}
 
-	/* Switch.sketchframe: a 52×24 pill with 4px inset and a 24×16 pill thumb. */
+	/* Inputs-Switch.sketchframe: a 52×24 pill with 4px inset and a 24×16 pill thumb. */
 	:global(.og-switch-track) {
 		box-sizing: border-box;
 		display: flex;

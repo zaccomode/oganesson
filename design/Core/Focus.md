@@ -2,7 +2,7 @@
 
 Every interactive element must show where focus is.
 
-_See also: Text Input.sketchframe (the "Active" states)_
+_See also: Inputs-Text Input.sketchframe (the "Active" states)_
 
 ## Focus Indicator
 

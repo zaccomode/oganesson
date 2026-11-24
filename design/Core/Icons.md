@@ -4,7 +4,7 @@ Oganesson doesn't ship its own icon set. [Lucide](https://lucide.dev) is the def
 
 ## Sizing
 
-Icons are drawn in a square box. The default size is 14px, the size used throughout the Sketch files for button and input icons. Components may set a different size for their context; developers can override it per icon.
+Icons are drawn in a square box. The default size is 16px, the size the Sketch files use for button icons. Inputs use 12px icons. Components may set a different size for their context; developers can override it per icon.
 
 ## Color
 

@@ -203,7 +203,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 
 	// Every item is the same size, so they share one smooth-cornered clip path
 	// instead of each running its own squircle.
-	const ITEM_HEIGHT = 28;
+	const ITEM_HEIGHT = 30;
 	const itemWidth = $derived(listWidth - 4 - (scrollable ? 8 : 4));
 	const itemClip = $derived(
 		itemWidth > 0
@@ -396,7 +396,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		align-items: center;
 		gap: 6px;
 		min-width: 0;
-		height: 28px;
+		height: 30px;
 		margin: 0;
 		padding: 6px 8px 6px 10px;
 		border: 0;
@@ -455,7 +455,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	.og-select :global(.og-select-input) {
 		flex: 1;
 		min-width: 0;
-		height: 16px;
+		height: 18px;
 		margin: 0;
 		padding: 0;
 		border: 0;
@@ -562,12 +562,12 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		padding: 4px;
 	}
 
-	/* Room for the scrollbar (Select Input Menu Exploration - Scrolling Items). */
+	/* Room for the scrollbar (Menu Exploration - Scrolling Items.sketchframe). */
 	:global(.og-select-list[data-scrollable]) {
 		padding-right: 8px;
 	}
 
-	/* ── Items (Select Input Menu Item.sketchframe) ──────────────────────── */
+	/* ── Items (Inputs-Select Input Menu Item.sketchframe) ──────────────── */
 
 	:global(.og-select-item) {
 		position: relative;
@@ -577,7 +577,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		flex: none;
 		align-items: center;
 		gap: 6px;
-		height: 28px;
+		height: 30px;
 		padding: 6px 10px 6px 8px;
 		color: var(--og-color-dark);
 		white-space: nowrap;

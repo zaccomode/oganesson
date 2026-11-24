@@ -37,12 +37,12 @@ export const backgrounds = {
 
 export const typography = {
 	'large-title': { font: 'sans', size: 28, lineHeight: 34, weight: 600 },
-	title: { font: 'sans', size: 16, lineHeight: 20, weight: 500 },
-	'title-2': { font: 'sans', size: 14, lineHeight: 18, weight: 500 },
-	label: { font: 'sans', size: 13, lineHeight: 16, weight: 400 },
-	'small-label': { font: 'sans', size: 11, lineHeight: 14, weight: 400 },
-	subtitle: { font: 'mono', size: 9, lineHeight: 12, weight: 400 },
-	caption: { font: 'mono', size: 8, lineHeight: 10, weight: 400 }
+	title: { font: 'sans', size: 18, lineHeight: 22, weight: 500 },
+	'title-2': { font: 'sans', size: 16, lineHeight: 20, weight: 500 },
+	label: { font: 'sans', size: 14, lineHeight: 18, weight: 400 },
+	'small-label': { font: 'sans', size: 12, lineHeight: 15, weight: 400 },
+	subtitle: { font: 'mono', size: 11, lineHeight: 14, weight: 400 },
+	caption: { font: 'mono', size: 9, lineHeight: 12, weight: 400 }
 } as const;
 
 export type TextVariant = keyof typeof typography;
@@ -53,7 +53,7 @@ export const cornerSmoothing = 0.6;
 /** Radii below this use plain CSS border-radius instead of squircles (Shapes.md). */
 export const minSquircleRadius = 8;
 
-export const iconSize = 14;
+export const iconSize = 16;
 
 export const motion = {
 	easeOut: 'cubic-bezier(0.16, 1, 0.3, 1)',

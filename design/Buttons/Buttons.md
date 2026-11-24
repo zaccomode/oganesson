@@ -63,7 +63,7 @@ The default variant of a button is a label with an optional icon positioned eith
 
 Icon-only buttons must always have a label supplied for accessibility reasons. That label is reused for the tooltip.
 
-Icon buttons come in two sizes: **regular** (28px square with a 16px icon) and **small** (20px square with a 12px icon and 6px corners), for dense areas.
+Icon buttons come in two sizes: **regular** (30px square with an 18px icon) and **small** (24px square with a 12px icon and 6px corners), for dense areas.
 
 _See also: Buttons-Icon Button (Subtle).sketchframe, Buttons-Icon Button (Prominent).sketchframe, Buttons-Small Icon Button (Subtle).sketchframe_
 

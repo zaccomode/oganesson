@@ -88,7 +88,7 @@
 			canvasElement.querySelector<HTMLElement>(`[data-case="${c}"] .og-select-field`)!;
 
 		for (const c of ['default-icon', 'default', 'subtle-icon', 'subtle']) {
-			await expect(field(c).getBoundingClientRect().height).toBe(28);
+			await expect(field(c).getBoundingClientRect().height).toBe(30);
 		}
 		await expect(getComputedStyle(field('default-icon')).padding).toBe('6px 8px');
 		await expect(getComputedStyle(field('default')).padding).toBe('6px 8px 6px 10px');
@@ -152,19 +152,19 @@
 		await waitFor(() => expect(menu()).not.toBeNull());
 		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
 
-		// 2px below the field, at least as wide, 4px padding around 28px items 2px apart.
+		// 2px below the field, at least as wide, 4px padding around 30px items 2px apart.
 		const field = trigger.getBoundingClientRect();
 		const box = menu()!.getBoundingClientRect();
 		await expect(Math.round(box.top - field.bottom)).toBe(2);
 		await expect(Math.round(box.left)).toBe(Math.round(field.left));
 		await expect(box.width).toBeGreaterThanOrEqual(field.width);
 		const [first, second] = items();
-		await expect(first.getBoundingClientRect().height).toBe(28);
+		await expect(first.getBoundingClientRect().height).toBe(30);
 		await expect(Math.round(first.getBoundingClientRect().top - box.top)).toBe(4);
 		await expect(
 			Math.round(second.getBoundingClientRect().top - first.getBoundingClientRect().bottom)
 		).toBe(2);
-		await expect(Math.round(box.height)).toBe(4 + 4 * 28 + 3 * 2 + 4);
+		await expect(Math.round(box.height)).toBe(4 + 4 * 30 + 3 * 2 + 4);
 
 		// Acrylic (Elevated): translucent white with a 10px backdrop blur.
 		const surface = menu()!.querySelector<HTMLElement>('.og-select-menu-surface')!;
@@ -217,7 +217,7 @@
 		await userEvent.click(plain);
 		await waitFor(() => expect(menu()).not.toBeNull());
 		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
-		await waitFor(() => expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(156));
+		await waitFor(() => expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(166));
 		const top = () => menu()!.querySelector('[data-edge="top"]')!;
 		const bottom = () => menu()!.querySelector('[data-edge="bottom"]')!;
 		const scrollbar = () => menu()!.querySelector<HTMLElement>('.og-select-scrollbar');
@@ -240,7 +240,7 @@
 		// maxItems caps the menu at that many options.
 		await userEvent.click(capped);
 		await waitFor(() => expect(menu()).not.toBeNull());
-		await waitFor(() => expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(96));
+		await waitFor(() => expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(102));
 		await closeMenu();
 	}}
 >
@@ -317,7 +317,7 @@
 		await expect(menu()!.getBoundingClientRect().width).toBeGreaterThanOrEqual(
 			field.getBoundingClientRect().width
 		);
-		await expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(156);
+		await expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(166);
 		await userEvent.type(input, 'land');
 		await waitFor(() =>
 			expect(items().map((item) => item.textContent?.trim())).toEqual([

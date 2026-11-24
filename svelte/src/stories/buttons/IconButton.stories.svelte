@@ -40,12 +40,12 @@
 	asChild
 	play={async ({ canvasElement }) => {
 		const regular = canvasElement.querySelector<HTMLElement>('[data-case="regular"] .og-button')!;
-		await expect(regular.getBoundingClientRect()).toMatchObject({ width: 28, height: 28 });
-		await expect(regular.querySelector('svg')!.getBoundingClientRect().width).toBe(16);
+		await expect(regular.getBoundingClientRect()).toMatchObject({ width: 30, height: 30 });
+		await expect(regular.querySelector('svg')!.getBoundingClientRect().width).toBe(18);
 		await expect(regular.getAttribute('aria-label')).toBe('Edit');
 
 		const small = canvasElement.querySelector<HTMLElement>('[data-case="small"] .og-button')!;
-		await expect(small.getBoundingClientRect()).toMatchObject({ width: 20, height: 20 });
+		await expect(small.getBoundingClientRect()).toMatchObject({ width: 24, height: 24 });
 		await expect(small.querySelector('svg')!.getBoundingClientRect().width).toBe(12);
 		await expect(getComputedStyle(small).borderTopLeftRadius).toBe('6px');
 	}}

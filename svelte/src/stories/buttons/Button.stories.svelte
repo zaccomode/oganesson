@@ -51,7 +51,7 @@
 	asChild
 	play={async ({ canvasElement }) => {
 		const buttons = canvasElement.querySelectorAll<HTMLElement>('.og-button');
-		for (const b of buttons) await expect(b.getBoundingClientRect().height).toBe(28);
+		for (const b of buttons) await expect(b.getBoundingClientRect().height).toBe(30);
 
 		const plain = canvasElement.querySelector<HTMLElement>('[data-case="dark-none"] .og-button')!;
 		await expect(getComputedStyle(plain).padding).toBe('6px 10px');
@@ -59,7 +59,7 @@
 
 		const left = canvasElement.querySelector<HTMLElement>('[data-case="dark-left"] .og-button')!;
 		await expect(getComputedStyle(left).paddingLeft).toBe('8px');
-		await expect(left.querySelector('svg')!.getBoundingClientRect().width).toBe(14);
+		await expect(left.querySelector('svg')!.getBoundingClientRect().width).toBe(16);
 
 		const active = canvasElement.querySelector<HTMLElement>(
 			'[data-case="primary-none-active"] .og-button'
