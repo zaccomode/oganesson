@@ -53,3 +53,8 @@ When the user has requested reduced motion, every duration is zero: colours chan
 1. **Subtle buttons**, in all variants (default, icon, row).
 2. **Prominent buttons**, for their background only. Their raise and push-down movement is specified separately.
 3. **Inputs**, such as the text input, the select input and the switch (whose thumb slide uses movement timing).
+4. **Menu items**, such as a select input's options. The highlighted item, whether under the pointer or reached with the arrow keys, takes the hover layer.
+
+## Menu Motion
+
+Select input menus grow from 90% scale while fading in when they open, and shrink back to 90% while fading out when they close. Both use movement timing (150ms ease-out each way), and the menu grows out of the corner nearest the control that opened it (see _Inputs.md — Select Menu_).

@@ -1,5 +1,6 @@
 import ChevronDown from '@lucide/svelte/icons/chevron-down';
 import ChevronRight from '@lucide/svelte/icons/chevron-right';
+import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down';
 import Check from '@lucide/svelte/icons/check';
 import X from '@lucide/svelte/icons/x';
 import { getContext, setContext, type Component } from 'svelte';
@@ -13,6 +14,9 @@ export interface OganessonIcons {
 	chevronDown: Component<any>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	chevronRight: Component<any>;
+	/** The select input's open indicator. */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	chevronsUpDown: Component<any>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	check: Component<any>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,6 +26,7 @@ export interface OganessonIcons {
 export const defaultIcons: OganessonIcons = {
 	chevronDown: ChevronDown,
 	chevronRight: ChevronRight,
+	chevronsUpDown: ChevronsUpDown,
 	check: Check,
 	close: X
 };
