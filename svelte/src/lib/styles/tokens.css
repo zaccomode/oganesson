@@ -43,8 +43,10 @@
 	--og-radius: 8px;
 
 	/* ── Focus ─────────────────────────────────────────────────────────────── */
-	/* Keyboard focus ring: 2px, drawn 2px outside the control, following its corners. */
-	--og-focus-ring-color: var(--og-color-dark);
+	/* Focus indicator (Focus.md): a 1px border just outside the control and a
+	   0.5px line just inside it, following its corners. */
+	--og-focus-outer-color: var(--og-color-dark-thick-glass);
+	--og-focus-inner-color: var(--og-color-dark-secondary);
 
 	/* ── Icons ─────────────────────────────────────────────────────────────── */
 	--og-icon-size: 14px;
