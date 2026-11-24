@@ -46,7 +46,7 @@
 		const root = (c: string) =>
 			canvasElement.querySelector<HTMLElement>(`[data-case="${c}"] .og-text-input`)!;
 
-		await expect(field('default-icon').getBoundingClientRect().height).toBe(28);
+		await expect(field('default-icon').getBoundingClientRect().height).toBe(30);
 		await expect(getComputedStyle(field('default-icon')).paddingLeft).toBe('8px');
 		await expect(getComputedStyle(field('default')).padding).toBe('6px 10px');
 		await expect(
@@ -120,7 +120,7 @@
 			'Ada Lovelace'
 		);
 		await expect(getComputedStyle(input).color).toBe('rgb(33, 37, 43)');
-		await expect(getComputedStyle(input).fontSize).toBe('13px');
+		await expect(getComputedStyle(input).fontSize).toBe('14px');
 		input.blur();
 	}}
 >

@@ -30,13 +30,13 @@
 		const column = canvasElement.querySelector<HTMLElement>('.column')!;
 		const row = canvasElement.querySelector<HTMLElement>('[data-case="dark"] .og-button')!;
 		await expect(row.getBoundingClientRect().width).toBe(column.getBoundingClientRect().width);
-		await expect(row.getBoundingClientRect().height).toBe(28);
+		await expect(row.getBoundingClientRect().height).toBe(30);
 		await expect(getComputedStyle(row).paddingLeft).toBe('8px');
 
 		const secondary = row.querySelector<HTMLElement>('.og-subtitle')!;
 		await expect(sameColor(getComputedStyle(secondary).color, colors['dark-secondary'])).toBe(true);
 		const secondaryIcon = row.querySelectorAll('svg')[1];
-		await expect(secondaryIcon.getBoundingClientRect().width).toBe(12);
+		await expect(secondaryIcon.getBoundingClientRect().width).toBe(14);
 
 		const primary = canvasElement.querySelector<HTMLElement>('[data-case="primary"] .og-subtitle')!;
 		await expect(sameColor(getComputedStyle(primary).color, colors['primary-secondary'])).toBe(
@@ -74,7 +74,7 @@
 	.column {
 		display: grid;
 		gap: 8px;
-		width: 160px;
+		width: 220px;
 	}
 	.pair {
 		display: grid;

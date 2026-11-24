@@ -96,7 +96,7 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 		align-items: center;
 		gap: 6px;
 		min-width: 0;
-		height: 28px;
+		height: 30px;
 		padding: 6px 10px;
 		color: var(--og-color-dark);
 		cursor: text;
@@ -132,7 +132,7 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 	input {
 		flex: 1;
 		min-width: 0;
-		height: 16px;
+		height: 18px;
 		margin: 0;
 		padding: 0;
 		border: 0;

@@ -3,7 +3,7 @@
 Renders an icon from any SVG icon library (Lucide, Phosphor, Tabler, …) and
 sizes and colours it for its context.
 
-The icon fills a box of `--og-icon-size` (14px by default; components set
+The icon fills a box of `--og-icon-size` (16px by default; components set
 their own) and draws in the surrounding text colour via `currentColor`, which
 nearly every icon library uses.
 

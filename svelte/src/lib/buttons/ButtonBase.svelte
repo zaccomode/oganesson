@@ -186,7 +186,7 @@ the button and don't follow transforms applied to the button itself.
 	.og-button[data-layout='default'],
 	.og-button[data-layout='row'] {
 		padding: 6px 10px;
-		--og-icon-size: 14px;
+		--og-icon-size: 16px;
 	}
 
 	/* The Sketch files tighten the padding on the icon's side by 2px. */
@@ -201,11 +201,11 @@ the button and don't follow transforms applied to the button itself.
 	.og-button[data-layout='icon'] {
 		justify-content: center;
 		padding: 6px;
-		--og-icon-size: 16px;
+		--og-icon-size: 18px;
 	}
 
 	.og-button[data-layout='icon'][data-size='small'] {
-		padding: 4px;
+		padding: 6px;
 		border-radius: 6px;
 		--og-icon-size: 12px;
 	}

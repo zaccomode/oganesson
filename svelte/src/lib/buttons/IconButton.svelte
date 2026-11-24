@@ -21,7 +21,7 @@ default; make it `instant`, put it `below`, or turn it off with
 		icon: IconComponent;
 		/** Accessible name and tooltip text. */
 		label: string;
-		/** Regular (28px) or small (20px). */
+		/** Regular (30px) or small (24px). */
 		size?: 'regular' | 'small';
 		/** `true` (default), `'instant'` to skip the delay, or `false` for none. */
 		tooltip?: boolean | 'instant';

@@ -81,7 +81,7 @@ Every token is a CSS custom property, e.g. `var(--og-color-primary-thin-glass)`,
 
 ### Icons
 
-`<Icon>` accepts any Svelte icon component (Lucide, Phosphor, Tabler, …) or raw SVG, and sizes and colours it to fit: `--og-icon-size` (14px by default) and the surrounding text colour. To replace the icons Oganesson draws itself, call `setOganessonIcons({ close: MyX })` in your root layout.
+`<Icon>` accepts any Svelte icon component (Lucide, Phosphor, Tabler, …) or raw SVG, and sizes and colours it to fit: `--og-icon-size` (16px by default) and the surrounding text colour. To replace the icons Oganesson draws itself, call `setOganessonIcons({ close: MyX })` in your root layout.
 
 ### Squircles
 

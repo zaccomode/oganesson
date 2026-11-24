@@ -5,8 +5,8 @@ export interface SelectOption {
 	disabled?: boolean;
 }
 
-/** Item height (28px) plus the 2px gap between items. */
-const ITEM_PITCH = 30;
+/** Item height (30px) plus the 2px gap between items. */
+const ITEM_PITCH = 32;
 /** The menu's 4px padding at the top and bottom. */
 const MENU_PADDING = 4;
 

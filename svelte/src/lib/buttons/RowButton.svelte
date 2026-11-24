@@ -49,7 +49,7 @@ chevron for in-app navigation, or an external-link icon.
 		<span class="og-subtitle og-button-row-secondary">{secondaryLabel}</span>
 	{/if}
 	{#if secondaryIcon}
-		<Icon icon={secondaryIcon} size={12} class="og-button-row-secondary" />
+		<Icon icon={secondaryIcon} size={14} class="og-button-row-secondary" />
 	{/if}
 </ButtonBase>
 

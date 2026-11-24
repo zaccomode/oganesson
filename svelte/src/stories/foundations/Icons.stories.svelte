@@ -13,7 +13,7 @@
 			docs: {
 				description: {
 					component:
-						'`<Icon>` takes any Svelte icon component (Lucide is the default choice; Phosphor, Tabler and others work too) or raw SVG, then sizes it to `--og-icon-size` (14px unless a component sets otherwise) and colours it with the surrounding text colour through `currentColor`. Icons are decorative unless given a `label`. Swap the icons Oganesson draws itself with `setOganessonIcons()`.'
+						'`<Icon>` takes any Svelte icon component (Lucide is the default choice; Phosphor, Tabler and others work too) or raw SVG, then sizes it to `--og-icon-size` (16px unless a component sets otherwise) and colours it with the surrounding text colour through `currentColor`. Icons are decorative unless given a `label`. Swap the icons Oganesson draws itself with `setOganessonIcons()`.'
 				}
 			}
 		}
@@ -26,7 +26,7 @@
 	play={async ({ canvasElement }) => {
 		for (const svg of canvasElement.querySelectorAll<SVGSVGElement>('[data-case="default"] svg')) {
 			const box = svg.getBoundingClientRect();
-			await expect([box.width, box.height]).toEqual([14, 14]);
+			await expect([box.width, box.height]).toEqual([16, 16]);
 		}
 		const sized = canvasElement.querySelector('[data-case="24"] svg')!.getBoundingClientRect();
 		await expect(sized.width).toBe(24);
@@ -47,7 +47,7 @@
 			<Icon>
 				<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="6" /></svg>
 			</Icon>
-			<Text variant="caption" as="span">14px default · Lucide, another library, raw SVG</Text>
+			<Text variant="caption" as="span">16px default · Lucide, another library, raw SVG</Text>
 		</div>
 		<div class="row">
 			{#each [14, 16, 20] as size (size)}

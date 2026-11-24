@@ -30,36 +30,36 @@
 }
 
 .og-title {
+	font-size: 18px;
+	line-height: 22px;
+	font-weight: 500;
+}
+
+.og-title-2 {
 	font-size: 16px;
 	line-height: 20px;
 	font-weight: 500;
 }
 
-.og-title-2 {
+.og-label {
 	font-size: 14px;
 	line-height: 18px;
-	font-weight: 500;
-}
-
-.og-label {
-	font-size: 13px;
-	line-height: 16px;
 	font-weight: 400;
 }
 
 .og-small-label {
-	font-size: 11px;
-	line-height: 14px;
+	font-size: 12px;
+	line-height: 15px;
 	font-weight: 400;
 	color: var(--og-color-dark-secondary);
 }
 
 .og-subtitle {
-	font-size: 9px;
-	line-height: 12px;
+	font-size: 11px;
+	line-height: 14px;
 }
 
 .og-caption {
-	font-size: 8px;
-	line-height: 10px;
+	font-size: 9px;
+	line-height: 12px;
 }
