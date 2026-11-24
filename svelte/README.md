@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. Foundations only so far: tokens, text styles, icons, squircles and interaction surfaces. Components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces) and buttons. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -23,6 +23,26 @@ Requires Svelte 5.32 or later. Importing anything from the package also loads it
 ```
 
 To load only the styles (for example in a page with no Oganesson components), import `oganesson-svelte/styles.css`.
+
+### Buttons
+
+```svelte
+<script>
+	import { Button, IconButton, RowButton, TooltipProvider } from 'oganesson-svelte';
+	import { Plus, Trash2, ChevronRight } from '@lucide/svelte';
+</script>
+
+<Button appearance="prominent" icon={Plus} onclick={create}>New project</Button>
+<Button colorway="danger">Delete</Button>
+
+<TooltipProvider>
+	<IconButton icon={Trash2} label="Delete" colorway="danger" />
+</TooltipProvider>
+
+<RowButton href="/inbox" secondaryLabel="12" secondaryIcon={ChevronRight}>Inbox</RowButton>
+```
+
+Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms to appear, then immediately when moving to another button within 500ms.
 
 ### Tokens
 

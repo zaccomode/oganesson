@@ -58,5 +58,8 @@ export const iconSize = 14;
 export const motion = {
 	easeOut: 'cubic-bezier(0.16, 1, 0.3, 1)',
 	hoverOutMs: 500,
-	pressOutMs: 1000
+	pressOutMs: 1000,
+	/** Movement such as a prominent button's raise: the same both ways. */
+	movementMs: 150,
+	easeMovement: 'ease-out'
 } as const;

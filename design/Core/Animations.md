@@ -6,7 +6,7 @@ Oganesson offers many unique animations that are used throughout the application
 
 Interaction animations give feedback when the user hovers over or presses an interactive surface, such as a button or input. They apply to an element's colours (its background and its foreground) and are deliberately asymmetrical: a colour change appears instantly when the interaction begins, then fades out slowly once it ends. The instant response makes the interface feel immediate, and the slow fade shows where the user has just been.
 
-Movement, such as a prominent button rising on hover, is not an interaction animation and is not covered by these rules.
+Movement, such as a prominent button rising on hover, is not an interaction animation and is not covered by these rules. Movement uses short, symmetrical timing instead (150ms ease-out both ways; see _Buttons.md — Prominent Style_).
 
 ### Timing
 
