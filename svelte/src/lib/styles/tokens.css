@@ -42,6 +42,10 @@
 	/* ── Shape ─────────────────────────────────────────────────────────────── */
 	--og-radius: 8px;
 
+	/* ── Focus ─────────────────────────────────────────────────────────────── */
+	/* Keyboard focus ring: 2px, drawn 2px outside the control, following its corners. */
+	--og-focus-ring-color: var(--og-color-dark);
+
 	/* ── Icons ─────────────────────────────────────────────────────────────── */
 	--og-icon-size: 14px;
 
