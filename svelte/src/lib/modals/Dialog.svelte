@@ -37,6 +37,7 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 	import IconButton from '../buttons/IconButton.svelte';
 	import type { IconComponent } from '../buttons/types.js';
 	import { getOganessonIcons } from '../icons/context.js';
+	import NoToolbar from '../internal/NoToolbar.svelte';
 	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import Text from '../typography/Text.svelte';
 	import { DIALOG_WIDTH, moveBetweenActions } from './modal.js';
@@ -122,73 +123,76 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 		</AlertDialog.Trigger>
 	{/if}
 	<AlertDialog.Portal>
-		<AlertDialog.Overlay class="og-modal-overlay" data-og-modal="dialog" />
-		<AlertDialog.Content
-			class={['og-modal', 'og-dialog', className]}
-			style="--og-dialog-width: {DIALOG_WIDTH}px"
-			interactOutsideBehavior={closeOnBackgroundPress ? 'close' : 'ignore'}
-			escapeKeydownBehavior={(closeOnEscape ?? closeOnBackgroundPress) ? 'close' : 'ignore'}
-			onOpenAutoFocus={(event) => {
-				// Modals.md: the cancellation action has focus by default.
-				event.preventDefault();
-				(cancelButton ?? confirmButton)?.focus();
-			}}
-		>
-			<div
-				class="og-modal-surface og-dialog-surface"
-				{@attach squircle({ radius: 22, effects: elevatedEffects })}
+		<!-- Portalled out of any toolbar the trigger sits in, so its buttons aren't the toolbar's. -->
+		<NoToolbar>
+			<AlertDialog.Overlay class="og-modal-overlay" data-og-modal="dialog" />
+			<AlertDialog.Content
+				class={['og-modal', 'og-dialog', className]}
+				style="--og-dialog-width: {DIALOG_WIDTH}px"
+				interactOutsideBehavior={closeOnBackgroundPress ? 'close' : 'ignore'}
+				escapeKeydownBehavior={(closeOnEscape ?? closeOnBackgroundPress) ? 'close' : 'ignore'}
+				onOpenAutoFocus={(event) => {
+					// Modals.md: the cancellation action has focus by default.
+					event.preventDefault();
+					(cancelButton ?? confirmButton)?.focus();
+				}}
 			>
-				<div class="og-modal-header">
-					<AlertDialog.Title>
-						{#snippet child({ props })}
-							<Text {...props} variant="title" as="h2" class="og-modal-title">{title}</Text>
-						{/snippet}
-					</AlertDialog.Title>
-					{#if closeButton}
-						<AlertDialog.Cancel>
-							{#snippet child({ props })}
-								<IconButton {...props} icon={icons.close} label="Close" tooltip={false} />
-							{/snippet}
-						</AlertDialog.Cancel>
-					{/if}
-				</div>
-				<AlertDialog.Description>
-					{#snippet child({ props })}
-						<Text {...props} variant="label" class="og-dialog-description">{description}</Text>
-					{/snippet}
-				</AlertDialog.Description>
-				<!-- Arrow keys move between the actions; Tab works as usual (Modals.md). -->
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<div
-					class="og-dialog-actions"
-					bind:this={actions}
-					role="group"
-					aria-label="Actions"
-					onkeydown={(event) => actions && moveBetweenActions(event, actions)}
+					class="og-modal-surface og-dialog-surface"
+					{@attach squircle({ radius: 22, effects: elevatedEffects })}
 				>
-					{#if cancelLabel !== false}
-						<AlertDialog.Cancel>
+					<div class="og-modal-header">
+						<AlertDialog.Title>
 							{#snippet child({ props })}
-								<Button {...props} bind:ref={cancelButton}>{cancelLabel}</Button>
+								<Text {...props} variant="title" as="h2" class="og-modal-title">{title}</Text>
 							{/snippet}
-						</AlertDialog.Cancel>
-					{/if}
-					<AlertDialog.Action>
+						</AlertDialog.Title>
+						{#if closeButton}
+							<AlertDialog.Cancel>
+								{#snippet child({ props })}
+									<IconButton {...props} icon={icons.close} label="Close" tooltip={false} />
+								{/snippet}
+							</AlertDialog.Cancel>
+						{/if}
+					</div>
+					<AlertDialog.Description>
 						{#snippet child({ props })}
-							<Button
-								{...props}
-								bind:ref={confirmButton}
-								appearance="prominent"
-								icon={confirmIcon}
-								onclick={confirm}
-							>
-								{confirmLabel}
-							</Button>
+							<Text {...props} variant="label" class="og-dialog-description">{description}</Text>
 						{/snippet}
-					</AlertDialog.Action>
+					</AlertDialog.Description>
+					<!-- Arrow keys move between the actions; Tab works as usual (Modals.md). -->
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<div
+						class="og-dialog-actions"
+						bind:this={actions}
+						role="group"
+						aria-label="Actions"
+						onkeydown={(event) => actions && moveBetweenActions(event, actions)}
+					>
+						{#if cancelLabel !== false}
+							<AlertDialog.Cancel>
+								{#snippet child({ props })}
+									<Button {...props} bind:ref={cancelButton}>{cancelLabel}</Button>
+								{/snippet}
+							</AlertDialog.Cancel>
+						{/if}
+						<AlertDialog.Action>
+							{#snippet child({ props })}
+								<Button
+									{...props}
+									bind:ref={confirmButton}
+									appearance="prominent"
+									icon={confirmIcon}
+									onclick={confirm}
+								>
+									{confirmLabel}
+								</Button>
+							{/snippet}
+						</AlertDialog.Action>
+					</div>
 				</div>
-			</div>
-		</AlertDialog.Content>
+			</AlertDialog.Content>
+		</NoToolbar>
 	</AlertDialog.Portal>
 </AlertDialog.Root>
 

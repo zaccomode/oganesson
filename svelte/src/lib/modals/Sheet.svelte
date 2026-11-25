@@ -39,6 +39,7 @@ follows it unless `closeOnEscape` is set.
 	import type { ClassValue } from 'svelte/elements';
 	import IconButton from '../buttons/IconButton.svelte';
 	import { getOganessonIcons } from '../icons/context.js';
+	import NoToolbar from '../internal/NoToolbar.svelte';
 	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import ScrollEdgeEffect from '../toolbars/ScrollEdgeEffect.svelte';
 	import Text from '../typography/Text.svelte';
@@ -141,53 +142,56 @@ follows it unless `closeOnEscape` is set.
 		</Dialog.Trigger>
 	{/if}
 	<Dialog.Portal>
-		<Dialog.Overlay class="og-modal-overlay" data-og-modal="sheet" />
-		<Dialog.Content
-			bind:ref={content}
-			class={['og-modal', 'og-sheet', className]}
-			style="--og-sheet-width: {width}px; --og-sheet-height: {height}px; --og-sheet-gap: {SHEET_VIEWPORT_GAP}px"
-			interactOutsideBehavior={closeOnBackgroundPress ? 'close' : 'ignore'}
-			escapeKeydownBehavior={(closeOnEscape ?? closeOnBackgroundPress) ? 'close' : 'ignore'}
-			onOpenAutoFocus={(event) => {
-				// The first control in the content. With none, static content that scrolls
-				// takes focus so the keyboard scrolls it; otherwise the sheet itself does.
-				const target =
-					firstTabbable(body) ?? (body && body.scrollHeight > body.clientHeight ? body : null);
-				event.preventDefault();
-				if (target && target === body) target.tabIndex = 0;
-				(target ?? content)?.focus();
-			}}
-		>
-			<div
-				class="og-modal-surface og-sheet-surface"
-				data-footer={hasFooter ? '' : undefined}
-				{@attach squircle({ radius: 22, effects: elevatedEffects })}
+		<!-- Portalled out of any toolbar the trigger sits in, so its buttons aren't the toolbar's. -->
+		<NoToolbar>
+			<Dialog.Overlay class="og-modal-overlay" data-og-modal="sheet" />
+			<Dialog.Content
+				bind:ref={content}
+				class={['og-modal', 'og-sheet', className]}
+				style="--og-sheet-width: {width}px; --og-sheet-height: {height}px; --og-sheet-gap: {SHEET_VIEWPORT_GAP}px"
+				interactOutsideBehavior={closeOnBackgroundPress ? 'close' : 'ignore'}
+				escapeKeydownBehavior={(closeOnEscape ?? closeOnBackgroundPress) ? 'close' : 'ignore'}
+				onOpenAutoFocus={(event) => {
+					// The first control in the content. With none, static content that scrolls
+					// takes focus so the keyboard scrolls it; otherwise the sheet itself does.
+					const target =
+						firstTabbable(body) ?? (body && body.scrollHeight > body.clientHeight ? body : null);
+					event.preventDefault();
+					if (target && target === body) target.tabIndex = 0;
+					(target ?? content)?.focus();
+				}}
 			>
-				<ScrollEdgeEffect edge="top" pinned={false} class="og-sheet-header">
-					<Dialog.Title>
-						{#snippet child({ props })}
-							<Text {...props} variant="title" as="h2" class="og-modal-title">{title}</Text>
-						{/snippet}
-					</Dialog.Title>
-					<Dialog.Close>
-						{#snippet child({ props })}
-							<IconButton {...props} icon={icons.close} label="Close" tooltip={false} />
-						{/snippet}
-					</Dialog.Close>
-				</ScrollEdgeEffect>
-				<div class="og-sheet-body" bind:this={body} {@attach scrollableByKeyboard}>
-					{@render children()}
-				</div>
-				{#if hasFooter}
-					<ScrollEdgeEffect edge="bottom" pinned={false} class="og-sheet-footer">
-						{@render tertiaryAction?.({ close })}
-						<span class="og-sheet-spacer"></span>
-						{@render secondaryAction?.({ close })}
-						{@render primaryAction?.({ close })}
+				<div
+					class="og-modal-surface og-sheet-surface"
+					data-footer={hasFooter ? '' : undefined}
+					{@attach squircle({ radius: 22, effects: elevatedEffects })}
+				>
+					<ScrollEdgeEffect edge="top" pinned={false} class="og-sheet-header">
+						<Dialog.Title>
+							{#snippet child({ props })}
+								<Text {...props} variant="title" as="h2" class="og-modal-title">{title}</Text>
+							{/snippet}
+						</Dialog.Title>
+						<Dialog.Close>
+							{#snippet child({ props })}
+								<IconButton {...props} icon={icons.close} label="Close" tooltip={false} />
+							{/snippet}
+						</Dialog.Close>
 					</ScrollEdgeEffect>
-				{/if}
-			</div>
-		</Dialog.Content>
+					<div class="og-sheet-body" bind:this={body} {@attach scrollableByKeyboard}>
+						{@render children()}
+					</div>
+					{#if hasFooter}
+						<ScrollEdgeEffect edge="bottom" pinned={false} class="og-sheet-footer">
+							{@render tertiaryAction?.({ close })}
+							<span class="og-sheet-spacer"></span>
+							{@render secondaryAction?.({ close })}
+							{@render primaryAction?.({ close })}
+						</ScrollEdgeEffect>
+					{/if}
+				</div>
+			</Dialog.Content>
+		</NoToolbar>
 	</Dialog.Portal>
 </Dialog.Root>
 
