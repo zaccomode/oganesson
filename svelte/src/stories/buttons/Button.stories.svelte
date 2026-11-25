@@ -108,6 +108,9 @@
 		await expect(getComputedStyle(shell('plain'), '::before').opacity).toBe('0');
 		await expect(getComputedStyle(shell('elevated'), '::before').opacity).toBe('1');
 		await expect(getComputedStyle(shell('disabled')).opacity).toBe('0.5');
+		// At rest there's no hover strip below the button: hovering just under it would
+		// raise the button away from the pointer and make it bounce.
+		await expect(getComputedStyle(shell('plain'), '::after').content).toBe('none');
 
 		await userEvent.click(button);
 		await expect(args.onclick).toHaveBeenCalledOnce();
