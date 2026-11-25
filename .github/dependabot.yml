@@ -1,0 +1,61 @@
+# Routine version updates. The security side — alerts, and the pull requests
+# that fix them — is a repository setting rather than anything in this file,
+# and is on.
+#
+# What this file is really deciding is how reviewable the stream is. A bump
+# whose changelog someone has to read gets its own pull request; a bump whose
+# changelog nobody was ever going to read gets batched with its neighbours.
+# Majors are therefore deliberately left out of every group below.
+version: 2
+updates:
+  # checkout and setup-node, which CI and the three release workflows share.
+  # Grouped: they move together, and CI either passes on the set or it doesn't.
+  # Worth keeping current for its own sake — the release workflows run with
+  # write access, and svelte-publish-npm.yml mints the identity token npm
+  # trusts to publish oganesson-svelte.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+
+  # oganesson-svelte is the only package, and it lives in svelte/ with its own
+  # lockfile; there is no workspace root. design/ has no manifests. If another
+  # implementation joins it, switch to `directories:` with one entry each.
+  - package-ecosystem: npm
+    directory: /svelte
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    ignore:
+      # @types/node describes a floor, not a target. The package declares
+      # engines.node >=24 and the release workflows build on 24, so these
+      # types track Node 24; a newer major would typecheck calls that fail
+      # there. Bump it when engines.node moves, not when DefinitelyTyped
+      # ships.
+      #
+      # Scoped to majors rather than ignoring the name outright: ignore
+      # conditions suppress security pull requests too, and the note at the
+      # top of this file is only true while that path stays open.
+      - dependency-name: '@types/node'
+        update-types:
+          - version-update:semver-major
+
+    # Split by whether the dependency ships. A bad devDependency breaks the
+    # build or the story tests in front of whoever opened the PR; a bad
+    # dependency (bits-ui, the Lisse squircles, Lucide icons, the fonts) is
+    # installed into every app that uses oganesson-svelte, so the two halves
+    # deserve separate looks even when both are only patch bumps. Svelte,
+    # SvelteKit, Bits UI, Storybook, Vite and Vitest majors are migrations
+    # rather than bumps, and arrive on their own by virtue of being excluded
+    # here. A Svelte major also means revisiting the peerDependencies range
+    # by hand.
+    groups:
+      dev-minor-patch:
+        dependency-type: development
+        update-types: [minor, patch]
+      prod-minor-patch:
+        dependency-type: production
+        update-types: [minor, patch]

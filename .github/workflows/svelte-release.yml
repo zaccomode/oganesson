@@ -16,8 +16,10 @@ on:
   # release: choose the tag in the ref picker.
   workflow_dispatch:
 
+# Read-only by default; the job below asks for write access on its own, so
+# that anything added to this file later starts from the narrow scope.
 permissions:
-  contents: write # create the draft release
+  contents: read
 
 defaults:
   run:
@@ -26,6 +28,8 @@ defaults:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the draft release
     steps:
       - uses: actions/checkout@v7
         with:
