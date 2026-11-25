@@ -155,9 +155,13 @@
 		// Scale and shadow on the menu; fade and blur on its surface.
 		await expect(motion.transitionProperty).toBe('scale, box-shadow');
 		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
-		const surfaceMotion = getComputedStyle(menu()!.querySelector('.og-menu-surface')!);
-		await expect(surfaceMotion.transitionProperty).toBe('opacity, filter');
-		await expect(surfaceMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+		// Every child fades: the surface and Lisse's inner-shadow overlay beside it.
+		await expect(menu()!.children.length).toBeGreaterThan(1);
+		for (const child of menu()!.children) {
+			const childMotion = getComputedStyle(child);
+			await expect(childMotion.transitionProperty).toBe('opacity, filter');
+			await expect(childMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+		}
 		await expect(motion.transformOrigin).toBe(`${box.width}px 0px`);
 
 		// Choosing an item runs it and closes the menu.

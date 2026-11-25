@@ -135,7 +135,7 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 	 * Menu motion (Animations.md): grows from 90% and sharpens from a 4px blur
 	 * while fading in on open; the reverse on close.
 	 *
-	 * The fade and blur run on the surface, not on this element: an ancestor with
+	 * The fade and blur run on its children, not on this element: an ancestor with
 	 * opacity below 1 or a filter isolates the surface's backdrop-filter, so WebKit
 	 * showed no acrylic blur until the entrance finished. Only the scale (transforms
 	 * don't isolate backdrops) and the shadow animate here.
@@ -146,15 +146,23 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 		box-shadow: none;
 	}
 
-	:global(.og-menu[data-starting-style] > .og-menu-surface),
-	:global(.og-menu[data-ending-style] > .og-menu-surface) {
+	/* The fade covers every child: the surface, and the inner-shadow overlay that
+	   Lisse draws as the surface's sibling (it would otherwise outlive the menu). */
+	:global(.og-menu > *) {
+		transition:
+			opacity var(--og-duration-menu-in) var(--og-ease-movement),
+			filter var(--og-duration-menu-in) var(--og-ease-movement);
+	}
+
+	:global(.og-menu[data-starting-style] > *),
+	:global(.og-menu[data-ending-style] > *) {
 		opacity: 0;
 		filter: blur(4px);
 	}
 
 	/* Bits UI applies this while closing, so its transition runs on exit. */
 	:global(.og-menu[data-ending-style]),
-	:global(.og-menu[data-ending-style] > .og-menu-surface) {
+	:global(.og-menu[data-ending-style] > *) {
 		transition-duration: var(--og-duration-menu-out);
 		transition-timing-function: var(--og-ease-out);
 	}
@@ -169,8 +177,5 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 		-webkit-backdrop-filter: blur(var(--og-blur-menu));
 		backdrop-filter: blur(var(--og-blur-menu));
 		border-radius: 12px;
-		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
-			filter var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 </style>

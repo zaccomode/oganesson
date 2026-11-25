@@ -531,7 +531,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 
 	/*
 	 * Grows from 90% and sharpens from a 4px blur while fading in on open; the
-	 * reverse on close. The fade and blur run on the surface, not on this element:
+	 * reverse on close. The fade and blur run on its children, not on this element:
 	 * an ancestor with opacity below 1 or a filter isolates the surface's
 	 * backdrop-filter, so WebKit showed no acrylic blur until the entrance
 	 * finished. Only the scale and the shadow animate here.
@@ -542,8 +542,16 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		box-shadow: none;
 	}
 
-	:global(.og-select-menu[data-starting-style] > .og-select-menu-surface),
-	:global(.og-select-menu[data-ending-style] > .og-select-menu-surface) {
+	/* The fade covers every child: the surface, and the inner-shadow overlay that
+	   Lisse draws as the surface's sibling (it would otherwise outlive the menu). */
+	:global(.og-select-menu > *) {
+		transition:
+			opacity var(--og-duration-menu-in) var(--og-ease-movement),
+			filter var(--og-duration-menu-in) var(--og-ease-movement);
+	}
+
+	:global(.og-select-menu[data-starting-style] > *),
+	:global(.og-select-menu[data-ending-style] > *) {
 		opacity: 0;
 		filter: blur(4px);
 	}
@@ -551,7 +559,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	/* Bits UI applies this while closing, so its transition runs on exit. The exit
 	   uses the snappier interaction curve. */
 	:global(.og-select-menu[data-ending-style]),
-	:global(.og-select-menu[data-ending-style] > .og-select-menu-surface) {
+	:global(.og-select-menu[data-ending-style] > *) {
 		transition-duration: var(--og-duration-menu-out);
 		transition-timing-function: var(--og-ease-out);
 	}
@@ -567,9 +575,6 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		backdrop-filter: blur(var(--og-blur-menu));
 		border-radius: 12px;
 		overflow: hidden;
-		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
-			filter var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 
 	/* The design draws its own scrollbar, so the native one is hidden. */
