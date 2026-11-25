@@ -48,7 +48,13 @@
 	async function openMenu(trigger: HTMLElement) {
 		await userEvent.click(trigger);
 		await waitFor(() => expect(menu()).not.toBeNull());
-		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		// The outer menu never fades or blurs (that would hide the surface's backdrop blur
+		// in WebKit until the entrance ends); the surface does.
+		await expect(getComputedStyle(menu()!).opacity).toBe('1');
+		await expect(getComputedStyle(menu()!).filter).toBe('none');
+		await waitFor(() =>
+			expect(getComputedStyle(menu()!.querySelector('.og-menu-surface')!).opacity).toBe('1')
+		);
 	}
 
 	async function closeMenu() {
@@ -146,7 +152,12 @@
 		// Grows from the trigger's corner (top right) over 100ms.
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const motion = getComputedStyle(menu()!);
-		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s, 0s' : '0.1s, 0.1s, 0.1s');
+		// Scale and shadow on the menu; fade and blur on its surface.
+		await expect(motion.transitionProperty).toBe('scale, box-shadow');
+		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+		const surfaceMotion = getComputedStyle(menu()!.querySelector('.og-menu-surface')!);
+		await expect(surfaceMotion.transitionProperty).toBe('opacity, filter');
+		await expect(surfaceMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
 		await expect(motion.transformOrigin).toBe(`${box.width}px 0px`);
 
 		// Choosing an item runs it and closes the menu.

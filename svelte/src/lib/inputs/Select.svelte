@@ -520,9 +520,8 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		   transition is the one that runs on entrance. */
 		transform-origin: top center;
 		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
 			scale var(--og-duration-menu-in) var(--og-ease-movement),
-			filter var(--og-duration-menu-in) var(--og-ease-movement);
+			box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 
 	/* Above the field (opened or flipped there), it grows from its bottom edge. */
@@ -530,18 +529,29 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		transform-origin: bottom center;
 	}
 
-	/* Grows from 90% and sharpens from a 4px blur while fading in on open; the
-	   reverse on close. */
+	/*
+	 * Grows from 90% and sharpens from a 4px blur while fading in on open; the
+	 * reverse on close. The fade and blur run on the surface, not on this element:
+	 * an ancestor with opacity below 1 or a filter isolates the surface's
+	 * backdrop-filter, so WebKit showed no acrylic blur until the entrance
+	 * finished. Only the scale and the shadow animate here.
+	 */
 	:global(.og-select-menu[data-starting-style]),
 	:global(.og-select-menu[data-ending-style]) {
-		opacity: 0;
 		scale: 0.9;
+		box-shadow: none;
+	}
+
+	:global(.og-select-menu[data-starting-style] > .og-select-menu-surface),
+	:global(.og-select-menu[data-ending-style] > .og-select-menu-surface) {
+		opacity: 0;
 		filter: blur(4px);
 	}
 
 	/* Bits UI applies this while closing, so its transition runs on exit. The exit
 	   uses the snappier interaction curve. */
-	:global(.og-select-menu[data-ending-style]) {
+	:global(.og-select-menu[data-ending-style]),
+	:global(.og-select-menu[data-ending-style] > .og-select-menu-surface) {
 		transition-duration: var(--og-duration-menu-out);
 		transition-timing-function: var(--og-ease-out);
 	}
@@ -557,6 +567,9 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		backdrop-filter: blur(var(--og-blur-menu));
 		border-radius: 12px;
 		overflow: hidden;
+		transition:
+			opacity var(--og-duration-menu-in) var(--og-ease-movement),
+			filter var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 
 	/* The design draws its own scrollbar, so the native one is hidden. */

@@ -150,7 +150,13 @@
 		const trigger = canvasElement.querySelector<HTMLElement>('.og-select-field')!;
 		await userEvent.click(trigger);
 		await waitFor(() => expect(menu()).not.toBeNull());
-		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		// The outer menu never fades or blurs (that would hide the surface's backdrop blur
+		// in WebKit until the entrance ends); the surface does.
+		await expect(getComputedStyle(menu()!).opacity).toBe('1');
+		await expect(getComputedStyle(menu()!).filter).toBe('none');
+		await waitFor(() =>
+			expect(getComputedStyle(menu()!.querySelector('.og-select-menu-surface')!).opacity).toBe('1')
+		);
 
 		// 2px below the field, at least as wide, 4px padding around 30px items 2px apart.
 		const field = trigger.getBoundingClientRect();
@@ -189,7 +195,12 @@
 		// Below the field, the menu grows from the middle of its top edge, over 100ms.
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const motion = getComputedStyle(menu()!);
-		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s, 0s' : '0.1s, 0.1s, 0.1s');
+		// Scale and shadow on the menu; fade and blur on its surface.
+		await expect(motion.transitionProperty).toBe('scale, box-shadow');
+		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+		const surfaceMotion = getComputedStyle(menu()!.querySelector('.og-select-menu-surface')!);
+		await expect(surfaceMotion.transitionProperty).toBe('opacity, filter');
+		await expect(surfaceMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
 		const size = menu()!.getBoundingClientRect();
 		await expect(motion.transformOrigin).toBe(`${size.width / 2}px 0px`);
 
@@ -216,7 +227,9 @@
 		// Five options, then it scrolls.
 		await userEvent.click(plain);
 		await waitFor(() => expect(menu()).not.toBeNull());
-		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		await waitFor(() =>
+			expect(getComputedStyle(menu()!.querySelector('.og-select-menu-surface')!).opacity).toBe('1')
+		);
 		await waitFor(() => expect(Math.round(menu()!.getBoundingClientRect().height)).toBe(166));
 		const top = () => menu()!.querySelector('[data-edge="top"]')!;
 		const bottom = () => menu()!.querySelector('[data-edge="bottom"]')!;
@@ -278,7 +291,9 @@
 			).toBe(2)
 		);
 
-		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		await waitFor(() =>
+			expect(getComputedStyle(menu()!.querySelector('.og-select-menu-surface')!).opacity).toBe('1')
+		);
 		// Above the field, it grows from the middle of its bottom edge.
 		const size = menu()!.getBoundingClientRect();
 		await expect(getComputedStyle(menu()!).transformOrigin).toBe(
@@ -309,7 +324,9 @@
 		await userEvent.click(input);
 		await waitFor(() => expect(menu()).not.toBeNull());
 		await expect(items().length).toBe(countries.length);
-		await waitFor(() => expect(getComputedStyle(menu()!).opacity).toBe('1'));
+		await waitFor(() =>
+			expect(getComputedStyle(menu()!.querySelector('.og-select-menu-surface')!).opacity).toBe('1')
+		);
 		// The menu lines up with the whole field, not just the text inside it.
 		await expect(Math.round(menu()!.getBoundingClientRect().left)).toBe(
 			Math.round(field.getBoundingClientRect().left)
