@@ -16,6 +16,7 @@ hover layer (Animations.md). Type to jump to an item by its label.
 	import { DropdownMenu } from 'bits-ui';
 	import RowButton from '../buttons/RowButton.svelte';
 	import type { ButtonColorway, IconComponent } from '../buttons/types.js';
+	import { setToolbarContext } from '../toolbars/context.js';
 
 	interface Props {
 		icon: IconComponent;
@@ -45,6 +46,10 @@ hover layer (Animations.md). Type to jump to an item by its label.
 		onSelect,
 		closeOnSelect = true
 	}: Props = $props();
+
+	// A menu opened from a toolbar is portalled out of it, so its items aren't the
+	// toolbar's buttons: they keep the menu's own arrow-key navigation.
+	setToolbarContext(null);
 </script>
 
 <DropdownMenu.Item {disabled} {onSelect} {closeOnSelect} textValue={label}>

@@ -10,6 +10,10 @@ export { default as Switch } from './inputs/Switch.svelte';
 export { default as Select } from './inputs/Select.svelte';
 export { default as Menu } from './menus/Menu.svelte';
 export { default as MenuItem } from './menus/MenuItem.svelte';
+export { default as Toolbar } from './toolbars/Toolbar.svelte';
+export { default as ToolbarGroup } from './toolbars/ToolbarGroup.svelte';
+export { default as ToolbarSeparator } from './toolbars/ToolbarSeparator.svelte';
+export { default as ScrollEdgeEffect } from './toolbars/ScrollEdgeEffect.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
 export type {
@@ -20,6 +24,7 @@ export type {
 } from './buttons/types.js';
 export type { SelectOption } from './inputs/select.js';
 export type { MenuAlign, MenuSide } from './menus/menu.js';
+export type { ToolbarSize } from './toolbars/context.js';
 export {
 	setOganessonIcons,
 	getOganessonIcons,
