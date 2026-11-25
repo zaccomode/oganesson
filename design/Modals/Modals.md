@@ -47,7 +47,7 @@ _See also: Sheet Modal.sketchframe_
 A sheet has smooth 22px corners, a Background 1 fill, the elevated drop shadow and the white inner highlight. Its header and footer are 62px bars (16px of padding around 30px controls) laid over the content, each with the scroll edge effect (see _Scroll Edge Effect.md_) facing the content:
 
 1. **Header:** the title (Title style), with a subtle close button in the top-right corner, 16px apart.
-2. **Content:** 16px from the sides of the sheet, starting below the header and able to scroll clear of the footer. Without a footer, the content ends 16px from the bottom.
+2. **Content:** 16px from the sides of the sheet, starting below the header and able to scroll clear of the footer. Without a footer, the content ends 16px from the bottom. The content's scrollbar runs between the header and footer rather than under them, and a control scrolled into view (for example by Tab) stops clear of both bars.
 3. **Footer:** the tertiary action on the far left, then the secondary and primary actions on the right, 8px apart.
 
 When a sheet opens, the first control in its content takes focus. If there is none, static content that scrolls takes focus so the keyboard can scroll it; otherwise the sheet itself does, so no control shows a focus ring until the keyboard moves. Focus then moves through the content, the footer actions from left to right, and the close button, and stays within the sheet.

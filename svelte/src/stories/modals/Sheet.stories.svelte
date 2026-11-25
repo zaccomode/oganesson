@@ -244,6 +244,9 @@
 		// The content overflows; the body scrolls, not the sheet, so the header and
 		// footer stay put while the form passes beneath them.
 		await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
+		// Controls scrolled into view (by Tab, say) stop clear of the header and footer.
+		await expect(getComputedStyle(body).scrollPaddingTop).toBe('62px');
+		await expect(getComputedStyle(body).scrollPaddingBottom).toBe('62px');
 		const headerTop = rect(header).top;
 		body.scrollTop = body.scrollHeight;
 		await waitFor(() => expect(body.scrollTop).toBeGreaterThan(0));

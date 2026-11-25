@@ -225,12 +225,38 @@ follows it unless `closeOnEscape` is set.
 		overflow: auto;
 		overscroll-behavior: contain;
 		/* Content starts below the header and can scroll to clear the footer. */
-		padding: var(--og-sheet-bar) 16px 16px;
+		--og-sheet-body-end: 16px;
+		padding: var(--og-sheet-bar) 16px var(--og-sheet-body-end);
+		/* Scrolling a control into view (Tab, find in page) stops clear of the bars. */
+		scroll-padding-block: var(--og-sheet-bar) var(--og-sheet-body-end);
 		outline: none;
 	}
 
 	:global(.og-sheet-surface[data-footer] .og-sheet-body) {
-		padding-bottom: var(--og-sheet-bar);
+		--og-sheet-body-end: var(--og-sheet-bar);
+	}
+
+	/*
+	 * Keep the scrollbar out from under the header and footer. Only WebKit's
+	 * scrollbar pseudo-elements can inset the track, and styling them replaces the
+	 * system's overlay scrollbar, so this draws a slim one in its style: a 7px
+	 * rounded thumb on a clear track, 2px from the edge. Firefox keeps its own.
+	 */
+	:global(.og-sheet-body::-webkit-scrollbar) {
+		width: 11px;
+		background: transparent;
+	}
+
+	:global(.og-sheet-body::-webkit-scrollbar-track) {
+		background: transparent;
+		/* Without a footer, still clear the sheet's 22px rounded corner. */
+		margin-block: var(--og-sheet-bar) max(var(--og-sheet-body-end), 22px);
+	}
+
+	:global(.og-sheet-body::-webkit-scrollbar-thumb) {
+		border: 2px solid transparent;
+		border-radius: 6px;
+		background: var(--og-color-dark-secondary) padding-box;
 	}
 
 	/* The header and footer sit on the scroll edge effect (Scroll Edge Effect.md),
