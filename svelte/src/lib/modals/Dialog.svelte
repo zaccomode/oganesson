@@ -96,20 +96,20 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 	let confirmButton = $state<HTMLElement | null>(null);
 	let actions = $state<HTMLElement | null>(null);
 
-	// Set while confirming, so the close that follows isn't reported as a cancellation.
-	let confirming = false;
-
+	// bits only calls this for changes it makes itself: the trigger, Escape, a background
+	// press and the Cancel/close buttons. Every close it reports is a cancellation;
+	// confirming closes through `confirm()` below, which bits never reports.
 	function handleOpenChange(next: boolean) {
 		onOpenChange?.(next);
-		if (!next && !confirming) onCancel?.();
+		if (!next) onCancel?.();
 	}
 
+	// AlertDialog.Action doesn't close on its own, so this is the only path that closes
+	// on confirm, and returning `false` from `onConfirm` leaves the dialog open.
 	function confirm() {
 		if (onConfirm?.() === false) return;
-		confirming = true;
 		open = false;
 		onOpenChange?.(false);
-		confirming = false;
 	}
 </script>
 

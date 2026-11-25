@@ -57,6 +57,10 @@
 <script lang="ts">
 	let confirmed = $state(0);
 	let cancelled = $state(0);
+
+	// Confirm vetoed: onConfirm returns `veto` and records every open change.
+	let veto = $state<false | undefined>(false);
+	let openChanges = $state<boolean[]>([]);
 </script>
 
 {#snippet openButton({ props }: { props: Record<string, unknown> })}
@@ -221,6 +225,51 @@
 			confirmed++;
 		}}
 		onCancel={() => cancelled++}
+	/>
+</Story>
+
+<!-- Returning `false` from onConfirm keeps the dialog open; anything else closes it. -->
+<Story
+	name="Confirm vetoed"
+	asChild
+	play={async ({ canvasElement }) => {
+		await openDialog(canvasElement);
+		openChanges = [];
+		const confirm = buttonNamed('Publish');
+
+		// onConfirm returns false: the dialog stays open with focus inside, and it
+		// isn't reported as a cancellation or a close.
+		veto = false;
+		await userEvent.click(confirm);
+		await new Promise((resolve) => setTimeout(resolve, 150));
+		await expect(confirmed).toBe(1);
+		await expect(dialog()).not.toBeNull();
+		await expect(dialog()!.contains(document.activeElement)).toBe(true);
+		await expect(cancelled).toBe(0);
+		await expect(openChanges).toEqual([]);
+
+		// onConfirm returns undefined: it closes, reports one close and no cancellation.
+		veto = undefined;
+		await userEvent.click(buttonNamed('Publish'));
+		await closed();
+		await expect(confirmed).toBe(2);
+		await expect(cancelled).toBe(0);
+		await expect(openChanges).toEqual([false]);
+		confirmed = 0;
+		openChanges = [];
+	}}
+>
+	<Dialog
+		title="Publish the article"
+		description="It will be visible to everyone with the link."
+		confirmLabel="Publish"
+		trigger={openButton}
+		onConfirm={() => {
+			confirmed++;
+			return veto;
+		}}
+		onCancel={() => cancelled++}
+		onOpenChange={(open) => openChanges.push(open)}
 	/>
 </Story>
 
