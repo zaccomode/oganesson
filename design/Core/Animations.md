@@ -38,7 +38,7 @@ The press effect is drawn as a separate layer on top of the element's current ba
 1. **Subtle surfaces** use a thick glass layer, darkening the surface.
 2. **Prominent buttons** use a lightening layer over their gradient.
 
-Disabled surfaces don't show the press effect. Neither do text inputs: pressing one focuses it, and its active state shows that instead (see _Inputs.md_).
+Disabled surfaces don't show the press effect. Neither do text inputs: pressing one focuses it, and its active state shows that instead (see _Inputs.md_). Nor do switches: pressing one stretches its thumb towards where it will travel, using movement timing (see _Inputs.md — Switch States_).
 
 ### Focus
 
@@ -52,7 +52,7 @@ When the user has requested reduced motion, every duration is zero: colours chan
 
 1. **Subtle buttons**, in all variants (default, icon, row).
 2. **Prominent buttons**, for their background only. Their raise and push-down movement is specified separately.
-3. **Inputs**, such as the text input, the select input and the switch (whose thumb slide uses movement timing).
+3. **Inputs**, such as the text input, the select input and the switch (hover only; its thumb slide and press stretch use movement timing).
 4. **Menu items**, such as a select input's options. The highlighted item, whether under the pointer or reached with the arrow keys, takes the hover layer.
 
 ## Menu Motion
