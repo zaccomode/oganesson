@@ -121,35 +121,43 @@ lists of options or where the state may be indeterminate.
 		cursor: default;
 	}
 
+	/*
+	 * The thumb is positioned with margin rather than translate so its position
+	 * and width animate together in layout. A composited translate starts a
+	 * frame or so after a width change, so an on thumb nudged right before it
+	 * grew left when pressed.
+	 */
 	:global(.og-switch-thumb) {
 		display: block;
+		flex: none;
 		width: 24px;
 		height: 16px;
+		margin-inline-start: 0;
 		border-radius: 8px;
 		background-color: var(--og-color-dark);
 		pointer-events: none;
 		transition:
-			translate var(--og-duration-movement) var(--og-ease-movement),
+			margin-inline-start var(--og-duration-movement) var(--og-ease-movement),
 			width var(--og-duration-movement) var(--og-ease-movement),
 			background-color var(--og-duration-movement) var(--og-ease-movement);
 	}
 
 	:global(.og-switch-track[aria-checked='true'] > .og-switch-thumb) {
-		translate: 20px 0;
+		margin-inline-start: 20px;
 		background-color: var(--og-color-white);
 	}
 
 	/*
-	 * Pressed: the thumb stretches 10px towards the side it will travel to,
+	 * Pressed: the thumb stretches 4px towards the side it will travel to,
 	 * keeping its far edge in place. Off, it grows rightwards; on, it grows
-	 * leftwards (it moves 10px left as it widens). On release it slides across
+	 * leftwards (it moves 4px left as it widens). On release it slides across
 	 * and shrinks back in one movement.
 	 */
 	.og-switch[data-pressed] > :global(.og-switch-track > .og-switch-thumb) {
-		width: 34px;
+		width: 28px;
 	}
 
 	.og-switch[data-pressed] > :global(.og-switch-track[aria-checked='true'] > .og-switch-thumb) {
-		translate: 10px 0;
+		margin-inline-start: 16px;
 	}
 </style>

@@ -70,9 +70,9 @@
 
 		for (const [c, rest, stretched, after] of [
 			// Off: grows rightwards from the left edge, then slides right.
-			['press-off', { left: 4, right: 28 }, { left: 4, right: 38 }, 'true'],
+			['press-off', { left: 4, right: 28 }, { left: 4, right: 32 }, 'true'],
 			// On: grows leftwards from the right edge, then slides left.
-			['press-on', { left: 24, right: 48 }, { left: 14, right: 48 }, 'false']
+			['press-on', { left: 24, right: 48 }, { left: 20, right: 48 }, 'false']
 		] as const) {
 			const t = track(c);
 			const before = t.getAttribute('aria-checked');
@@ -81,10 +81,10 @@
 			// No press layer on the track: the thumb stretch replaces it.
 			await expect(getComputedStyle(t, '::after').backgroundColor).toBe('rgba(0, 0, 0, 0)');
 
-			// Holding the pointer down stretches the thumb 10px towards its
+			// Holding the pointer down stretches the thumb 4px towards its
 			// destination without toggling.
 			await user.pointer({ keys: '[MouseLeft>]', target: t });
-			await waitFor(() => expect(thumbBox(t)).toMatchObject({ ...stretched, width: 34 }));
+			await waitFor(() => expect(thumbBox(t)).toMatchObject({ ...stretched, width: 28 }));
 			await expect(t.getAttribute('aria-checked')).toBe(before);
 
 			// Releasing toggles it, and the thumb slides across at its resting size.
@@ -97,7 +97,7 @@
 		// Releasing away from the switch cancels: no stretch, no toggle.
 		const off = track('press-cancel');
 		await user.pointer({ keys: '[MouseLeft>]', target: off });
-		await waitFor(() => expect(thumbBox(off).width).toBe(34));
+		await waitFor(() => expect(thumbBox(off).width).toBe(28));
 		await user.pointer({ keys: '[/MouseLeft]', target: canvasElement });
 		await expect(off.getAttribute('aria-checked')).toBe('false');
 		await waitFor(() => expect(thumbBox(off)).toMatchObject({ left: 4, width: 24 }));
