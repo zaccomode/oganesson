@@ -22,6 +22,7 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 	import FocusRing from '../internal/FocusRing.svelte';
 	import { squircle } from '../internal/squircle.svelte.js';
 	import type { IconComponent } from '../buttons/types.js';
+	import { connectFormField, joinIds } from '../forms/context.js';
 
 	interface Props extends Omit<HTMLInputAttributes, 'value' | 'children'> {
 		value?: string | null;
@@ -39,9 +40,15 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 		type = 'text',
 		disabled = false,
 		ref = $bindable(null),
+		id,
+		required,
+		'aria-describedby': describedBy,
 		class: className,
 		...rest
 	}: Props = $props();
+
+	// Inside a <FormField>, take its id, description and required state.
+	const field = connectFormField('TextInput', { id: () => id ?? undefined, icon: () => icon });
 
 	let width = $state(0);
 	let height = $state(0);
@@ -72,7 +79,17 @@ when the field has a visible label ("John Doe..."), an action when it doesn't
 		{@attach squircle()}
 	>
 		{#if icon}<Icon {icon} class="og-text-input-icon" />{/if}
-		<input bind:this={ref} bind:value {type} {disabled} class="og-label" {...rest} />
+		<input
+			bind:this={ref}
+			bind:value
+			{type}
+			{disabled}
+			id={field?.inputId ?? id}
+			required={required ?? (field?.required || undefined)}
+			aria-describedby={joinIds(field?.descriptionId, describedBy)}
+			class="og-label"
+			{...rest}
+		/>
 	</div>
 	<FocusRing {width} {height} radius={8} inner={appearance === 'default'} />
 </div>

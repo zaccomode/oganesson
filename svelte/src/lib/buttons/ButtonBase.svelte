@@ -118,6 +118,10 @@ the button and don't follow transforms applied to the button itself.
 		display: inline-flex;
 		vertical-align: middle;
 		max-width: 100%;
+		/* Button labels aren't selectable text: dragging across or double-clicking
+		   a button shouldn't highlight it. */
+		-webkit-user-select: none;
+		user-select: none;
 		transition: translate var(--og-duration-movement) var(--og-ease-movement);
 	}
 

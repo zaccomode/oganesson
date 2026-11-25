@@ -15,6 +15,7 @@ lists of options or where the state may be indeterminate.
 	import { Switch } from 'bits-ui';
 	import FocusRing from '../internal/FocusRing.svelte';
 	import { squircle } from '../internal/squircle.svelte.js';
+	import { connectFormField, joinIds } from '../forms/context.js';
 
 	type Props = Omit<Switch.RootProps, 'child' | 'children'>;
 
@@ -22,10 +23,16 @@ lists of options or where the state may be indeterminate.
 		checked = $bindable(false),
 		ref = $bindable(null),
 		disabled = false,
+		id,
+		required,
+		'aria-describedby': describedBy,
 		class: className,
 		onpointerdown,
 		...rest
 	}: Props = $props();
+
+	// Inside a <FormField>: a fixed-width input, so the label fills the row.
+	const field = connectFormField('Switch', { id: () => id, hug: true });
 
 	// Inputs.md (Switch States, Press): while the pointer is held down the thumb
 	// stretches towards where it will travel, and it only moves on release.
@@ -55,6 +62,9 @@ lists of options or where the state may be indeterminate.
 		bind:checked
 		bind:ref
 		{disabled}
+		id={field?.inputId ?? id}
+		required={required ?? field?.required}
+		aria-describedby={joinIds(field?.descriptionId, describedBy)}
 		{...rest}
 		onpointerdown={press}
 		class="og-switch-track og-surface"
