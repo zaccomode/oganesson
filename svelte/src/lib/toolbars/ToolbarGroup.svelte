@@ -14,10 +14,9 @@ toolbar, for example around a select input.
 ```
 -->
 <script lang="ts">
-	import type { EffectsConfig } from '@lisse/svelte';
 	import type { Snippet } from 'svelte';
 	import type { ClassValue } from 'svelte/elements';
-	import { squircle } from '../internal/squircle.svelte.js';
+	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import { getToolbarContext, toolbarGroupMetrics } from './context.js';
 
 	interface Props {
@@ -35,12 +34,6 @@ toolbar, for example around a select input.
 	const toolbar = getToolbarContext();
 	const size = $derived(toolbar?.size ?? 'regular');
 	const metrics = $derived(toolbarGroupMetrics[size]);
-
-	// Acrylic (Elevated): the white highlight is an inner shadow drawn along the
-	// squircle. The drop shadow is a CSS box-shadow on the rounded wrapper (Shapes.md).
-	const groupEffects: EffectsConfig = {
-		innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
-	};
 </script>
 
 <div
@@ -53,7 +46,7 @@ toolbar, for example around a select input.
 >
 	<div
 		class="og-toolbar-group-surface"
-		{@attach squircle(() => ({ radius: metrics.radius, effects: groupEffects }))}
+		{@attach squircle(() => ({ radius: metrics.radius, effects: elevatedEffects }))}
 	>
 		{@render children()}
 	</div>

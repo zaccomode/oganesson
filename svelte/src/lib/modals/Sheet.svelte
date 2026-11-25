@@ -35,12 +35,11 @@ follows it unless `closeOnEscape` is set.
 -->
 <script lang="ts">
 	import { Dialog } from 'bits-ui';
-	import type { EffectsConfig } from '@lisse/svelte';
 	import type { Snippet } from 'svelte';
 	import type { ClassValue } from 'svelte/elements';
 	import IconButton from '../buttons/IconButton.svelte';
 	import { getOganessonIcons } from '../icons/context.js';
-	import { squircle } from '../internal/squircle.svelte.js';
+	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import ScrollEdgeEffect from '../toolbars/ScrollEdgeEffect.svelte';
 	import Text from '../typography/Text.svelte';
 	import { firstTabbable, SHEET_VIEWPORT_GAP, type SheetActionArgs } from './modal.js';
@@ -131,12 +130,6 @@ follows it unless `closeOnEscape` is set.
 			mutations.disconnect();
 		};
 	}
-
-	// Sheet Modal.sketchframe: the elevated drop shadow behind a Background 1 surface,
-	// with the white inner highlight drawn along the squircle.
-	const effects: EffectsConfig = {
-		innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
-	};
 </script>
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
@@ -168,7 +161,7 @@ follows it unless `closeOnEscape` is set.
 			<div
 				class="og-modal-surface og-sheet-surface"
 				data-footer={hasFooter ? '' : undefined}
-				{@attach squircle({ radius: 22, effects })}
+				{@attach squircle({ radius: 22, effects: elevatedEffects })}
 			>
 				<ScrollEdgeEffect edge="top" pinned={false} class="og-sheet-header">
 					<Dialog.Title>

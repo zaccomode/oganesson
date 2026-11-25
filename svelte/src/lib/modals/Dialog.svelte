@@ -31,14 +31,13 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 -->
 <script lang="ts">
 	import { AlertDialog } from 'bits-ui';
-	import type { EffectsConfig } from '@lisse/svelte';
 	import type { Snippet } from 'svelte';
 	import type { ClassValue } from 'svelte/elements';
 	import Button from '../buttons/Button.svelte';
 	import IconButton from '../buttons/IconButton.svelte';
 	import type { IconComponent } from '../buttons/types.js';
 	import { getOganessonIcons } from '../icons/context.js';
-	import { squircle } from '../internal/squircle.svelte.js';
+	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import Text from '../typography/Text.svelte';
 	import { DIALOG_WIDTH, moveBetweenActions } from './modal.js';
 
@@ -112,12 +111,6 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 		onOpenChange?.(false);
 		confirming = false;
 	}
-
-	// Dialog Modal.sketchframe: Acrylic (Elevated). The highlight is an inner shadow
-	// along the squircle; the drop shadow is a CSS box-shadow behind it (Shapes.md).
-	const effects: EffectsConfig = {
-		innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
-	};
 </script>
 
 <AlertDialog.Root bind:open onOpenChange={handleOpenChange}>
@@ -141,7 +134,10 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 				(cancelButton ?? confirmButton)?.focus();
 			}}
 		>
-			<div class="og-modal-surface og-dialog-surface" {@attach squircle({ radius: 22, effects })}>
+			<div
+				class="og-modal-surface og-dialog-surface"
+				{@attach squircle({ radius: 22, effects: elevatedEffects })}
+			>
 				<div class="og-modal-header">
 					<AlertDialog.Title>
 						{#snippet child({ props })}
