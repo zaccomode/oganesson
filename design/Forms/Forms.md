@@ -36,4 +36,4 @@ A group's body has a Background 2 (Acrylic) fill, 16px smooth corners and 8px of
 
 ## Forms
 
-A form is at least 300px and at most 650px wide. All fields and buttons within a form must be contained within at least one form group.
+A form is at most 650px wide. It has no minimum width: it shrinks with its container on narrow screens, and its fields stack their labels above their inputs at those widths. All fields and buttons within a form must be contained within at least one form group.

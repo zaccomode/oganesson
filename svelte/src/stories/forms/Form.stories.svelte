@@ -14,7 +14,7 @@
 			docs: {
 				description: {
 					component:
-						'A form (Forms.md): groups of fields and buttons, 16px apart, between 300px and 650px wide. Every field and button sits in a `<FormGroup>`, which can have a short title; the first group usually has none. Fields in a group are separated by a line. Within a form, either every field has an icon or none does (mixing them logs a warning in development).'
+						'A form (Forms.md): groups of fields and buttons, 16px apart, up to 650px wide with no minimum width. Every field and button sits in a `<FormGroup>`, which can have a short title; the first group usually has none. Fields in a group are separated by a line. Within a form, either every field has an icon or none does (mixing them logs a warning in development).'
 				}
 			}
 		}
@@ -130,7 +130,8 @@
 			Fields within each group are ordered left-to-right on sufficiently wide devices, and should be separated
 			by a horizontal line.
 			<br /><br />
-			Forms should be at least 300px wide and at most 650px wide.
+			Forms should be at most 650px wide. (The Sketch file also sets a 300px minimum, which was dropped
+			so forms fit narrow phones.)
 		</p>
 	</div>
 </Story>
@@ -159,12 +160,16 @@
 </Story>
 
 <Story
-	name="Minimum and maximum width"
+	name="Narrow phone and maximum width"
 	asChild
 	play={async ({ canvasElement }) => {
 		const form = (c: string) =>
 			canvasElement.querySelector<HTMLFormElement>(`[data-case="${c}"] form.og-form`)!;
-		await expect(rect(form('min')).width).toBe(300);
+		// A 320px phone with 20px margins leaves 280px: the form shrinks to fit rather
+		// than overflowing, and its fields stack.
+		await expect(rect(form('min')).width).toBe(280);
+		const fieldInput = form('min').querySelector('.og-form-field .og-text-input')!;
+		await expect(rect(fieldInput).width).toBe(280 - 16);
 		await expect(rect(form('max')).width).toBe(650);
 	}}
 >
@@ -295,7 +300,7 @@
 		gap: 24px;
 	}
 	.tiny {
-		width: 200px;
+		width: 280px;
 	}
 	.wide {
 		width: 900px;

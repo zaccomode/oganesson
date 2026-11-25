@@ -4,7 +4,8 @@ A form (design/Forms/Forms.md): a column of `<FormGroup>`s holding fields and
 buttons. Forms are for entering or editing medium-to-large amounts of
 information; short flows like signing in usually don't need one.
 
-The form fills its container between 300px and 650px wide. Every field and
+The form fills its container up to 650px wide, with no minimum: on narrow
+screens it shrinks with its container. Every field and
 button must sit inside a group. Within a form, either every field has an icon or
 none does; in development, mixing them logs a warning.
 
@@ -66,14 +67,15 @@ none does; in development, mixing them logs a warning.
 </form>
 
 <style>
-	/* Form Exploration.sketchframe: groups stacked 16px apart; forms are 300–650px wide. */
+	/* Form Exploration.sketchframe: groups stacked 16px apart. Forms are at most 650px
+	   wide, with no minimum, so they never overflow a narrow phone (Forms.md). */
 	.og-form {
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
 		width: 100%;
-		min-width: 300px;
+		min-width: 0;
 		max-width: 650px;
 		margin: 0;
 	}
