@@ -43,7 +43,10 @@ Render the trigger through the `trigger` snippet and spread `props` onto it:
 </script>
 
 {#snippet root()}
-	<Tooltip.Root delayDuration={instant ? 0 : undefined} {disabled}>
+	<!-- Only keyboard focus opens the tooltip. A button that opens a menu or modal gets
+	     focus back when it closes, and a tooltip opened by that focus would stay until
+	     the user clicked elsewhere. -->
+	<Tooltip.Root delayDuration={instant ? 0 : undefined} {disabled} ignoreNonKeyboardFocus>
 		<Tooltip.Trigger>
 			{#snippet child({ props })}
 				{@render trigger(props)}
