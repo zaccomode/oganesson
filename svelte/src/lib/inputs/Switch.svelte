@@ -27,14 +27,37 @@ lists of options or where the state may be indeterminate.
 		required,
 		'aria-describedby': describedBy,
 		class: className,
+		onpointerdown,
 		...rest
 	}: Props = $props();
 
 	// Inside a <FormField>: a fixed-width input, so the label fills the row.
 	const field = connectFormField('Switch', { id: () => id, hug: true });
+
+	// Inputs.md (Switch States, Press): while the pointer is held down the thumb
+	// stretches towards where it will travel, and it only moves on release.
+	// Tracked in script rather than with :active so it also works on iOS Safari
+	// and ends wherever the pointer is released.
+	let pressed = $state(false);
+
+	const press: typeof onpointerdown = (event) => {
+		onpointerdown?.(event);
+		if (disabled || event.defaultPrevented || !event.isPrimary || event.button !== 0) return;
+		pressed = true;
+	};
+
+	function release() {
+		pressed = false;
+	}
 </script>
 
-<span class={['og-switch', className]} data-disabled={disabled ? '' : undefined}>
+<svelte:window onpointerup={release} onpointercancel={release} onblur={release} />
+
+<span
+	class={['og-switch', className]}
+	data-disabled={disabled ? '' : undefined}
+	data-pressed={pressed ? '' : undefined}
+>
 	<Switch.Root
 		bind:checked
 		bind:ref
@@ -43,10 +66,16 @@ lists of options or where the state may be indeterminate.
 		required={required ?? field?.required}
 		aria-describedby={joinIds(field?.descriptionId, describedBy)}
 		{...rest}
+		onpointerdown={press}
 		class="og-switch-track og-surface"
 		{@attach squircle()}
 	>
-		<Switch.Thumb class="og-switch-thumb" {@attach squircle()} />
+		<!--
+			No squircle on the thumb: it's a pill, where smoothing has no room and
+			Lisse draws plain arcs anyway. Its clip-path also trails a resize by a
+			frame or two, which shaved the leading edge while the thumb stretched.
+		-->
+		<Switch.Thumb class="og-switch-thumb" />
 	</Switch.Root>
 	<FocusRing width={52} height={24} radius={12} />
 </span>
@@ -68,7 +97,10 @@ lists of options or where the state may be indeterminate.
 		transition-duration: 0s;
 	}
 
-	/* Inputs-Switch.sketchframe: a 52×24 pill with 4px inset and a 24×16 pill thumb. */
+	/*
+	 * Inputs-Switch.sketchframe: a 52×24 pill with 4px inset and a 24×16 pill
+	 * thumb, so the thumb travels 20px.
+	 */
 	:global(.og-switch-track) {
 		box-sizing: border-box;
 		display: flex;
@@ -85,34 +117,57 @@ lists of options or where the state may be indeterminate.
 		transition: background-color var(--og-duration-movement) var(--og-ease-movement);
 		--og-surface-bg: var(--og-color-dark-thin-glass);
 		--og-surface-hover: var(--og-color-dark-thin-glass);
-		--og-surface-press: var(--og-color-dark-thick-glass);
+		/* No press layer: pressing stretches the thumb instead (see below). */
+		--og-surface-press: transparent;
 	}
 
-	/* On: a dark track, so hover and press lighten it instead. */
+	/* On: a dark track, so hover lightens it instead. */
 	:global(.og-switch-track[aria-checked='true']) {
 		--og-surface-bg: var(--og-color-dark);
 		--og-surface-hover: var(--og-color-white-thin-glass);
-		--og-surface-press: var(--og-color-white-thick-glass);
 	}
 
 	:global(.og-switch-track:disabled) {
 		cursor: default;
 	}
 
+	/*
+	 * The thumb is positioned with margin rather than translate so its position
+	 * and width animate together in layout. A composited translate starts a
+	 * frame or so after a width change, so an on thumb nudged right before it
+	 * grew left when pressed.
+	 */
 	:global(.og-switch-thumb) {
 		display: block;
+		flex: none;
 		width: 24px;
 		height: 16px;
+		margin-inline-start: 0;
 		border-radius: 8px;
 		background-color: var(--og-color-dark);
 		pointer-events: none;
 		transition:
-			translate var(--og-duration-movement) var(--og-ease-movement),
+			margin-inline-start var(--og-duration-movement) var(--og-ease-movement),
+			width var(--og-duration-movement) var(--og-ease-movement),
 			background-color var(--og-duration-movement) var(--og-ease-movement);
 	}
 
 	:global(.og-switch-track[aria-checked='true'] > .og-switch-thumb) {
-		translate: 20px 0;
+		margin-inline-start: 20px;
 		background-color: var(--og-color-white);
+	}
+
+	/*
+	 * Pressed: the thumb stretches 4px towards the side it will travel to,
+	 * keeping its far edge in place. Off, it grows rightwards; on, it grows
+	 * leftwards (it moves 4px left as it widens). On release it slides across
+	 * and shrinks back in one movement.
+	 */
+	.og-switch[data-pressed] > :global(.og-switch-track > .og-switch-thumb) {
+		width: 28px;
+	}
+
+	.og-switch[data-pressed] > :global(.og-switch-track[aria-checked='true'] > .og-switch-thumb) {
+		margin-inline-start: 16px;
 	}
 </style>
