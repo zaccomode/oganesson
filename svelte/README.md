@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input and the switch. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input and menus. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -74,6 +74,25 @@ Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms
 ```
 
 `<Select>` shows up to `maxItems` (5) options before scrolling, or set `maxHeight` in pixels. The menu opens on `side` (`bottom` by default) and flips when there's less than `minHeight` (140px) of room. Add `typeahead` to let people type to filter the options. Add `allowEmpty` to put a "None" option at the top that clears the value back to `''` (rename it with `emptyOptionLabel`).
+
+### Menus
+
+```svelte
+<script>
+	import { Menu, MenuItem, IconButton } from 'oganesson-svelte';
+	import { Ellipsis, Pencil, Trash2 } from '@lucide/svelte';
+</script>
+
+<Menu>
+	{#snippet trigger({ props, open })}
+		<IconButton {...props} active={open} icon={Ellipsis} label="More" tooltip={false} />
+	{/snippet}
+	<MenuItem icon={Pencil} label="Rename" onSelect={rename} />
+	<MenuItem icon={Trash2} label="Delete" colorway="danger" onSelect={remove} />
+</Menu>
+```
+
+Spread the trigger snippet's `props` onto any button; pass `active={open}` so it looks active while the menu shows. The menu opens below the trigger, right-aligned, 200px wide; set `side` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`) to move it, and it repositions itself to stay in view. Items take a `colorway`, a `secondaryLabel` or `secondaryIcon`, `disabled` or `href`. Keep menus to 6 items; development builds warn above that.
 
 ### Tokens
 
