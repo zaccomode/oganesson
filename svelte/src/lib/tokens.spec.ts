@@ -46,6 +46,8 @@ describe('tokens.ts mirrors tokens.css', () => {
 		expect(cssVar('--og-duration-focus-out')).toBe(`${motion.focusOutMs}ms`);
 		expect(cssVar('--og-duration-menu-in')).toBe(`${motion.menuInMs}ms`);
 		expect(cssVar('--og-duration-menu-out')).toBe(`${motion.menuOutMs}ms`);
+		expect(cssVar('--og-duration-backdrop-in')).toBe(`${motion.backdropInMs}ms`);
+		expect(cssVar('--og-duration-backdrop-out')).toBe(`${motion.backdropOutMs}ms`);
 	});
 
 	it('declares no colour token missing from tokens.ts', () => {

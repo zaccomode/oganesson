@@ -28,7 +28,7 @@ These are the only paletted colors. A few components use one-off values specific
 | Background 1            | `#f2f4f4`                 |
 | Background 2 (Acrylic)  | `rgba(255,255,255,0.702)` |
 
-Acrylic is always combined with a background blur. Menus use a 10px blur and dialog modals a 24px blur.
+Acrylic is always combined with a background blur. Menus and dialog modals use a 10px blur.
 
 ## Dark Mode
 

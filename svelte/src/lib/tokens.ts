@@ -66,5 +66,8 @@ export const motion = {
 	focusOutMs: 500,
 	/** Menus grow and fade in quickly, and out more slowly. */
 	menuInMs: 100,
-	menuOutMs: 300
+	menuOutMs: 300,
+	/** The dimmed background behind modals fades in quickly, and out more slowly. */
+	backdropInMs: 200,
+	backdropOutMs: 300
 } as const;

@@ -58,7 +58,8 @@
 		0px 83px 50px 0px rgba(0, 0, 0, 0.051);
 	--og-acrylic-highlight: inset 0px 1px 6px 0px #ffffff;
 	--og-blur-menu: 10px;
-	--og-blur-dialog: 24px;
+	/* The dimmed background behind a sheet modal (dialogs' background isn't blurred). */
+	--og-blur-sheet-backdrop: 8px;
 
 	/* ── Motion (Animations.md: Interaction Animations) ────────────────────── */
 	--og-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -75,6 +76,10 @@
 	/* Menus: a quick grow-and-fade in, a longer one out (Animations.md). */
 	--og-duration-menu-in: 100ms;
 	--og-duration-menu-out: 300ms;
+
+	/* The dimmed background behind modals: a quick fade in, a longer one out (Modals.md). */
+	--og-duration-backdrop-in: 200ms;
+	--og-duration-backdrop-out: 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -85,5 +90,7 @@
 		--og-duration-focus-out: 0ms;
 		--og-duration-menu-in: 0ms;
 		--og-duration-menu-out: 0ms;
+		--og-duration-backdrop-in: 0ms;
+		--og-duration-backdrop-out: 0ms;
 	}
 }

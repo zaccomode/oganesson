@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms and toolbars. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms, toolbars and modals. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -170,6 +170,40 @@ Spread the trigger snippet's `props` onto any button; pass `active={open}` so it
 A toolbar holds one or more `<ToolbarGroup>`s (the acrylic containers, 4px apart); `<ToolbarSeparator>` splits a group into sections. Set `size="large"` to emphasise the controls, and `fill` on a group to stretch it across the room left (for example around a `<Select>`). Buttons and menu triggers inside share one tab stop and the arrow keys move between them; inputs keep their own tab stops.
 
 `<ScrollEdgeEffect>` pins its toolbars to the `top` (default) or `bottom` edge of the scroll container with `position: sticky`, over a progressive blur and gradient. Make it a direct child of the scrolling element: first for the top, last for the bottom. Its children sit in a row, 8px apart and 16px in; give a title `flex: 1` to push toolbars to either end. Set `pinned={false}` to position it yourself. Use it only under toolbars.
+
+### Modals
+
+```svelte
+<script>
+	import { Dialog, Sheet, Form, Button } from 'oganesson-svelte';
+	import { Trash2 } from '@lucide/svelte';
+	let editing = $state(false);
+</script>
+
+<Dialog
+	title="Confirm account deletion"
+	description="Your projects and settings will be removed. This can't be undone."
+	confirmLabel="Delete"
+	confirmIcon={Trash2}
+	onConfirm={deleteAccount}
+>
+	{#snippet trigger({ props })}
+		<Button {...props} colorway="danger">Delete account</Button>
+	{/snippet}
+</Dialog>
+
+<Sheet title="New event" width={470} height={540} bind:open={editing}>
+	<Form id="new-event" onsubmit={save}>…</Form>
+	{#snippet tertiaryAction({ close })}
+		<Button onclick={close}>Cancel</Button>
+	{/snippet}
+	{#snippet primaryAction()}
+		<Button appearance="prominent" type="submit" form="new-event">Save</Button>
+	{/snippet}
+</Sheet>
+```
+
+Open a modal from its `trigger` snippet or by binding `open`. A `<Dialog>` is a short alert or confirmation: cancel on the left (`cancelLabel`, or `false` for none) has focus when it opens, and the prominent confirm on the right fires `onConfirm` (return `false` to stay open). A `<Sheet>` has a fixed `width` and `height`; its content scrolls beneath the header and footer and it keeps 16px clear of a smaller viewport. Its footer takes up to three snippets, `tertiaryAction` (far left), `secondaryAction` and `primaryAction` (far right), each given a `close` function; leave them out for static content. Pressing the background, Escape or the close button closes either as a cancellation and fires `onCancel`. Set `closeOnBackgroundPress={false}` to stop that; Escape follows it unless you set `closeOnEscape`.
 
 ### Tokens
 

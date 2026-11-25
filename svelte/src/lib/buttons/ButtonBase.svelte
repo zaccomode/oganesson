@@ -302,20 +302,22 @@ Inside a `<Toolbar>`, the button renders through Bits UI `Toolbar.Button` (or
 		opacity: 1;
 	}
 
-	/* Keeps the pointer "over" the button while it's raised, so it doesn't flicker
-	   between hovered and not when the pointer is near its bottom edge. */
-	.og-button-shell[data-appearance='prominent']::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: -2px;
-		height: 2px;
-	}
-
 	@media (hover: hover) {
 		.og-button-shell[data-appearance='prominent']:not([data-disabled]):hover {
 			translate: 0 -2px;
+		}
+
+		/* While raised, fill the 2px the button left behind so the pointer stays over
+		   it. Only while hovered: at rest this strip would sit below the button, and
+		   hovering it would raise the button away from the pointer, which would drop
+		   the hover and lower it again, over and over. */
+		.og-button-shell[data-appearance='prominent']:not([data-disabled]):hover::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: -2px;
+			height: 2px;
 		}
 
 		.og-button-shell[data-appearance='prominent']:not([data-disabled]):hover::before {
