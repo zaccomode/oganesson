@@ -1,16 +1,16 @@
 # oganesson-svelte
 
-The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
+The Svelte implementation of [Oganesson](https://github.com/zaccomode/oganesson), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](https://github.com/zaccomode/oganesson/tree/main/design) is the source of truth; this package follows it exactly.
 
 > Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms, toolbars and modals. More components arrive milestone by milestone.
 
 ## Using it
 
 ```sh
-npm install oganesson-svelte
+npm install oganesson-svelte @lucide/svelte
 ```
 
-Requires Svelte 5.32 or later. Importing anything from the package also loads its stylesheet: the design tokens, the self-hosted fonts (Instrument Sans and Geist Mono) and the text styles.
+Requires Svelte 5.32 or later. `@lucide/svelte` is optional: the examples below use it for icons, but `<Icon>` takes any icon component. Importing anything from the package also loads its stylesheet: the design tokens, the self-hosted fonts (Instrument Sans and Geist Mono) and the text styles.
 
 ```svelte
 <script>
@@ -231,3 +231,7 @@ npm run build         # build dist/ and run publint
 - Library code lives in `src/lib`; stories in `src/stories`.
 - Stories double as tests: each story renders in Chromium, runs its `play` function and is checked with axe.
 - `src/lib/styles/tokens.css` is the source of truth for tokens; `src/lib/tokens.ts` mirrors it and a unit test keeps them in step.
+
+## Releasing
+
+Bump `version` in `package.json` (`npm version 0.2.0 --no-git-tag-version`) in a pull request. Merging it tags the release, builds it and leaves a draft GitHub release; publishing the draft puts it on npm. See [RELEASING.md](https://github.com/zaccomode/oganesson/blob/main/svelte/RELEASING.md).

@@ -1,0 +1,94 @@
+name: oganesson-svelte release
+
+# A svelte-v* tag is the trigger, and the tag has to agree with the version in
+# svelte/package.json. This builds and tests the package, packs it, and leaves
+# a draft GitHub release with the tarball attached. Publishing that draft is
+# what puts the tarball on npm; see svelte-publish-npm.yml.
+#
+# Ordinarily nobody pushes that tag by hand: svelte-tag-release.yml creates it
+# when a version bump lands on main, then dispatches this workflow on it. A tag
+# pushed by hand still starts a release through `push` below.
+on:
+  push:
+    tags: ['svelte-v*']
+  # How svelte-tag-release.yml starts this, because a tag created with
+  # GITHUB_TOKEN does not fire `push`. Also available by hand to re-run a
+  # release: choose the tag in the ref picker.
+  workflow_dispatch:
+
+permissions:
+  contents: write # create the draft release
+
+defaults:
+  run:
+    working-directory: svelte
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check the tag against the package
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ github.ref_name }}"
+          if [ "${{ github.ref_type }}" != "tag" ] || [[ "$tag" != svelte-v* ]]; then
+            echo "::error::This workflow builds a svelte-v* tag, but it was run against" \
+                 "${{ github.ref_type }} $tag. Re-run it from Actions and choose the" \
+                 "release tag in the ref picker."
+            exit 1
+          fi
+          version="$(jq -r .version package.json)"
+          if [ "$tag" != "svelte-v$version" ]; then
+            echo "::error::Tag $tag does not match svelte/package.json's version" \
+                 "$version. Bump the version, then re-tag."
+            exit 1
+          fi
+          if gh release view "$tag" --repo "${{ github.repository }}" > /dev/null 2>&1; then
+            echo "::error::A release for $tag already exists. Delete it in the" \
+                 "Releases UI first if you mean to rebuild it."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: svelte/package-lock.json
+
+      # The same checks CI runs, so a tag pushed by hand, which skips CI on
+      # main, still cannot release something broken.
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run lint
+      - run: npm run check
+      - run: npm test
+
+      # prepack runs svelte-package and publint, so this is the build too.
+      # The tarball goes on the release, and svelte-publish-npm.yml publishes
+      # that exact file rather than rebuilding it.
+      - name: Pack
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/dist"
+          npm pack --pack-destination "$RUNNER_TEMP/dist"
+          ls "$RUNNER_TEMP/dist"
+
+      # A draft, so a person looks at it before it reaches npm.
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.check.outputs.version }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/dist/oganesson-svelte-$VERSION.tgz" \
+            --repo "${{ github.repository }}" \
+            --draft --title "oganesson-svelte $VERSION" --generate-notes \
+            --verify-tag
