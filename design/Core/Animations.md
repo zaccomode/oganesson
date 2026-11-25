@@ -53,8 +53,8 @@ When the user has requested reduced motion, every duration is zero: colours chan
 1. **Subtle buttons**, in all variants (default, icon, row).
 2. **Prominent buttons**, for their background only. Their raise and push-down movement is specified separately.
 3. **Inputs**, such as the text input, the select input and the switch (whose thumb slide uses movement timing).
-4. **Menu items**, such as a select input's options. The highlighted item, whether under the pointer or reached with the arrow keys, takes the hover layer.
+4. **Menu items**, such as a menu's row buttons and a select input's options. The highlighted item, whether under the pointer or reached with the arrow keys, takes the hover layer.
 
 ## Menu Motion
 
-Select input menus grow from 90% scale and sharpen from a 4px blur while fading in when they open, and shrink back to 90% and blur back to 4px while fading out when they close, scaling from the middle of the edge facing the control: the top edge when the menu is below it, the bottom edge when it's above. The entrance takes **100ms** with `ease-out` (`cubic-bezier(0, 0, 0.58, 1)`), the movement curve, and the exit **300ms** with the interaction fade-out curve `cubic-bezier(0.16, 1, 0.3, 1)`. The quick entrance keeps opening a menu feeling immediate; the exit moves most of the way at once, so the menu gets out of the way (see _Inputs.md — Select Menu_).
+Menus and select input menus grow from 90% scale and sharpen from a 4px blur while fading in when they open, and shrink back to 90% and blur back to 4px while fading out when they close, scaling from the middle of the edge facing the control: the top edge when the menu is below it, the bottom edge when it's above. Menus aligned to one end of their control scale from the corner on that end instead (see _Menus.md — Motion_). The entrance takes **100ms** with `ease-out` (`cubic-bezier(0, 0, 0.58, 1)`), the movement curve, and the exit **300ms** with the interaction fade-out curve `cubic-bezier(0.16, 1, 0.3, 1)`. The quick entrance keeps opening a menu feeling immediate; the exit moves most of the way at once, so the menu gets out of the way (see _Inputs.md — Select Menu_).
