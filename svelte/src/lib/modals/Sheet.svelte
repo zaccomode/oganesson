@@ -41,6 +41,7 @@ follows it unless `closeOnEscape` is set.
 	import IconButton from '../buttons/IconButton.svelte';
 	import { getOganessonIcons } from '../icons/context.js';
 	import { squircle } from '../internal/squircle.svelte.js';
+	import ScrollEdgeEffect from '../toolbars/ScrollEdgeEffect.svelte';
 	import Text from '../typography/Text.svelte';
 	import { firstTabbable, SHEET_VIEWPORT_GAP, type SheetActionArgs } from './modal.js';
 
@@ -147,7 +148,7 @@ follows it unless `closeOnEscape` is set.
 		</Dialog.Trigger>
 	{/if}
 	<Dialog.Portal>
-		<Dialog.Overlay class="og-modal-overlay" />
+		<Dialog.Overlay class="og-modal-overlay" data-og-modal="sheet" />
 		<Dialog.Content
 			bind:ref={content}
 			class={['og-modal', 'og-sheet', className]}
@@ -169,7 +170,7 @@ follows it unless `closeOnEscape` is set.
 				data-footer={hasFooter ? '' : undefined}
 				{@attach squircle({ radius: 22, effects })}
 			>
-				<div class="og-modal-header og-sheet-header og-sheet-edge">
+				<ScrollEdgeEffect edge="top" pinned={false} class="og-sheet-header">
 					<Dialog.Title>
 						{#snippet child({ props })}
 							<Text {...props} variant="title" as="h2" class="og-modal-title">{title}</Text>
@@ -180,17 +181,17 @@ follows it unless `closeOnEscape` is set.
 							<IconButton {...props} icon={icons.close} label="Close" tooltip={false} />
 						{/snippet}
 					</Dialog.Close>
-				</div>
+				</ScrollEdgeEffect>
 				<div class="og-sheet-body" bind:this={body} {@attach scrollableByKeyboard}>
 					{@render children()}
 				</div>
 				{#if hasFooter}
-					<div class="og-sheet-footer og-sheet-edge">
+					<ScrollEdgeEffect edge="bottom" pinned={false} class="og-sheet-footer">
 						{@render tertiaryAction?.({ close })}
 						<span class="og-sheet-spacer"></span>
 						{@render secondaryAction?.({ close })}
 						{@render primaryAction?.({ close })}
-					</div>
+					</ScrollEdgeEffect>
 				{/if}
 			</div>
 		</Dialog.Content>
@@ -232,74 +233,38 @@ follows it unless `closeOnEscape` is set.
 		padding-bottom: var(--og-sheet-bar);
 	}
 
-	:global(.og-sheet-header),
-	:global(.og-sheet-footer) {
-		box-sizing: border-box;
+	/* The header and footer sit on the scroll edge effect (Scroll Edge Effect.md),
+	   pinned over the scrolling content. Doubled classes outweigh the effect's own
+	   positioning. */
+	:global(.og-sheet-surface > .og-sheet-header.og-sheet-header),
+	:global(.og-sheet-surface > .og-sheet-footer.og-sheet-footer) {
 		position: absolute;
 		left: 0;
 		right: 0;
 		z-index: 1;
 		min-height: var(--og-sheet-bar);
-		padding: 16px;
 	}
 
-	:global(.og-sheet-header) {
+	:global(.og-sheet-surface > .og-sheet-header.og-sheet-header) {
 		top: 0;
 	}
 
-	/* Tertiary on the far left, then secondary and primary on the right, 8px apart. */
-	:global(.og-sheet-footer) {
+	:global(.og-sheet-surface > .og-sheet-footer.og-sheet-footer) {
 		bottom: 0;
-		display: flex;
-		align-items: center;
-		gap: 8px;
+	}
+
+	/* Header: the title fills the row, 16px from the close button. Footer: the
+	   tertiary action on the far left, then secondary and primary, 8px apart. */
+	:global(.og-sheet-header .og-scroll-edge-content) {
+		justify-content: flex-start;
+		gap: 16px;
+	}
+
+	:global(.og-sheet-footer .og-scroll-edge-content) {
+		justify-content: flex-start;
 	}
 
 	:global(.og-sheet-spacer) {
 		flex: 1;
-	}
-
-	/*
-	 * Smooth Edge Effect (Top and Bottom) from Sheet Modal.sketchframe, the scroll
-	 * edge effect (Scroll Edge Effect.md): Background 1 at 70.2% fading to clear
-	 * towards the content, over a progressive background blur, drawn as a masked
-	 * backdrop blur. Sketch gives the blur as 4px, but its progressive blur reads
-	 * much stronger than CSS blur(4px); 8px, full strength across the outer 40% of
-	 * the bar, matches Scroll Edge Effect.sketchframe's preview.
-	 */
-	:global(.og-sheet-edge) {
-		--og-sheet-edge-color: color-mix(in srgb, var(--og-bg-1) 70.2%, transparent);
-	}
-
-	:global(.og-sheet-edge > *) {
-		position: relative;
-		z-index: 1;
-	}
-
-	:global(.og-sheet-edge::before) {
-		content: '';
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-		-webkit-backdrop-filter: blur(8px);
-		backdrop-filter: blur(8px);
-	}
-
-	:global(.og-sheet-header) {
-		background: linear-gradient(to bottom, var(--og-sheet-edge-color), transparent 97.62%);
-	}
-
-	:global(.og-sheet-header::before) {
-		-webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
-		mask-image: linear-gradient(to bottom, #000 40%, transparent);
-	}
-
-	:global(.og-sheet-footer) {
-		background: linear-gradient(to bottom, transparent, var(--og-sheet-edge-color) 97.62%);
-	}
-
-	:global(.og-sheet-footer::before) {
-		-webkit-mask-image: linear-gradient(to top, #000 40%, transparent);
-		mask-image: linear-gradient(to top, #000 40%, transparent);
 	}
 </style>

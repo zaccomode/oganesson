@@ -10,12 +10,18 @@ Internal: the shared structure and styling for Button, IconButton and RowButton
 
 Movement (150ms both ways) lives on the wrappers because Lisse's border overlays are siblings of
 the button and don't follow transforms applied to the button itself.
+
+Inside a `<Toolbar>`, the button renders through Bits UI `Toolbar.Button` (or
+`Toolbar.Link`) so it joins the toolbar's roving focus.
 -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { EffectsConfig } from '@lisse/svelte';
+	import { Toolbar as ToolbarPrimitive } from 'bits-ui';
+	import { mergeProps } from 'svelte-toolbelt';
 	import FocusRing from '../internal/FocusRing.svelte';
 	import { squircle } from '../internal/squircle.svelte.js';
+	import { getToolbarContext } from '../toolbars/context.js';
 	import type { ButtonCommonProps } from './types.js';
 
 	interface Props extends ButtonCommonProps {
@@ -64,18 +70,38 @@ the button and don't follow transforms applied to the button itself.
 		middleBorder: { width: 1, color: '#090a0c', opacity: 1 }
 	};
 
+	const inToolbar = getToolbarContext() !== null;
+
 	const element = $derived(href === undefined ? 'button' : 'a');
+	// Links leave out what they don't set, so a toolbar's roving tabindex stands.
 	const elementAttributes = $derived(
 		element === 'button'
 			? { type: type ?? 'button', disabled }
 			: {
 					href: disabled ? undefined : href,
-					'aria-disabled': disabled ? ('true' as const) : undefined,
-					role: disabled ? 'link' : undefined,
-					tabindex: disabled ? -1 : undefined
+					...(disabled && { 'aria-disabled': 'true' as const, role: 'link', tabindex: -1 })
 				}
 	);
 </script>
+
+{#snippet surface(toolbarProps: Record<string, unknown>)}
+	<svelte:element
+		this={element}
+		bind:this={ref}
+		{...mergeProps(rest, toolbarProps)}
+		{...elementAttributes}
+		class={['og-button', 'og-surface', className]}
+		data-appearance={appearance}
+		data-colorway={prominent ? undefined : colorway}
+		data-layout={layout}
+		data-size={size}
+		data-og-active={active && !prominent ? '' : undefined}
+		data-disabled={disabled ? '' : undefined}
+		{@attach squircle(() => ({ radius, effects: prominent ? prominentEffects : undefined }))}
+	>
+		{@render children?.()}
+	</svelte:element>
+{/snippet}
 
 <span
 	class="og-button-shell"
@@ -90,22 +116,21 @@ the button and don't follow transforms applied to the button itself.
 		bind:clientWidth={width}
 		bind:clientHeight={height}
 	>
-		<svelte:element
-			this={element}
-			bind:this={ref}
-			{...rest}
-			{...elementAttributes}
-			class={['og-button', 'og-surface', className]}
-			data-appearance={appearance}
-			data-colorway={prominent ? undefined : colorway}
-			data-layout={layout}
-			data-size={size}
-			data-og-active={active && !prominent ? '' : undefined}
-			data-disabled={disabled ? '' : undefined}
-			{@attach squircle(() => ({ radius, effects: prominent ? prominentEffects : undefined }))}
-		>
-			{@render children?.()}
-		</svelte:element>
+		{#if inToolbar && element === 'button'}
+			<ToolbarPrimitive.Button id={rest.id ?? undefined} type={type ?? 'button'} {disabled}>
+				{#snippet child({ props })}
+					{@render surface(props)}
+				{/snippet}
+			</ToolbarPrimitive.Button>
+		{:else if inToolbar}
+			<ToolbarPrimitive.Link id={rest.id ?? undefined}>
+				{#snippet child({ props })}
+					{@render surface(props)}
+				{/snippet}
+			</ToolbarPrimitive.Link>
+		{:else}
+			{@render surface({})}
+		{/if}
 		<FocusRing {width} {height} {radius} />
 	</span>
 </span>

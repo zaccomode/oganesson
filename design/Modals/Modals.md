@@ -52,15 +52,13 @@ A sheet has smooth 22px corners, a Background 1 fill, the elevated drop shadow a
 
 When a sheet opens, the first control in its content takes focus. If there is none, static content that scrolls takes focus so the keyboard can scroll it; otherwise the sheet itself does, so no control shows a focus ring until the keyboard moves. Focus then moves through the content, the footer actions from left to right, and the close button, and stays within the sheet.
 
-The scroll edge effect's background blur is 4px in the Sketch files, but Sketch's progressive blur is much stronger than a 4px CSS blur. Web implementations use an 8px blur at full strength across the outer 40% of each bar, fading out towards the content, which matches _Scroll Edge Effect.sketchframe_.
-
 ---
 
 ## Interaction Design
 
 ### The Background
 
-Behind either type of modal, the page is dimmed with 23.9% black (`rgba(0,0,0,0.239)`) and a 24px background blur. Modals sit above the page but below menus, select menus and tooltips, so those opened from inside a modal show above it.
+Behind either type of modal, the page is dimmed with 23.9% black (`rgba(0,0,0,0.239)`). Behind a sheet modal it is also blurred by 8px; behind a dialog modal it isn't blurred. Modals sit above the page but below menus, select menus and tooltips, so those opened from inside a modal show above it.
 
 ### Pressing the Background
 
@@ -75,4 +73,4 @@ By default, modals use the same behaviour for closing on "Escape" key press as w
 
 ### Motion
 
-Modals use the menu motion (see _Animations.md — Menu Motion_), scaled from their centre: they grow from 90% scale and sharpen from a 4px blur while fading in over 100ms, and shrink, blur and fade back out over 300ms. The dimmed background fades in and out with the same timing. As with menus, apply the fade and blur to the modal's surface and anything drawn beside it, never to an ancestor of the surface, or WebKit hides the dialog's acrylic blur until the entrance finishes.
+Modals use the menu motion (see _Animations.md — Menu Motion_), scaled from their centre: they grow from 90% scale and sharpen from a 4px blur while fading in over 100ms, and shrink, blur and fade back out over 300ms. The dimmed background, and its blur behind a sheet, fades in over 200ms (`ease-out`) and out over 300ms (the interaction fade-out curve), so it never snaps into or out of view. Animate the blur itself from none, not only the background's opacity: WebKit doesn't fade a backdrop blur with its element's opacity. As with menus, apply the fade and blur to the modal's surface and anything drawn beside it, never to an ancestor of the surface, or WebKit hides the dialog's acrylic blur until the entrance finishes.

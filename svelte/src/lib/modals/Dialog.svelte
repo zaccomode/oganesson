@@ -129,7 +129,7 @@ Open it from a `trigger` snippet (spread `props` onto your button), or bind `ope
 		</AlertDialog.Trigger>
 	{/if}
 	<AlertDialog.Portal>
-		<AlertDialog.Overlay class="og-modal-overlay" />
+		<AlertDialog.Overlay class="og-modal-overlay" data-og-modal="dialog" />
 		<AlertDialog.Content
 			class={['og-modal', 'og-dialog', className]}
 			style="--og-dialog-width: {DIALOG_WIDTH}px"

@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms and modals. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms, toolbars and modals. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -137,6 +137,39 @@ Give either every field in a form an `icon` or none, and don't give an input its
 ```
 
 Spread the trigger snippet's `props` onto any button; pass `active={open}` so it looks active while the menu shows. The menu opens below the trigger, right-aligned, 200px wide; set `side` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`) to move it, and it repositions itself to stay in view. Items take a `colorway`, a `secondaryLabel` or `secondaryIcon`, `disabled` or `href`. Keep menus to 6 items; development builds warn above that.
+
+### Toolbars
+
+```svelte
+<script>
+	import {
+		Toolbar,
+		ToolbarGroup,
+		ToolbarSeparator,
+		ScrollEdgeEffect,
+		IconButton
+	} from 'oganesson-svelte';
+	import { Bold, Italic, Link } from '@lucide/svelte';
+</script>
+
+<div style="overflow: auto">
+	<ScrollEdgeEffect edge="top">
+		<Toolbar aria-label="Formatting">
+			<ToolbarGroup>
+				<IconButton icon={Bold} label="Bold" />
+				<IconButton icon={Italic} label="Italic" />
+				<ToolbarSeparator />
+				<IconButton icon={Link} label="Link" />
+			</ToolbarGroup>
+		</Toolbar>
+	</ScrollEdgeEffect>
+	…content…
+</div>
+```
+
+A toolbar holds one or more `<ToolbarGroup>`s (the acrylic containers, 4px apart); `<ToolbarSeparator>` splits a group into sections. Set `size="large"` to emphasise the controls, and `fill` on a group to stretch it across the room left (for example around a `<Select>`). Buttons and menu triggers inside share one tab stop and the arrow keys move between them; inputs keep their own tab stops.
+
+`<ScrollEdgeEffect>` pins its toolbars to the `top` (default) or `bottom` edge of the scroll container with `position: sticky`, over a progressive blur and gradient. Make it a direct child of the scrolling element: first for the top, last for the bottom. Its children sit in a row, 8px apart and 16px in; give a title `flex: 1` to push toolbars to either end. Set `pinned={false}` to position it yourself. Use it only under toolbars.
 
 ### Modals
 

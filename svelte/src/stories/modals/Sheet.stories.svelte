@@ -158,13 +158,14 @@
 		await expect(round(box.top + box.height / 2)).toBe(round(innerHeight / 2));
 
 		// Background 1, the elevated shadow, 22px smooth corners; the page behind is 23.9%
-		// black with a 24px blur.
+		// black with an 8px blur.
 		const surface = part('surface');
 		await expect(sameColor(getComputedStyle(surface).backgroundColor, backgrounds['1'])).toBe(true);
 		await expect(getComputedStyle(sheet()!).boxShadow).toContain('9px 20px');
 		await waitFor(() => expect(getComputedStyle(surface).clipPath).toMatch(/^path\(/));
 		await expect(getComputedStyle(overlay()!).backgroundColor).toBe('rgba(0, 0, 0, 0.24)');
-		await expect(getComputedStyle(overlay()!).backdropFilter).toBe('blur(24px)');
+		// The blur fades in with the background.
+		await waitFor(() => expect(getComputedStyle(overlay()!).backdropFilter).toBe('blur(8px)'));
 
 		// Header: 62px, the title 16px in, the close button 16px from the top right.
 		const header = part('header');
@@ -193,12 +194,10 @@
 
 		// Both bars use the scroll edge effect: a fading Background 1 gradient over a
 		// progressive blur that fades out towards the content.
-		for (const bar of [header, footer]) {
-			await expect(getComputedStyle(bar).backgroundImage).toContain('linear-gradient');
-			const blur = getComputedStyle(bar, '::before');
-			await expect(blur.backdropFilter).toBe('blur(8px)');
-			await expect(blur.maskImage).toContain('linear-gradient');
-		}
+		await expect(header.classList).toContain('og-scroll-edge');
+		await expect(header.dataset.edge).toBe('top');
+		await expect(footer.classList).toContain('og-scroll-edge');
+		await expect(footer.dataset.edge).toBe('bottom');
 
 		// Nothing in the content to focus, and nothing to scroll: the sheet itself has
 		// focus, so no control shows a focus ring until the keyboard moves.

@@ -10,22 +10,42 @@
  * opened from inside a modal show above it.
  */
 
-/* Dialog Modal.sketchframe / Sheet Modal.sketchframe: the frame behind the
-   modal is 23.9% black with a 24px background blur. */
+/* Dialog Modal.sketchframe / Sheet Modal.sketchframe: the page behind a modal is
+   dimmed with 23.9% black; behind a sheet it's also blurred by 8px. */
 .og-modal-overlay {
 	position: fixed;
 	inset: 0;
 	z-index: 900;
 	/* A one-off value for modals (Modals.md), not a palette background. */
 	background: rgba(0, 0, 0, 0.239);
-	-webkit-backdrop-filter: blur(var(--og-blur-dialog));
-	backdrop-filter: blur(var(--og-blur-dialog));
-	transition: opacity var(--og-duration-menu-in) var(--og-ease-movement);
+	--og-modal-backdrop-blur: 0px;
+	-webkit-backdrop-filter: blur(var(--og-modal-backdrop-blur));
+	backdrop-filter: blur(var(--og-modal-backdrop-blur));
+	/*
+	 * It fades in and out rather than snapping (Modals.md, Motion). The blur
+	 * animates with the fade, from none: WebKit doesn't fade a backdrop blur with
+	 * its element's opacity, so fading opacity alone would show it snap.
+	 */
+	transition:
+		opacity var(--og-duration-backdrop-in) var(--og-ease-movement),
+		-webkit-backdrop-filter var(--og-duration-backdrop-in) var(--og-ease-movement),
+		backdrop-filter var(--og-duration-backdrop-in) var(--og-ease-movement);
+}
+
+.og-modal-overlay[data-og-modal='sheet'] {
+	--og-modal-backdrop-blur: var(--og-blur-sheet-backdrop);
 }
 
 .og-modal-overlay[data-starting-style],
 .og-modal-overlay[data-ending-style] {
 	opacity: 0;
+	-webkit-backdrop-filter: blur(0px);
+	backdrop-filter: blur(0px);
+}
+
+.og-modal-overlay[data-ending-style] {
+	transition-duration: var(--og-duration-backdrop-out);
+	transition-timing-function: var(--og-ease-out);
 }
 
 .og-modal {
@@ -72,7 +92,6 @@
 	filter: blur(4px);
 }
 
-.og-modal-overlay[data-ending-style],
 .og-modal[data-ending-style],
 .og-modal[data-ending-style] > * {
 	transition-duration: var(--og-duration-menu-out);

@@ -15,7 +15,7 @@
 			docs: {
 				description: {
 					component:
-						'A dialog modal (Modals.md): a small alert or confirmation with a 3-5 word title and a 1-2 sentence description. Cancel sits on the left and the prominent confirm action on the right; **cancel has focus when it opens**, and Tab or the arrow keys move between the actions. It uses the elevated Acrylic style over the dimmed, blurred page. Pressing the background or Escape closes it as a cancellation by default; either can be turned off.'
+						'A dialog modal (Modals.md): a small alert or confirmation with a 3-5 word title and a 1-2 sentence description. Cancel sits on the left and the prominent confirm action on the right; **cancel has focus when it opens**, and Tab or the arrow keys move between the actions. It uses the elevated Acrylic style over the dimmed page. Pressing the background or Escape closes it as a cancellation by default; either can be turned off.'
 				}
 			}
 		}
@@ -67,7 +67,7 @@
 	{/snippet}
 </Story>
 
-<!-- Dialog Modal.sketchframe: the dialog over the dimmed, blurred page. -->
+<!-- Dialog Modal.sketchframe: the dialog over the dimmed page. -->
 <Story
 	name="Dialog"
 	asChild
@@ -119,9 +119,15 @@
 		await expect(getComputedStyle(dialog()!).boxShadow).toContain('9px 20px');
 		await waitFor(() => expect(getComputedStyle(surface()).clipPath).toMatch(/^path\(/));
 
-		// Behind it, the page is 23.9% black with a 24px blur.
+		// Behind it, the page is dimmed with 23.9% black, unblurred. The background fades
+		// in (and its blur with it, for sheets) over 200ms.
 		await expect(getComputedStyle(overlay()!).backgroundColor).toBe('rgba(0, 0, 0, 0.24)');
-		await expect(getComputedStyle(overlay()!).backdropFilter).toBe('blur(24px)');
+		await expect(getComputedStyle(overlay()!).backdropFilter).toBe('blur(0px)');
+		const fade = getComputedStyle(overlay()!);
+		await expect(fade.transitionProperty).toMatch(/^opacity, .*backdrop-filter/);
+		await expect(fade.transitionDuration.split(', ')[0]).toBe(
+			matchMedia('(prefers-reduced-motion: reduce)').matches ? '0s' : '0.2s'
+		);
 
 		// Motion: scale and shadow on the dialog; every child (the surface and Lisse's
 		// inner-shadow overlay beside it) fades, so WebKit keeps the acrylic blur.
@@ -147,7 +153,7 @@
 >
 	<div class="page">
 		<Text variant="large-title">Account</Text>
-		<Text>Content behind the dialog shows through its blurred, dimmed background.</Text>
+		<Text>Content behind the dialog shows through its dimmed background.</Text>
 		<Dialog
 			title="Modal Title"
 			{description}
