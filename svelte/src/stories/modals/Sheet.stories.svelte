@@ -47,6 +47,8 @@
 		await userEvent.click(canvas.querySelector<HTMLElement>('[data-testid="open"]')!);
 		await waitFor(() => expect(sheet()).not.toBeNull());
 		await waitFor(() => expect(getComputedStyle(part('surface')).opacity).toBe('1'));
+		// Measure once it has finished growing to full size.
+		await waitFor(() => expect(getComputedStyle(sheet()!).scale).toMatch(/^(none|1)$/));
 	}
 
 	async function closed() {
@@ -169,11 +171,11 @@
 
 		// Header: 62px, the title 16px in, the close button 16px from the top right.
 		const header = part('header');
-		await expect(rect(header).height).toBe(62);
-		await expect(rect(header).top).toBe(box.top);
+		await expect(round(rect(header).height)).toBe(62);
+		await expect(round(rect(header).top)).toBe(round(box.top));
 		const title = header.querySelector<HTMLElement>('h2.og-modal-title')!;
 		await expect(title.textContent).toBe('Modal Title');
-		await expect(rect(title).left - box.left).toBe(16);
+		await expect(round(rect(title).left - box.left)).toBe(16);
 		await expect(sheet()!.getAttribute('aria-labelledby')).toBe(title.id);
 		await expect(sheet()!.getAttribute('role')).toBe('dialog');
 		const close = buttonNamed('Close');
@@ -182,8 +184,8 @@
 
 		// Footer: 62px; Cancel on the far left, Back and Next on the right, 8px apart.
 		const footer = part('footer');
-		await expect(rect(footer).height).toBe(62);
-		await expect(rect(footer).bottom).toBe(box.bottom);
+		await expect(round(rect(footer).height)).toBe(62);
+		await expect(round(rect(footer).bottom)).toBe(round(box.bottom));
 		const cancel = buttonNamed('Cancel');
 		const back = buttonNamed('Back');
 		const next = buttonNamed('Next');

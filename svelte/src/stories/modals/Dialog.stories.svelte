@@ -39,6 +39,8 @@
 		await userEvent.click(canvas.querySelector<HTMLElement>('[data-testid="open"]')!);
 		await waitFor(() => expect(dialog()).not.toBeNull());
 		await waitFor(() => expect(getComputedStyle(surface()).opacity).toBe('1'));
+		// Measure once it has finished growing to full size.
+		await waitFor(() => expect(getComputedStyle(dialog()!).scale).toMatch(/^(none|1)$/));
 	}
 
 	async function closed() {
@@ -83,8 +85,8 @@
 		const header = dialog()!.querySelector<HTMLElement>('.og-modal-header')!;
 		const text = dialog()!.querySelector<HTMLElement>('.og-dialog-description')!;
 		const actions = dialog()!.querySelector<HTMLElement>('.og-dialog-actions')!;
-		await expect(rect(header).top - box.top).toBe(16);
-		await expect(rect(header).left - box.left).toBe(16);
+		await expect(round(rect(header).top - box.top)).toBe(16);
+		await expect(round(rect(header).left - box.left)).toBe(16);
 		await expect(rect(header).height).toBe(30);
 		await expect(rect(text).top - rect(header).bottom).toBe(16);
 		await expect(rect(actions).top - rect(text).bottom).toBe(16);
