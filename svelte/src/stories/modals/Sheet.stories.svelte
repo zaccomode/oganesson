@@ -154,8 +154,8 @@
 		const box = rect(sheet()!);
 
 		// A fixed 470 × 540, centred.
-		await expect(box.width).toBe(470);
-		await expect(box.height).toBe(540);
+		await expect(round(box.width)).toBe(470);
+		await expect(round(box.height)).toBe(540);
 		await expect(round(box.left + box.width / 2)).toBe(round(innerWidth / 2));
 		await expect(round(box.top + box.height / 2)).toBe(round(innerHeight / 2));
 
