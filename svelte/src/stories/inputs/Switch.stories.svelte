@@ -55,6 +55,69 @@
 </Story>
 
 <Story
+	name="Press"
+	asChild
+	play={async ({ canvasElement }) => {
+		// One session, so a press and its release count as a click.
+		const user = userEvent.setup();
+		const track = (c: string) =>
+			canvasElement.querySelector<HTMLElement>(`[data-case="${c}"] .og-switch-track`)!;
+		const thumbBox = (t: HTMLElement) => {
+			const thumb = t.querySelector<HTMLElement>('.og-switch-thumb')!.getBoundingClientRect();
+			const left = t.getBoundingClientRect().left;
+			return { left: thumb.left - left, right: thumb.right - left, width: thumb.width };
+		};
+
+		for (const [c, rest, stretched, after] of [
+			// Off: grows rightwards from the left edge, then slides right.
+			['press-off', { left: 4, right: 28 }, { left: 4, right: 38 }, 'true'],
+			// On: grows leftwards from the right edge, then slides left.
+			['press-on', { left: 24, right: 48 }, { left: 14, right: 48 }, 'false']
+		] as const) {
+			const t = track(c);
+			const before = t.getAttribute('aria-checked');
+			await expect(thumbBox(t)).toMatchObject(rest);
+
+			// No press layer on the track: the thumb stretch replaces it.
+			await expect(getComputedStyle(t, '::after').backgroundColor).toBe('rgba(0, 0, 0, 0)');
+
+			// Holding the pointer down stretches the thumb 10px towards its
+			// destination without toggling.
+			await user.pointer({ keys: '[MouseLeft>]', target: t });
+			await waitFor(() => expect(thumbBox(t)).toMatchObject({ ...stretched, width: 34 }));
+			await expect(t.getAttribute('aria-checked')).toBe(before);
+
+			// Releasing toggles it, and the thumb slides across at its resting size.
+			await user.pointer({ keys: '[/MouseLeft]', target: t });
+			await expect(t.getAttribute('aria-checked')).toBe(after);
+			const end = after === 'true' ? { left: 24, right: 48 } : { left: 4, right: 28 };
+			await waitFor(() => expect(thumbBox(t)).toMatchObject({ ...end, width: 24 }));
+		}
+
+		// Releasing away from the switch cancels: no stretch, no toggle.
+		const off = track('press-cancel');
+		await user.pointer({ keys: '[MouseLeft>]', target: off });
+		await waitFor(() => expect(thumbBox(off).width).toBe(34));
+		await user.pointer({ keys: '[/MouseLeft]', target: canvasElement });
+		await expect(off.getAttribute('aria-checked')).toBe('false');
+		await waitFor(() => expect(thumbBox(off)).toMatchObject({ left: 4, width: 24 }));
+
+		// Disabled switches don't stretch.
+		const disabled = track('press-disabled');
+		await user.pointer({ keys: '[MouseLeft>]', target: disabled });
+		await expect(thumbBox(disabled).width).toBe(24);
+		await user.pointer({ keys: '[/MouseLeft]', target: disabled });
+	}}
+>
+	<div class="row">
+		<span data-case="press-off"><Switch aria-label="Press off" /></span>
+		<span data-case="press-on"><Switch checked aria-label="Press on" /></span>
+		<span data-case="press-cancel"><Switch aria-label="Press and cancel" /></span>
+		<span data-case="press-disabled"><Switch disabled aria-label="Press disabled" /></span>
+	</div>
+</Story>
+
+<Story
 	name="With labels"
 	asChild
 	play={async ({ canvasElement }) => {
