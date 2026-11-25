@@ -23,6 +23,13 @@
  * flashed on fade-out. Registered custom properties animated in background
  * layers avoid that but Safari doesn't repaint them mid-transition.
  *
+ * Why will-change: opacity? Even at z-index 0, Safari (27, inside an iframe
+ * such as Storybook's preview) paints the hover layer on an active surface and
+ * then drops it a few hundred ms later, falling back to a stale tile of the
+ * squircle-clipped element; the fade-out on mouse-out then composites the layer
+ * and it flashes back. Keeping both layers composited permanently means the
+ * static and animated states take the same path, so the layer stays painted.
+ *
  * Customise per component with:
  *   --og-surface-bg            resting background (default transparent)
  *   --og-surface-bg-active     background when [data-og-active] (default thin glass)
@@ -57,6 +64,7 @@
 	border-radius: inherit;
 	pointer-events: none;
 	opacity: 0;
+	will-change: opacity;
 }
 
 .og-surface::before {
