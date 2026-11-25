@@ -110,7 +110,10 @@
 		await expect(rect(fields[0]).height).toBe(24);
 		await expect(rect(fields[1]).top - rect(fields[0]).bottom).toBe(8);
 		await expect(getComputedStyle(fields[1]).borderTopWidth).toBe('1px');
-		await expect(rect(bodies[1]).height).toBe(8 + 24 + 8 + 1 + 8 + 54 + 8);
+		// 8px padding, the switch row, then the separated field (its description wraps to
+		// two lines in the Sketch file, but line breaks depend on font rendering).
+		await expect(rect(bodies[1]).height).toBe(8 + 24 + 8 + rect(fields[1]).height + 8);
+		await expect(rect(fields[1]).height).toBeGreaterThanOrEqual(1 + 8 + 54);
 
 		// The button fills its group.
 		const button = bodies[2].querySelector<HTMLElement>('.og-button-row')!;
