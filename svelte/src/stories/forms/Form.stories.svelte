@@ -14,7 +14,7 @@
 			docs: {
 				description: {
 					component:
-						'A form (Forms.md): groups of fields and buttons, 16px apart, up to 650px wide with no minimum width. Every field and button sits in a `<FormGroup>`, which can have a short title; the first group usually has none. Fields in a group are separated by a line. Within a form, either every field has an icon or none does (mixing them logs a warning in development).'
+						'A form (Forms.md): groups of fields and buttons, 16px apart, up to 650px wide with no minimum width. Every field and button sits in a `<FormGroup>`, which can have a short title; the first group usually has none. Every item in a group (fields, buttons and display-only content) is separated by a line. Within a form, either every field has an icon or none does (mixing them logs a warning in development).'
 				}
 			}
 		}
@@ -195,6 +195,19 @@
 		// Labels line up across fields, after the icon.
 		const lefts = fields.map((f) => rect(f.querySelector('.og-form-field-text')!).left);
 		await expect(new Set(lefts).size).toBe(1);
+
+		// Every item in a group is separated by a line, buttons and display-only
+		// content included.
+		const bodies = [...form.querySelectorAll<HTMLElement>('.og-form-group-body')];
+		for (const body of bodies) {
+			const items = [...body.children] as HTMLElement[];
+			for (const [i, item] of items.entries()) {
+				const style = getComputedStyle(item);
+				await expect(style.borderTopWidth).toBe(i === 0 ? '0px' : '1px');
+				await expect(style.paddingTop).toBe(i === 0 ? '0px' : '8px');
+			}
+		}
+		await expect(bodies.at(-1)!.children).toHaveLength(2);
 
 		// The required title blocks submitting until it's filled in; then it submits.
 		const save = canvasElement.querySelector<HTMLElement>('[data-testid="save"]')!;

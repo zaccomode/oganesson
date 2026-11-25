@@ -32,7 +32,7 @@ _See also: Form Exploration.sketchframe_
 
 Form groups may contain both form fields and display-only content that may be used to help convey the value or output of the fields that group contains.
 
-A group's body has a Background 2 (Acrylic) fill, 16px smooth corners and 8px of padding, with 8px between the items it contains. Adjacent fields are separated by a 1px Dark Thick Glass line, 8px from each; other content is not separated automatically. A group's title is a Subtitle, 4px above the body, and names the group for assistive technology. Groups are 16px apart.
+A group's body has a Background 2 (Acrylic) fill, 16px smooth corners and 8px of padding, with 8px between the items it contains. Every item in a group (fields, buttons and display-only content alike) is separated from the next by a 1px Dark Thick Glass horizontal line, 8px from each. A group's title is a Subtitle, 4px above the body, and names the group for assistive technology. Groups are 16px apart.
 
 ## Forms
 

@@ -118,6 +118,7 @@ Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms
 ```
 
 Give either every field in a form an `icon` or none, and don't give an input its own icon inside a field that has one; both log a warning in development.
+
 ### Menus
 
 ```svelte

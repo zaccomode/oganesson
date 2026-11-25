@@ -4,9 +4,10 @@ A group of related fields in a `<Form>` (design/Forms/Forms.md: Groups), with an
 optional short title above it. The first group in a form almost never has a
 title: it holds the "general" information.
 
-Fields inside a group are separated by a horizontal line. A group can also hold
-buttons (such as a `<RowButton>`) and display-only content that helps explain
-the values of its fields.
+A group can hold fields, buttons (such as a `<RowButton>`) and display-only
+content that helps explain the values of its fields. Every item is separated
+from the next by a horizontal line, so put display-only content in a plain
+element: the line is drawn as its top border, 8px above its content.
 
 ```svelte
 <FormGroup title="Schedule">
@@ -70,8 +71,9 @@ the values of its fields.
 		background-color: var(--og-bg-acrylic);
 	}
 
-	/* Fields are separated by a horizontal line (Dark Thick Glass), 8px from each. */
-	.og-form-group-body > :global(.og-form-field + .og-form-field) {
+	/* Every item, buttons included, is separated from the one before by a
+	   horizontal line (Dark Thick Glass), 8px from each. */
+	.og-form-group-body > :global(* + *) {
 		padding-top: 8px;
 		border-top: 1px solid var(--og-color-dark-thick-glass);
 	}
