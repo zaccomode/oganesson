@@ -109,7 +109,7 @@
 		const button = trigger.getBoundingClientRect();
 		const box = menu()!.getBoundingClientRect();
 		await expect(menu()!.dataset.side).toBe('bottom');
-		await expect(box.width).toBe(200);
+		await expect(round(box.width)).toBe(200);
 		await expect(round(box.top - button.bottom)).toBe(2);
 		await expect(round(box.right)).toBe(round(button.right));
 

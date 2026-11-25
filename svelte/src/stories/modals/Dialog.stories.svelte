@@ -79,7 +79,7 @@
 
 		// 400px wide, centred, 160px tall: 16px padding around a 30px header, the
 		// two-line description and the 30px actions row, 16px apart.
-		await expect(box.width).toBe(400);
+		await expect(round(box.width)).toBe(400);
 		await expect(round(box.left + box.width / 2)).toBe(round(innerWidth / 2));
 		await expect(round(box.top + box.height / 2)).toBe(round(innerHeight / 2));
 		const header = dialog()!.querySelector<HTMLElement>('.og-modal-header')!;
