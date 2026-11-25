@@ -19,9 +19,10 @@ on:
   # automatic path it does not wait for CI, so check the head is green first.
   workflow_dispatch:
 
+# Read-only by default; the job below asks for write access on its own, so
+# that anything added to this file later starts from the narrow scope.
 permissions:
-  contents: write # create the tag
-  actions: write # dispatch svelte-release.yml
+  contents: read
 
 # Two pushes to main finishing CI together must not both decide the tag is
 # missing and both start a build.
@@ -39,6 +40,9 @@ jobs:
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the tag
+      actions: write # dispatch svelte-release.yml
     steps:
       - uses: actions/checkout@v7
         with:
