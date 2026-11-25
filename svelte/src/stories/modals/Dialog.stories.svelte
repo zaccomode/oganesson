@@ -269,7 +269,7 @@
 			return veto;
 		}}
 		onCancel={() => cancelled++}
-		onOpenChange={(open) => openChanges.push(open)}
+		onOpenChange={(open: boolean) => openChanges.push(open)}
 	/>
 </Story>
 
