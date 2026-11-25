@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus and toolbars. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms and toolbars. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -74,6 +74,50 @@ Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms
 ```
 
 `<Select>` shows up to `maxItems` (5) options before scrolling, or set `maxHeight` in pixels. The menu opens on `side` (`bottom` by default) and flips when there's less than `minHeight` (140px) of room. Add `typeahead` to let people type to filter the options. Add `allowEmpty` to put a "None" option at the top that clears the value back to `''` (rename it with `emptyOptionLabel`).
+
+### Forms
+
+```svelte
+<script>
+	import {
+		Form,
+		FormGroup,
+		FormField,
+		TextInput,
+		Switch,
+		Select,
+		RowButton
+	} from 'oganesson-svelte';
+	let name = $state('');
+	let reminders = $state(true);
+</script>
+
+<Form onsubmit={save}>
+	<FormGroup>
+		<FormField label="Name" required>
+			<TextInput bind:value={name} placeholder="Jane Doe..." />
+		</FormField>
+	</FormGroup>
+	<FormGroup title="Notifications">
+		<FormField label="Reminders" description="A nudge before each event.">
+			<Switch bind:checked={reminders} />
+		</FormField>
+	</FormGroup>
+	<FormGroup>
+		<RowButton type="submit">Save</RowButton>
+	</FormGroup>
+</Form>
+```
+
+`<FormField>` wires its label (and description, via `aria-describedby`) to the Oganesson input inside it, and passes `required` on. Labels sit beside the input and move above it when the field is narrower than 400px. For any other control, take the wiring props from the children snippet:
+
+```svelte
+<FormField label="Colour">
+	{#snippet children(props)}<input type="color" {...props} />{/snippet}
+</FormField>
+```
+
+Give either every field in a form an `icon` or none, and don't give an input its own icon inside a field that has one; both log a warning in development.
 
 ### Menus
 

@@ -143,6 +143,10 @@ Inside a `<Toolbar>`, the button renders through Bits UI `Toolbar.Button` (or
 		display: inline-flex;
 		vertical-align: middle;
 		max-width: 100%;
+		/* Button labels aren't selectable text: dragging across or double-clicking
+		   a button shouldn't highlight it. */
+		-webkit-user-select: none;
+		user-select: none;
 		transition: translate var(--og-duration-movement) var(--og-ease-movement);
 	}
 

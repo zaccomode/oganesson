@@ -52,6 +52,8 @@
 	play={async ({ canvasElement }) => {
 		const buttons = canvasElement.querySelectorAll<HTMLElement>('.og-button');
 		for (const b of buttons) await expect(b.getBoundingClientRect().height).toBe(30);
+		// Labels can't be selected.
+		for (const b of buttons) await expect(getComputedStyle(b).userSelect).toBe('none');
 
 		const plain = canvasElement.querySelector<HTMLElement>('[data-case="dark-none"] .og-button')!;
 		await expect(getComputedStyle(plain).padding).toBe('6px 10px');

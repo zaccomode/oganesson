@@ -127,22 +127,42 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 		   aligned edge, or the middle of the facing edge when centred. */
 		transform-origin: var(--bits-floating-transform-origin);
 		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
 			scale var(--og-duration-menu-in) var(--og-ease-movement),
+			box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
+	}
+
+	/*
+	 * Menu motion (Animations.md): grows from 90% and sharpens from a 4px blur
+	 * while fading in on open; the reverse on close.
+	 *
+	 * The fade and blur run on its children, not on this element: an ancestor with
+	 * opacity below 1 or a filter isolates the surface's backdrop-filter, so WebKit
+	 * showed no acrylic blur until the entrance finished. Only the scale (transforms
+	 * don't isolate backdrops) and the shadow animate here.
+	 */
+	:global(.og-menu[data-starting-style]),
+	:global(.og-menu[data-ending-style]) {
+		scale: 0.9;
+		box-shadow: none;
+	}
+
+	/* The fade covers every child: the surface, and the inner-shadow overlay that
+	   Lisse draws as the surface's sibling (it would otherwise outlive the menu). */
+	:global(.og-menu > *) {
+		transition:
+			opacity var(--og-duration-menu-in) var(--og-ease-movement),
 			filter var(--og-duration-menu-in) var(--og-ease-movement);
 	}
 
-	/* Menu motion (Animations.md): grows from 90% and sharpens from a 4px blur
-	   while fading in on open; the reverse on close. */
-	:global(.og-menu[data-starting-style]),
-	:global(.og-menu[data-ending-style]) {
+	:global(.og-menu[data-starting-style] > *),
+	:global(.og-menu[data-ending-style] > *) {
 		opacity: 0;
-		scale: 0.9;
 		filter: blur(4px);
 	}
 
 	/* Bits UI applies this while closing, so its transition runs on exit. */
-	:global(.og-menu[data-ending-style]) {
+	:global(.og-menu[data-ending-style]),
+	:global(.og-menu[data-ending-style] > *) {
 		transition-duration: var(--og-duration-menu-out);
 		transition-timing-function: var(--og-ease-out);
 	}
