@@ -1,0 +1,102 @@
+/*
+ * Shared modal styling (design/Modals/Modals.md) for <Dialog> and <Sheet>.
+ *
+ *   .og-modal-overlay     the dimmed, blurred page behind the modal
+ *   .og-modal             centred; holds the elevated drop shadow and scales
+ *     .og-modal-surface   squircle-clipped surface: fades and sharpens
+ *     (Lisse overlay)     the inner-shadow highlight, drawn beside the surface
+ *
+ * Modals sit below menus, selects and tooltips (z-index 1000), so the ones
+ * opened from inside a modal show above it.
+ */
+
+/* Dialog Modal.sketchframe / Sheet Modal.sketchframe: the frame behind the
+   modal is 23.9% black with a 24px background blur. */
+.og-modal-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 900;
+	/* A one-off value for modals (Modals.md), not a palette background. */
+	background: rgba(0, 0, 0, 0.239);
+	-webkit-backdrop-filter: blur(var(--og-blur-dialog));
+	backdrop-filter: blur(var(--og-blur-dialog));
+	transition: opacity var(--og-duration-menu-in) var(--og-ease-movement);
+}
+
+.og-modal-overlay[data-starting-style],
+.og-modal-overlay[data-ending-style] {
+	opacity: 0;
+}
+
+.og-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 900;
+	box-sizing: border-box;
+	display: flex;
+	/* Centred, without a transform (so the scale below stays the only one). */
+	margin: auto;
+	border-radius: 22px;
+	box-shadow: var(--og-shadow-elevated);
+	outline: none;
+	transition:
+		scale var(--og-duration-menu-in) var(--og-ease-movement),
+		box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
+}
+
+/*
+ * Modal motion (Modals.md, Motion): the menu motion from Animations.md, scaled
+ * from the centre. Grows from 90% and sharpens from a 4px blur while fading in;
+ * the reverse on close.
+ *
+ * The fade and blur run on the modal's children, never on .og-modal itself: an
+ * ancestor with opacity below 1 or a filter isolates the surface's backdrop
+ * blur, so WebKit would show no acrylic until the entrance finished. Every child
+ * fades, including the inner-shadow overlay Lisse draws beside the surface.
+ */
+.og-modal[data-starting-style],
+.og-modal[data-ending-style] {
+	scale: 0.9;
+	box-shadow: none;
+}
+
+.og-modal > * {
+	transition:
+		opacity var(--og-duration-menu-in) var(--og-ease-movement),
+		filter var(--og-duration-menu-in) var(--og-ease-movement);
+}
+
+.og-modal[data-starting-style] > *,
+.og-modal[data-ending-style] > * {
+	opacity: 0;
+	filter: blur(4px);
+}
+
+.og-modal-overlay[data-ending-style],
+.og-modal[data-ending-style],
+.og-modal[data-ending-style] > * {
+	transition-duration: var(--og-duration-menu-out);
+	transition-timing-function: var(--og-ease-out);
+}
+
+.og-modal-surface {
+	box-sizing: border-box;
+	flex: 1;
+	min-width: 0;
+	border-radius: 22px;
+	color: var(--og-color-dark);
+}
+
+/* Header: the title beside the close button, 16px apart. */
+.og-modal-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.og-modal-title {
+	flex: 1;
+	min-width: 0;
+	margin: 0;
+	overflow-wrap: anywhere;
+}

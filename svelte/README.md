@@ -2,7 +2,7 @@
 
 The Svelte implementation of [Oganesson](../README.md), built on [Bits UI](https://www.bits-ui.com). The design spec in [`/design`](../design) is the source of truth; this package follows it exactly.
 
-> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus and forms. More components arrive milestone by milestone.
+> Pre-release. So far: foundations (tokens, text styles, icons, squircles, interaction surfaces), buttons, the text input, the switch, the select input, menus, forms and modals. More components arrive milestone by milestone.
 
 ## Using it
 
@@ -137,6 +137,40 @@ Give either every field in a form an `icon` or none, and don't give an input its
 ```
 
 Spread the trigger snippet's `props` onto any button; pass `active={open}` so it looks active while the menu shows. The menu opens below the trigger, right-aligned, 200px wide; set `side` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`) to move it, and it repositions itself to stay in view. Items take a `colorway`, a `secondaryLabel` or `secondaryIcon`, `disabled` or `href`. Keep menus to 6 items; development builds warn above that.
+
+### Modals
+
+```svelte
+<script>
+	import { Dialog, Sheet, Form, Button } from 'oganesson-svelte';
+	import { Trash2 } from '@lucide/svelte';
+	let editing = $state(false);
+</script>
+
+<Dialog
+	title="Confirm account deletion"
+	description="Your projects and settings will be removed. This can't be undone."
+	confirmLabel="Delete"
+	confirmIcon={Trash2}
+	onConfirm={deleteAccount}
+>
+	{#snippet trigger({ props })}
+		<Button {...props} colorway="danger">Delete account</Button>
+	{/snippet}
+</Dialog>
+
+<Sheet title="New event" width={470} height={540} bind:open={editing}>
+	<Form id="new-event" onsubmit={save}>…</Form>
+	{#snippet tertiaryAction({ close })}
+		<Button onclick={close}>Cancel</Button>
+	{/snippet}
+	{#snippet primaryAction()}
+		<Button appearance="prominent" type="submit" form="new-event">Save</Button>
+	{/snippet}
+</Sheet>
+```
+
+Open a modal from its `trigger` snippet or by binding `open`. A `<Dialog>` is a short alert or confirmation: cancel on the left (`cancelLabel`, or `false` for none) has focus when it opens, and the prominent confirm on the right fires `onConfirm` (return `false` to stay open). A `<Sheet>` has a fixed `width` and `height`; its content scrolls beneath the header and footer and it keeps 16px clear of a smaller viewport. Its footer takes up to three snippets, `tertiaryAction` (far left), `secondaryAction` and `primaryAction` (far right), each given a `close` function; leave them out for static content. Pressing the background, Escape or the close button closes either as a cancellation and fires `onCancel`. Set `closeOnBackgroundPress={false}` to stop that; Escape follows it unless you set `closeOnEscape`.
 
 ### Tokens
 

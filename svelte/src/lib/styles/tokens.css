@@ -58,6 +58,7 @@
 		0px 83px 50px 0px rgba(0, 0, 0, 0.051);
 	--og-acrylic-highlight: inset 0px 1px 6px 0px #ffffff;
 	--og-blur-menu: 10px;
+	/* The dimmed background behind modals; dialogs themselves use the 10px Acrylic blur. */
 	--og-blur-dialog: 24px;
 
 	/* ── Motion (Animations.md: Interaction Animations) ────────────────────── */

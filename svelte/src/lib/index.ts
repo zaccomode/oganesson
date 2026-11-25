@@ -13,6 +13,8 @@ export { default as FormGroup } from './forms/FormGroup.svelte';
 export { default as FormField, type FormFieldControlProps } from './forms/FormField.svelte';
 export { default as Menu } from './menus/Menu.svelte';
 export { default as MenuItem } from './menus/MenuItem.svelte';
+export { default as Dialog } from './modals/Dialog.svelte';
+export { default as Sheet } from './modals/Sheet.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
 export type {
@@ -23,6 +25,7 @@ export type {
 } from './buttons/types.js';
 export type { SelectOption } from './inputs/select.js';
 export type { MenuAlign, MenuSide } from './menus/menu.js';
+export type { SheetActionArgs } from './modals/modal.js';
 export {
 	setOganessonIcons,
 	getOganessonIcons,
