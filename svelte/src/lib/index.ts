@@ -8,6 +8,9 @@ export { default as RowButton } from './buttons/RowButton.svelte';
 export { default as TextInput } from './inputs/TextInput.svelte';
 export { default as Switch } from './inputs/Switch.svelte';
 export { default as Select } from './inputs/Select.svelte';
+export { default as Form } from './forms/Form.svelte';
+export { default as FormGroup } from './forms/FormGroup.svelte';
+export { default as FormField, type FormFieldControlProps } from './forms/FormField.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
 export type {

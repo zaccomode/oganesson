@@ -98,6 +98,7 @@
 		"@lisse/svelte": "^0.7.3",
 		"@lucide/svelte": "^1.79.0",
 		"bits-ui": "^2.22.0",
+		"esm-env": "^1.2.2",
 		"svelte-toolbelt": "^0.10.7"
 	},
 	"peerDependencies": {

@@ -26,6 +26,7 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	import { cornerSmoothing } from '../tokens.js';
 	import type { IconComponent } from '../buttons/types.js';
 	import { menuHeightForItems, type SelectOption } from './select.js';
+	import { connectFormField, joinIds } from '../forms/context.js';
 
 	interface Props {
 		/** The field's id, for a `<label for>`. */
@@ -85,13 +86,25 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		maxItems = 5,
 		maxHeight,
 		disabled = false,
-		required,
+		required: requiredProp,
 		name,
 		onValueChange,
 		onOpenChange,
 		class: className,
-		...labelling
+		...labellingProps
 	}: Props = $props();
+
+	// Inside a <FormField>, take its id, description and required state.
+	const formField = connectFormField('Select', {
+		id: () => labellingProps.id,
+		icon: () => icon
+	});
+	const required = $derived(requiredProp ?? formField?.required);
+	const labelling = $derived({
+		...labellingProps,
+		id: formField?.inputId ?? labellingProps.id,
+		'aria-describedby': joinIds(formField?.descriptionId, labellingProps['aria-describedby'])
+	});
 
 	const icons = getOganessonIcons();
 
