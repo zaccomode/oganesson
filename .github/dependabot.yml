@@ -29,6 +29,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Dependabot only installs versions that are at least this many days old.
+    # When the lockfile pinned a version newer than that cutoff, the
+    # /svelte runs failed with ETARGET ("No matching version found ... with a
+    # date before"). svelte/.npmrc sets min-release-age to the same number,
+    # so an `npm install` run by hand can't put anything newer in the
+    # lockfile. Change both together. Security updates ignore the cooldown.
+    cooldown:
+      default-days: 3
     ignore:
       # @types/node describes a floor, not a target. The package declares
       # engines.node >=24 and the release workflows build on 24, so these
@@ -42,6 +50,14 @@ updates:
       - dependency-name: '@types/node'
         update-types:
           - version-update:semver-major
+      # bits-ui depends on svelte-toolbelt ^0.10.x. Holding ours to the same
+      # range means an app that installs oganesson-svelte gets one copy
+      # instead of two. Move it when bits-ui moves. Patch bumps, which
+      # include security fixes, still come through.
+      - dependency-name: svelte-toolbelt
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-major
 
     # Split by whether the dependency ships. A bad devDependency breaks the
     # build or the story tests in front of whoever opened the PR; a bad
@@ -52,10 +68,21 @@ updates:
     # rather than bumps, and arrive on their own by virtue of being excluded
     # here. A Svelte major also means revisiting the peerDependencies range
     # by hand.
+    #
+    # Under semver, a minor bump of a 0.x package is a breaking change, so
+    # 0.x dependencies are kept out of both groups and arrive one per pull
+    # request, the same way majors do. Dependabot can't match on version, so
+    # they are listed by name. Add any new 0.x dependency here, and remove
+    # one once it reaches 1.0.
     groups:
       dev-minor-patch:
         dependency-type: development
         update-types: [minor, patch]
+        exclude-patterns:
+          - publint
       prod-minor-patch:
         dependency-type: production
         update-types: [minor, patch]
+        exclude-patterns:
+          - '@lisse/*'
+          - svelte-toolbelt
