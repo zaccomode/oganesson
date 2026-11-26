@@ -1,6 +1,6 @@
 {
 	"name": "oganesson-svelte",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Svelte implementation of the Oganesson design system, built on Bits UI.",
 	"keywords": [
 		"svelte",
@@ -99,7 +99,7 @@
 		"@lucide/svelte": "^1.79.0",
 		"bits-ui": "^2.22.0",
 		"esm-env": "^1.2.2",
-		"svelte-toolbelt": "^0.13.0"
+		"svelte-toolbelt": "^0.10.7"
 	},
 	"peerDependencies": {
 		"svelte": "^5.32.0"
