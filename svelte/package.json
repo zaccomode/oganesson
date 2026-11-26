@@ -1,6 +1,6 @@
 {
 	"name": "oganesson-svelte",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "Svelte implementation of the Oganesson design system, built on Bits UI.",
 	"keywords": [
 		"svelte",

@@ -6,6 +6,7 @@
 		Component as Placeholder,
 		Copy,
 		Ellipsis,
+		Settings,
 		FolderKey,
 		Italic,
 		Link,
@@ -18,10 +19,12 @@
 	} from '@lucide/svelte';
 	import {
 		Button,
+		Dialog,
 		IconButton,
 		Menu,
 		MenuItem,
 		Select,
+		Sheet,
 		TextInput,
 		Toolbar,
 		ToolbarGroup,
@@ -61,6 +64,22 @@
 	const surfaceOf = (group: Element) =>
 		group.querySelector<HTMLElement>('.og-toolbar-group-surface')!;
 </script>
+
+{#snippet deleteTrigger({ props }: { props: Record<string, unknown> })}
+	<IconButton {...props} icon={Trash2} label="Delete" tooltip={false} />
+{/snippet}
+
+{#snippet settingsTrigger({ props }: { props: Record<string, unknown> })}
+	<IconButton {...props} icon={Settings} label="Settings" tooltip={false} />
+{/snippet}
+
+{#snippet sheetCancel({ close }: { close: () => void })}
+	<Button onclick={close}>Cancel</Button>
+{/snippet}
+
+{#snippet sheetSave({ close }: { close: () => void })}
+	<Button appearance="prominent" onclick={close}>Save</Button>
+{/snippet}
 
 {#snippet more({ props, open }: { props: Record<string, unknown>; open: boolean })}
 	<IconButton {...props} active={open} icon={Ellipsis} label="More" tooltip={false} />
@@ -314,6 +333,102 @@
 				<Menu trigger={more}>
 					<MenuItem icon={Copy} label="Duplicate" />
 				</Menu>
+			</ToolbarGroup>
+		</Toolbar>
+	</TooltipProvider>
+</Story>
+
+<!-- A dialog or sheet opened from a toolbar: the trigger joins the toolbar's roving
+     focus, but the modal is portalled out of it, so its buttons keep their own
+     tab stops and arrow keys. -->
+<Story
+	name="Modals"
+	asChild
+	play={async ({ canvasElement }) => {
+		const toolbar = canvasElement.querySelector<HTMLElement>('.og-toolbar')!;
+		const [bold, remove, settings] = [...toolbar.querySelectorAll<HTMLElement>('.og-button')];
+		const modal = () => document.querySelector<HTMLElement>('.og-modal');
+		const named = (name: string) =>
+			[...modal()!.querySelectorAll<HTMLElement>('button')].find(
+				(b) => (b.getAttribute('aria-label') ?? b.textContent?.trim()) === name
+			)!;
+		const noToolbarButtons = async () => {
+			const buttons = [...modal()!.querySelectorAll<HTMLElement>('button')];
+			await expect(buttons.length).toBeGreaterThan(0);
+			for (const button of buttons) {
+				await expect(button.tabIndex).toBe(0);
+				await expect(button.hasAttribute('data-toolbar-item')).toBe(false);
+			}
+		};
+
+		// The triggers are toolbar buttons.
+		await expect(remove.hasAttribute('data-toolbar-item')).toBe(true);
+		await expect(settings.hasAttribute('data-toolbar-item')).toBe(true);
+		bold.focus();
+		await userEvent.keyboard('{ArrowRight}');
+		await expect(document.activeElement).toBe(remove);
+
+		// Dialog: Tab cycles Cancel → Confirm → Close, and the arrow keys stay inside.
+		await userEvent.keyboard('{Enter}');
+		await waitFor(() => expect(modal()).not.toBeNull());
+		const cancel = named('Cancel');
+		const confirm = named('Delete');
+		const close = named('Close');
+		await waitFor(() => expect(document.activeElement).toBe(cancel));
+		await noToolbarButtons();
+		await userEvent.tab();
+		await expect(document.activeElement).toBe(confirm);
+		await userEvent.tab();
+		await expect(document.activeElement).toBe(close);
+		await userEvent.tab();
+		await expect(document.activeElement).toBe(cancel);
+		await userEvent.keyboard('{ArrowRight}');
+		await expect(document.activeElement).toBe(confirm);
+		await userEvent.keyboard('{ArrowLeft}');
+		await expect(document.activeElement).toBe(cancel);
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(modal()).toBeNull());
+		await waitFor(() => expect(document.activeElement).toBe(remove));
+
+		// Sheet: Tab reaches the footer actions and the close button.
+		await userEvent.keyboard('{ArrowRight}');
+		await expect(document.activeElement).toBe(settings);
+		await userEvent.keyboard('{Enter}');
+		await waitFor(() => expect(modal()).not.toBeNull());
+		await noToolbarButtons();
+		await waitFor(() => expect(modal()!.contains(document.activeElement)).toBe(true));
+		const order: HTMLElement[] = [];
+		for (let i = 0; i < 4; i++) {
+			await userEvent.tab();
+			order.push(document.activeElement as HTMLElement);
+		}
+		for (const name of ['Cancel', 'Save', 'Close']) {
+			await expect(order).toContain(named(name));
+		}
+		await userEvent.click(named('Cancel'));
+		await waitFor(() => expect(modal()).toBeNull());
+	}}
+>
+	<TooltipProvider>
+		<Toolbar aria-label="Actions">
+			<ToolbarGroup>
+				<IconButton icon={Bold} label="Bold" />
+				<Dialog
+					title="Delete item"
+					description="The item will be removed for everyone."
+					confirmLabel="Delete"
+					trigger={deleteTrigger}
+				/>
+				<Sheet
+					title="Settings"
+					width={360}
+					height={240}
+					trigger={settingsTrigger}
+					tertiaryAction={sheetCancel}
+					primaryAction={sheetSave}
+				>
+					<p>Nothing to set yet.</p>
+				</Sheet>
 			</ToolbarGroup>
 		</Toolbar>
 	</TooltipProvider>

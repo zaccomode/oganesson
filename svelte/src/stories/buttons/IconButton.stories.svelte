@@ -1,8 +1,11 @@
 <script module lang="ts">
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import { expect, userEvent, waitFor, within } from 'storybook/test';
-	import { Bell, Pencil, Search, Settings, Trash2 } from '@lucide/svelte';
-	import { IconButton, TooltipProvider } from '#lib';
+	// Trusted input from the test browser. Synthetic events don't drive the browser's
+	// :focus-visible heuristics, which decide whether returned focus shows a tooltip.
+	import { userEvent as browserInput } from 'vitest/browser';
+	import { Bell, Copy, Ellipsis, Pencil, Search, Settings, Trash2 } from '@lucide/svelte';
+	import { Dialog, IconButton, Menu, MenuItem, Toolbar, ToolbarGroup, TooltipProvider } from '#lib';
 
 	const { Story } = defineMeta({
 		title: 'Buttons/IconButton',
@@ -120,6 +123,106 @@
 			<IconButton icon={Trash2} label="Delete" colorway="danger" tooltipSide="bottom" />
 			<IconButton icon={Settings} label="Settings" tooltip="instant" />
 			<IconButton icon={Pencil} label="Edit" tooltip={false} />
+		</div>
+	</TooltipProvider>
+</Story>
+
+<!-- Pressing a button hides its tooltip, and it stays hidden while the pointer
+     rests on the button, inside a toolbar or not. -->
+<Story
+	name="Pressing hides the tooltip"
+	asChild
+	play={async ({ canvasElement }) => {
+		const body = within(document.body);
+		const tooltip = (text: string) =>
+			[...document.querySelectorAll<HTMLElement>('.og-tooltip')].find(
+				(t) => t.textContent?.trim() === text
+			) ?? null;
+
+		for (const button of canvasElement.querySelectorAll<HTMLElement>('.og-button')) {
+			const label = button.getAttribute('aria-label')!;
+			await browserInput.hover(button);
+			await body.findByText(label, {}, { timeout: 1000 });
+			await browserInput.click(button);
+			await waitFor(() => expect(tooltip(label)).toBeNull());
+			// Still hovered and now focused: it doesn't come back.
+			await sleep(800);
+			await expect(tooltip(label)).toBeNull();
+			await expect(document.activeElement).toBe(button);
+			await browserInput.unhover(button);
+			button.blur();
+			await sleep(600);
+		}
+	}}
+>
+	<TooltipProvider>
+		<div class="row pad">
+			<IconButton icon={Search} label="Search" onclick={() => {}} />
+			<Toolbar aria-label="Tools">
+				<ToolbarGroup>
+					<IconButton icon={Bell} label="Notifications" />
+				</ToolbarGroup>
+			</Toolbar>
+		</div>
+	</TooltipProvider>
+</Story>
+
+{#snippet moreTrigger({ props, open }: { props: Record<string, unknown>; open: boolean })}
+	<IconButton {...props} active={open} icon={Ellipsis} label="More" />
+{/snippet}
+
+{#snippet deleteTrigger({ props }: { props: Record<string, unknown> })}
+	<IconButton {...props} icon={Trash2} label="Delete" colorway="danger" />
+{/snippet}
+
+<!-- A button that opens a menu or dialog gets focus back when it closes. Its
+     tooltip doesn't open for that: only keyboard focus shows it. -->
+<Story
+	name="Tooltip after a menu or dialog"
+	asChild
+	play={async ({ canvasElement }) => {
+		const tooltip = (text: string) =>
+			[...document.querySelectorAll<HTMLElement>('.og-tooltip')].find(
+				(t) => t.textContent?.trim() === text
+			) ?? null;
+		const [more, remove] = canvasElement.querySelectorAll<HTMLElement>('.og-button');
+
+		// Choose a menu item: the menu closes and focus returns to the button.
+		await browserInput.click(more);
+		const item = await within(document.body).findByText('Duplicate');
+		await browserInput.click(item);
+		await waitFor(() => expect(document.querySelector('.og-menu')).toBeNull());
+		await waitFor(() => expect(document.activeElement).toBe(more));
+		await sleep(800);
+		await expect(tooltip('More')).toBeNull();
+
+		// Cancel a dialog: the same.
+		await browserInput.click(remove);
+		const cancel = await within(document.body).findByText('Cancel');
+		await browserInput.click(cancel);
+		await waitFor(() => expect(document.querySelector('.og-dialog')).toBeNull());
+		await waitFor(() => expect(document.activeElement).toBe(remove));
+		await sleep(800);
+		await expect(tooltip('Delete')).toBeNull();
+
+		// Keyboard focus still shows it.
+		await browserInput.keyboard('{Shift>}{Tab}{/Shift}');
+		await expect(document.activeElement).toBe(more);
+		await waitFor(() => expect(tooltip('More')).not.toBeNull(), { timeout: 1000 });
+		more.blur();
+	}}
+>
+	<TooltipProvider>
+		<div class="row pad">
+			<Menu trigger={moreTrigger}>
+				<MenuItem icon={Copy} label="Duplicate" />
+			</Menu>
+			<Dialog
+				title="Delete item"
+				description="The item will be removed."
+				confirmLabel="Delete"
+				trigger={deleteTrigger}
+			/>
 		</div>
 	</TooltipProvider>
 </Story>

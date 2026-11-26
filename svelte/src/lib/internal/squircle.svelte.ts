@@ -2,6 +2,17 @@ import { smoothCorners, type EffectsConfig, type SmoothCornersAction } from '@li
 import type { Attachment } from 'svelte/attachments';
 import { cornerSmoothing, minSquircleRadius } from '../tokens.js';
 
+/**
+ * The "Acrylic (Elevated)" highlight shared by menus, selects, toolbar groups,
+ * dialogs and sheets: a white inner shadow drawn along the squircle. The drop
+ * shadow behind it stays a CSS `box-shadow` on the rounded element (Shapes.md).
+ *
+ * Kept in one place so every elevated surface changes together.
+ */
+export const elevatedEffects: EffectsConfig = {
+	innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
+};
+
 export interface SquircleOptions {
 	/**
 	 * Corner radius in px. Defaults to the element's computed CSS

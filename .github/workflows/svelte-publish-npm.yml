@@ -35,8 +35,10 @@ jobs:
     env:
       TAG: ${{ github.event.release.tag_name || github.ref_name }}
     steps:
-      # Trusted publishing needs npm 11.5.1 or later, which Node 24 ships.
-      - uses: actions/setup-node@v7
+      # Trusted publishing needs npm 11.5.1 or later, which Node 24 ships; the
+      # runner's preinstalled Node may be older. Pinned to a commit, because this
+      # job holds the identity token npm accepts.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
@@ -48,6 +50,47 @@ jobs:
           set -euo pipefail
           gh release download "$TAG" --repo "${{ github.repository }}" --pattern 'oganesson-svelte-*.tgz' --dir "$RUNNER_TEMP/release"
           ls "$RUNNER_TEMP/release"
+
+      # Publish nothing but the tarball svelte-release.yml built for this tag:
+      # exactly one file, the one whose SHA-256 that workflow wrote into the
+      # release notes, holding this tag's version of oganesson-svelte.
+      - name: Check the tarball
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${TAG#svelte-v}"
+          shopt -s nullglob
+          tarballs=("$RUNNER_TEMP"/release/oganesson-svelte-*.tgz)
+          if [ "${#tarballs[@]}" -ne 1 ]; then
+            echo "::error::Expected one oganesson-svelte tarball on $TAG, found ${#tarballs[@]}."
+            exit 1
+          fi
+          tarball="${tarballs[0]}"
+
+          manifest="$(tar -xzOf "$tarball" package/package.json)"
+          name="$(jq -r .name <<< "$manifest")"
+          packed="$(jq -r .version <<< "$manifest")"
+          if [ "$name" != "oganesson-svelte" ] || [ "$packed" != "$version" ]; then
+            echo "::error::The tarball on $TAG holds $name@$packed, not oganesson-svelte@$version."
+            exit 1
+          fi
+
+          notes="$(gh release view "$TAG" --repo "${{ github.repository }}" --json body --jq .body)"
+          expected="$(grep -oE 'SHA-256 of `oganesson-svelte-[^`]+\.tgz`: `[0-9a-f]{64}`' <<< "$notes" | grep -oE '[0-9a-f]{64}' | head -1 || true)"
+          if [ -z "$expected" ]; then
+            echo "::error::The release notes for $TAG have no SHA-256 line for the tarball." \
+                 "svelte-release.yml writes it; restore it from that run's log."
+            exit 1
+          fi
+          actual="$(sha256sum "$tarball" | cut -d' ' -f1)"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error::The tarball on $TAG has SHA-256 $actual, but the release notes" \
+                 "record $expected. It was replaced after the release was built."
+            exit 1
+          fi
+          echo "$(basename "$tarball"): oganesson-svelte@$version, SHA-256 $actual."
 
       # The first version is published by hand (npm only lets a trusted
       # publisher be added to a package that exists), and a retry may follow a

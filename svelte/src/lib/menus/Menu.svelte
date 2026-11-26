@@ -25,10 +25,9 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 <script lang="ts">
 	import { DropdownMenu } from 'bits-ui';
 	import { DEV } from 'esm-env';
-	import type { EffectsConfig } from '@lisse/svelte';
 	import type { Snippet } from 'svelte';
 	import type { ClassValue } from 'svelte/elements';
-	import { squircle } from '../internal/squircle.svelte.js';
+	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import { MAX_MENU_ITEMS, type MenuAlign, type MenuSide } from './menu.js';
 
 	interface Props {
@@ -77,12 +76,6 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 			);
 		}
 	});
-
-	// Acrylic (Elevated): the highlight is an inner shadow drawn along the squircle.
-	// The drop shadow stays a CSS box-shadow on the rounded menu behind it (Shapes.md).
-	const menuEffects: EffectsConfig = {
-		innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
-	};
 </script>
 
 <DropdownMenu.Root bind:open {onOpenChange}>
@@ -104,7 +97,7 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 			aria-labelledby={ariaLabel ? undefined : triggerId}
 			style="--og-menu-width: {width}px"
 		>
-			<div class="og-menu-surface" {@attach squircle({ radius: 12, effects: menuEffects })}>
+			<div class="og-menu-surface" {@attach squircle({ radius: 12, effects: elevatedEffects })}>
 				{@render children()}
 			</div>
 		</DropdownMenu.Content>

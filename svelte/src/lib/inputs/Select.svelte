@@ -17,12 +17,11 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 <script lang="ts">
 	import { Combobox, Select as SelectPrimitive } from 'bits-ui';
 	import { generatePath } from '@lisse/core';
-	import type { EffectsConfig } from '@lisse/svelte';
 	import type { ClassValue } from 'svelte/elements';
 	import Icon from '../icons/Icon.svelte';
 	import { getOganessonIcons } from '../icons/context.js';
 	import FocusRing from '../internal/FocusRing.svelte';
-	import { squircle } from '../internal/squircle.svelte.js';
+	import { elevatedEffects, squircle } from '../internal/squircle.svelte.js';
 	import { cornerSmoothing } from '../tokens.js';
 	import type { IconComponent } from '../buttons/types.js';
 	import { menuHeightForItems, type SelectOption } from './select.js';
@@ -225,12 +224,6 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	);
 
 	const menuMaxHeight = $derived(maxHeight ?? menuHeightForItems(maxItems));
-
-	// Acrylic (Elevated): the highlight is an inner shadow drawn along the squircle.
-	// The drop shadow stays a CSS box-shadow on the rounded menu behind it (Shapes.md).
-	const menuEffects: EffectsConfig = {
-		innerShadow: { offsetX: 0, offsetY: 1, blur: 6, spread: 0, color: '#ffffff', opacity: 1 }
-	};
 </script>
 
 {#snippet field()}
@@ -291,7 +284,10 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 			customAnchor={typeahead ? fieldElement : null}
 			style="--og-select-max-height: {menuMaxHeight}px; --og-select-min-height: {minHeight}px"
 		>
-			<div class="og-select-menu-surface" {@attach squircle({ radius: 12, effects: menuEffects })}>
+			<div
+				class="og-select-menu-surface"
+				{@attach squircle({ radius: 12, effects: elevatedEffects })}
+			>
 				<SelectPrimitive.Viewport class="og-select-viewport" bind:ref={viewport}>
 					<div
 						class="og-select-list"

@@ -15,15 +15,24 @@ and publishing the draft GitHub release is the approval to put it on npm.
 2. **Merge it.** Once the `oganesson-svelte` CI workflow passes on `main`,
    `.github/workflows/svelte-tag-release.yml` sees the version change, tags the
    commit `svelte-v0.2.0` and starts `.github/workflows/svelte-release.yml` on
-   that tag. That runs lint, svelte-check and the tests, packs the package
-   (`prepack` runs `svelte-package` and `publint`), and leaves a **draft**
-   release with `oganesson-svelte-0.2.0.tgz` attached.
+   that tag. Its `build` job runs lint, svelte-check and the tests and packs
+   the package (`prepack` runs `svelte-package` and `publint`), all with a
+   read-only token. Its `draft` job, the only one with write access, runs no
+   repository or dependency code: it takes the tarball from `build` and leaves
+   a **draft** release with `oganesson-svelte-0.2.0.tgz` attached and the
+   tarball's SHA-256 at the top of the notes.
 
 3. **Publish the draft** from the repository's Releases page. That starts
-   `.github/workflows/svelte-publish-npm.yml`, which publishes the release's own
-   tarball, unchanged, to npm with provenance. A release published with **Set
-   as a pre-release** ticked stays on GitHub only; unticking it later publishes
-   it then.
+   `.github/workflows/svelte-publish-npm.yml`, which checks that the release
+   has exactly one tarball, that it holds `oganesson-svelte` at the tag's
+   version, and that its SHA-256 matches the line in the notes, then publishes
+   it, unchanged, to npm with provenance. Edit the notes as you like, but keep
+   the SHA-256 line: without it the publish fails. A release published with
+   **Set as a pre-release** ticked stays on GitHub only; unticking it later
+   publishes it then.
+
+Every action in `.github/workflows` is pinned to a full commit SHA, with its
+version in a comment. Dependabot's `github-actions` updates move both.
 
 Pushing a tag by hand still works, and is the fallback if the tagging workflow
 fails:

@@ -1,5 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { resolveRadius } from './squircle.svelte';
+import { elevatedEffects, resolveRadius } from './squircle.svelte';
 
 describe('resolveRadius', () => {
 	it('uses the computed CSS radius by default', () => {
@@ -20,5 +21,30 @@ describe('resolveRadius', () => {
 	it('ignores values it cannot parse', () => {
 		expect(resolveRadius(undefined, '')).toBeNull();
 		expect(resolveRadius(undefined, 'auto')).toBeNull();
+	});
+});
+
+describe('elevatedEffects', () => {
+	const lib = new URL('../', import.meta.url);
+	const sources = readdirSync(lib, { recursive: true, encoding: 'utf8' }).filter((file) =>
+		/\.(svelte|ts)$/.test(file)
+	);
+
+	it('is the white Acrylic (Elevated) highlight', () => {
+		expect(elevatedEffects.innerShadow).toEqual({
+			offsetX: 0,
+			offsetY: 1,
+			blur: 6,
+			spread: 0,
+			color: '#ffffff',
+			opacity: 1
+		});
+	});
+
+	it('is the only inner shadow defined in the library', () => {
+		const definers = sources.filter((file) =>
+			/innerShadow\s*:/.test(readFileSync(new URL(file, lib), 'utf8'))
+		);
+		expect(definers).toEqual(['internal/squircle.svelte.ts']);
 	});
 });
