@@ -42,9 +42,9 @@ describe('elevatedEffects', () => {
 	});
 
 	it('is the only inner shadow defined in the library', () => {
-		const definers = sources.filter((file) =>
-			/innerShadow\s*:/.test(readFileSync(new URL(file, lib), 'utf8'))
-		);
+		const definers = sources
+			.map((file) => file.replaceAll('\\', '/'))
+			.filter((file) => /innerShadow\s*:/.test(readFileSync(new URL(file, lib), 'utf8')));
 		expect(definers).toEqual(['internal/squircle.svelte.ts']);
 	});
 });
