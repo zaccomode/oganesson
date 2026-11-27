@@ -119,6 +119,19 @@ Wrap your app in `<TooltipProvider>` so icon-button tooltips share timing: 500ms
 
 Give either every field in a form an `icon` or none, and don't give an input its own icon inside a field that has one; both log a warning in development.
 
+Wrap a field that only applies some of the time in `<Reveal when={…}>`, directly after the field it depends on. It animates in and out with the reveal motion, and the rest of the form slides to make room:
+
+```svelte
+<FormGroup>
+	<FormField label="Use a nickname"><Switch bind:checked={useNickname} /></FormField>
+	<Reveal when={useNickname}>
+		<FormField label="Nickname"><TextInput bind:value={nickname} /></FormField>
+	</Reveal>
+</FormGroup>
+```
+
+`<Reveal>` works anywhere, not only in forms. For your own wrapper element, use the transition directly: `in:reveal out:reveal` (`import { reveal } from 'oganesson-svelte'`).
+
 ### Menus
 
 ```svelte

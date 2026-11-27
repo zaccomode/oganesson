@@ -80,6 +80,14 @@
 	--og-duration-menu-out: 150ms;
 	--og-ease-menu-out: cubic-bezier(0.645, 0.045, 0.355, 1);
 
+	/* Reveal motion: content appearing or disappearing within its parent, such as
+	   a conditional form field (Animations.md). Times like the menu motion, but
+	   separate from it. */
+	--og-duration-reveal-in: 200ms;
+	--og-ease-reveal-in: cubic-bezier(0.215, 0.61, 0.355, 1);
+	--og-duration-reveal-out: 150ms;
+	--og-ease-reveal-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+
 	/* The dimmed background behind modals: a quick fade in, a longer one out (Modals.md). */
 	--og-duration-backdrop-in: 200ms;
 	--og-duration-backdrop-out: 300ms;
@@ -93,6 +101,8 @@
 		--og-duration-focus-out: 0ms;
 		--og-duration-menu-in: 0ms;
 		--og-duration-menu-out: 0ms;
+		--og-duration-reveal-in: 0ms;
+		--og-duration-reveal-out: 0ms;
 		--og-duration-backdrop-in: 0ms;
 		--og-duration-backdrop-out: 0ms;
 	}

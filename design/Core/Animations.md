@@ -67,3 +67,14 @@ Menus, select input menus and modals grow from 95% scale and sharpen from a 4px 
 The scale, shadow, fade and blur all use the same timing, so they move together. The entrance starts fast and settles gently into place. The exit is quicker and accelerates smoothly away, so a closing menu gets out of the way without snapping (see _Inputs.md — Select Menu_). With reduced motion, menus and modals appear and disappear instantly.
 
 Implementation note: apply the fade and blur to the element that carries the acrylic backdrop blur (and to anything drawn beside it, such as the inner-shadow overlay), never to an ancestor of it. Any filter on an ancestor, even `blur(0px)` at rest, or opacity below 1, isolates a descendant's backdrop blur, so the acrylic stops blurring the page behind it. The scale and drop shadow can sit on an outer element, since transforms don't isolate backdrops.
+
+## Reveal Motion
+
+Content that appears or disappears within its parent, such as a form field that only applies while a switch is on, reveals itself rather than snapping in or out. It fades in, sharpens from a 4px blur and grows from 95% scale (from its top edge) as it appears, and fades, blurs and shrinks back as it disappears. Its height opens up and closes with it, along with its padding, borders and the gap before it, so the content after it slides into place instead of jumping.
+
+| Phase    | Duration | Curve                                                       |
+| -------- | -------- | ----------------------------------------------------------- |
+| Entrance | 200ms    | `cubic-bezier(0.215, 0.61, 0.355, 1)`, a cubic ease-out     |
+| Exit     | 150ms    | `cubic-bezier(0.645, 0.045, 0.355, 1)`, a cubic ease-in-out |
+
+With reduced motion, the content appears and disappears instantly. If the content is reversed partway through (the switch flipped back), it starts the other direction from where it is.
