@@ -516,8 +516,8 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		   transition is the one that runs on entrance. */
 		transform-origin: top center;
 		transition:
-			scale var(--og-duration-menu-in) var(--og-ease-movement),
-			box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
+			scale var(--og-duration-menu-in) var(--og-ease-menu-in),
+			box-shadow var(--og-duration-menu-in) var(--og-ease-menu-in);
 	}
 
 	/* Above the field (opened or flipped there), it grows from its bottom edge. */
@@ -526,15 +526,16 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	}
 
 	/*
-	 * Grows from 90% and sharpens from a 4px blur while fading in on open; the
-	 * reverse on close. The fade and blur run on its children, not on this element:
-	 * an ancestor with opacity below 1 or a filter isolates the surface's
-	 * backdrop-filter, so WebKit showed no acrylic blur until the entrance
-	 * finished. Only the scale and the shadow animate here.
+	 * Menu motion (Animations.md): grows from 95% and sharpens from a 4px blur
+	 * while fading in on open; the reverse on close. The fade and blur run on its
+	 * children, not on this element: any filter here, even blur(0px) at rest, or
+	 * opacity below 1, isolates the surface's backdrop-filter, so the acrylic
+	 * stops blurring the page behind it. Only the scale and the shadow animate
+	 * here.
 	 */
 	:global(.og-select-menu[data-starting-style]),
 	:global(.og-select-menu[data-ending-style]) {
-		scale: 0.9;
+		scale: 0.95;
 		box-shadow: none;
 	}
 
@@ -542,8 +543,8 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 	   Lisse draws as the surface's sibling (it would otherwise outlive the menu). */
 	:global(.og-select-menu > *) {
 		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
-			filter var(--og-duration-menu-in) var(--og-ease-movement);
+			opacity var(--og-duration-menu-in) var(--og-ease-menu-in),
+			filter var(--og-duration-menu-in) var(--og-ease-menu-in);
 	}
 
 	:global(.og-select-menu[data-starting-style] > *),
@@ -552,12 +553,11 @@ or `maxHeight` pixels, and never runs past the viewport; longer lists scroll.
 		filter: blur(4px);
 	}
 
-	/* Bits UI applies this while closing, so its transition runs on exit. The exit
-	   uses the snappier interaction curve. */
+	/* Bits UI applies this while closing, so its transition runs on exit. */
 	:global(.og-select-menu[data-ending-style]),
 	:global(.og-select-menu[data-ending-style] > *) {
 		transition-duration: var(--og-duration-menu-out);
-		transition-timing-function: var(--og-ease-out);
+		transition-timing-function: var(--og-ease-menu-out);
 	}
 
 	:global(.og-select-menu-surface) {

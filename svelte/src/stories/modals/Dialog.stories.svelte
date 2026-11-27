@@ -145,7 +145,7 @@
 		for (const child of dialog()!.children) {
 			await expect(getComputedStyle(child).transitionProperty).toBe('opacity, filter');
 			await expect(getComputedStyle(child).transitionDuration).toBe(
-				reduced ? '0s, 0s' : '0.1s, 0.1s'
+				reduced ? '0s, 0s' : '0.2s, 0.2s'
 			);
 		}
 

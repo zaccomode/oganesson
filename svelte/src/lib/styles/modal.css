@@ -60,30 +60,31 @@
 	box-shadow: var(--og-shadow-elevated);
 	outline: none;
 	transition:
-		scale var(--og-duration-menu-in) var(--og-ease-movement),
-		box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
+		scale var(--og-duration-menu-in) var(--og-ease-menu-in),
+		box-shadow var(--og-duration-menu-in) var(--og-ease-menu-in);
 }
 
 /*
  * Modal motion (Modals.md, Motion): the menu motion from Animations.md, scaled
- * from the centre. Grows from 90% and sharpens from a 4px blur while fading in;
+ * from the centre. Grows from 95% and sharpens from a 4px blur while fading in;
  * the reverse on close.
  *
- * The fade and blur run on the modal's children, never on .og-modal itself: an
- * ancestor with opacity below 1 or a filter isolates the surface's backdrop
- * blur, so WebKit would show no acrylic until the entrance finished. Every child
- * fades, including the inner-shadow overlay Lisse draws beside the surface.
+ * The fade and blur run on the modal's children, never on .og-modal itself: any
+ * filter on an ancestor, even blur(0px) at rest, or opacity below 1, isolates
+ * the surface's backdrop blur, so the acrylic stops blurring the page behind it.
+ * Every child fades, including the inner-shadow overlay Lisse draws beside the
+ * surface.
  */
 .og-modal[data-starting-style],
 .og-modal[data-ending-style] {
-	scale: 0.9;
+	scale: 0.95;
 	box-shadow: none;
 }
 
 .og-modal > * {
 	transition:
-		opacity var(--og-duration-menu-in) var(--og-ease-movement),
-		filter var(--og-duration-menu-in) var(--og-ease-movement);
+		opacity var(--og-duration-menu-in) var(--og-ease-menu-in),
+		filter var(--og-duration-menu-in) var(--og-ease-menu-in);
 }
 
 .og-modal[data-starting-style] > *,
@@ -95,7 +96,7 @@
 .og-modal[data-ending-style],
 .og-modal[data-ending-style] > * {
 	transition-duration: var(--og-duration-menu-out);
-	transition-timing-function: var(--og-ease-out);
+	transition-timing-function: var(--og-ease-menu-out);
 }
 
 .og-modal-surface {

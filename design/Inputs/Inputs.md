@@ -57,7 +57,7 @@ Each item has a 12px check slot on the left, so labels line up whether or not th
 
 **Scrolling:** a scrolling menu draws its own scrollbar, a 2px rounded line in Dark at 40% opacity, 4px in from the right edge and inset 12px from the top and bottom. The menu's right padding widens to 8px to make room for it. Whenever there are options hidden above or below, a 20px overflow indicator fades the menu towards white (95% opacity) at that edge to encourage scrolling. These two colors are one-off values for menus, not palette colors.
 
-**Motion:** the menu grows from 90% scale and sharpens from a 4px blur while fading in when it opens, and shrinks back to 90% and blurs while fading out when it closes, scaling from the middle of the edge facing the field: its top edge when it's below the field, its bottom edge when it's above. The entrance takes 100ms (ease-out) and the exit 300ms (the interaction fade-out curve); see _Animations.md — Menu Motion_.
+**Motion:** the menu grows from 95% scale and sharpens from a 4px blur while fading in when it opens, and shrinks back to 95% and blurs while fading out when it closes, scaling from the middle of the edge facing the field: its top edge when it's below the field, its bottom edge when it's above. The entrance takes 200ms (a cubic ease-out) and the exit 150ms (a cubic ease-in-out); see _Animations.md — Menu Motion_.
 
 ## Switches
 

@@ -120,22 +120,22 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 		   aligned edge, or the middle of the facing edge when centred. */
 		transform-origin: var(--bits-floating-transform-origin);
 		transition:
-			scale var(--og-duration-menu-in) var(--og-ease-movement),
-			box-shadow var(--og-duration-menu-in) var(--og-ease-movement);
+			scale var(--og-duration-menu-in) var(--og-ease-menu-in),
+			box-shadow var(--og-duration-menu-in) var(--og-ease-menu-in);
 	}
 
 	/*
-	 * Menu motion (Animations.md): grows from 90% and sharpens from a 4px blur
+	 * Menu motion (Animations.md): grows from 95% and sharpens from a 4px blur
 	 * while fading in on open; the reverse on close.
 	 *
-	 * The fade and blur run on its children, not on this element: an ancestor with
-	 * opacity below 1 or a filter isolates the surface's backdrop-filter, so WebKit
-	 * showed no acrylic blur until the entrance finished. Only the scale (transforms
-	 * don't isolate backdrops) and the shadow animate here.
+	 * The fade and blur run on its children, not on this element: any filter here,
+	 * even blur(0px) at rest, or opacity below 1, isolates the surface's
+	 * backdrop-filter, so the acrylic stops blurring the page behind it. Only the
+	 * scale (transforms don't isolate backdrops) and the shadow animate here.
 	 */
 	:global(.og-menu[data-starting-style]),
 	:global(.og-menu[data-ending-style]) {
-		scale: 0.9;
+		scale: 0.95;
 		box-shadow: none;
 	}
 
@@ -143,8 +143,8 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 	   Lisse draws as the surface's sibling (it would otherwise outlive the menu). */
 	:global(.og-menu > *) {
 		transition:
-			opacity var(--og-duration-menu-in) var(--og-ease-movement),
-			filter var(--og-duration-menu-in) var(--og-ease-movement);
+			opacity var(--og-duration-menu-in) var(--og-ease-menu-in),
+			filter var(--og-duration-menu-in) var(--og-ease-menu-in);
 	}
 
 	:global(.og-menu[data-starting-style] > *),
@@ -157,7 +157,7 @@ Render the trigger through the `trigger` snippet and spread `props` onto it.
 	:global(.og-menu[data-ending-style]),
 	:global(.og-menu[data-ending-style] > *) {
 		transition-duration: var(--og-duration-menu-out);
-		transition-timing-function: var(--og-ease-out);
+		transition-timing-function: var(--og-ease-menu-out);
 	}
 
 	/* Menus.sketchframe: Menu Container. 4px padding around items 2px apart. */

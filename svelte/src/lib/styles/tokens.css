@@ -73,9 +73,12 @@
 	/* Focus indicator: instant in, fades out like hover (Focus.md). */
 	--og-duration-focus-out: 500ms;
 
-	/* Menus: a quick grow-and-fade in, a longer one out (Animations.md). */
-	--og-duration-menu-in: 100ms;
-	--og-duration-menu-out: 300ms;
+	/* Menu motion, used by menus, select menus and modals (Animations.md): a
+	   decelerating grow-and-fade in, and a quicker ease-in-out shrink-and-fade out. */
+	--og-duration-menu-in: 200ms;
+	--og-ease-menu-in: cubic-bezier(0.215, 0.61, 0.355, 1);
+	--og-duration-menu-out: 150ms;
+	--og-ease-menu-out: cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	/* The dimmed background behind modals: a quick fade in, a longer one out (Modals.md). */
 	--og-duration-backdrop-in: 200ms;

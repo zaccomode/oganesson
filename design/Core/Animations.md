@@ -57,6 +57,13 @@ When the user has requested reduced motion, every duration is zero: colours chan
 
 ## Menu Motion
 
-Menus and select input menus grow from 90% scale and sharpen from a 4px blur while fading in when they open, and shrink back to 90% and blur back to 4px while fading out when they close, scaling from the middle of the edge facing the control: the top edge when the menu is below it, the bottom edge when it's above. Menus aligned to one end of their control scale from the corner on that end instead (see _Menus.md — Motion_). The entrance takes **100ms** with `ease-out` (`cubic-bezier(0, 0, 0.58, 1)`), the movement curve, and the exit **300ms** with the interaction fade-out curve `cubic-bezier(0.16, 1, 0.3, 1)`. The quick entrance keeps opening a menu feeling immediate; the exit moves most of the way at once, so the menu gets out of the way (see _Inputs.md — Select Menu_).
+Menus, select input menus and modals grow from 95% scale and sharpen from a 4px blur while fading in when they open, and shrink back to 95% and blur back to 4px while fading out when they close. The drop shadow grows in with them. Menus scale from the middle of the edge facing the control: the top edge when the menu is below it, the bottom edge when it's above. Menus aligned to one end of their control scale from the corner on that end instead (see _Menus.md — Motion_), and modals scale from their centre (see _Modals.md — Motion_).
 
-Implementation note: apply the fade and blur to the element that carries the menu's acrylic backdrop blur (and to anything drawn beside it, such as the inner-shadow overlay), never to an ancestor of it. An ancestor with opacity below 1 or a filter isolates a descendant's backdrop blur, so in WebKit the acrylic only appears once the entrance has finished. The scale and drop shadow can sit on an outer element, since transforms don't isolate backdrops.
+| Phase    | Duration | Curve                                                       |
+| -------- | -------- | ----------------------------------------------------------- |
+| Entrance | 200ms    | `cubic-bezier(0.215, 0.61, 0.355, 1)`, a cubic ease-out     |
+| Exit     | 150ms    | `cubic-bezier(0.645, 0.045, 0.355, 1)`, a cubic ease-in-out |
+
+The scale, shadow, fade and blur all use the same timing, so they move together. The entrance starts fast and settles gently into place. The exit is quicker and accelerates smoothly away, so a closing menu gets out of the way without snapping (see _Inputs.md — Select Menu_). With reduced motion, menus and modals appear and disappear instantly.
+
+Implementation note: apply the fade and blur to the element that carries the acrylic backdrop blur (and to anything drawn beside it, such as the inner-shadow overlay), never to an ancestor of it. Any filter on an ancestor, even `blur(0px)` at rest, or opacity below 1, isolates a descendant's backdrop blur, so the acrylic stops blurring the page behind it. The scale and drop shadow can sit on an outer element, since transforms don't isolate backdrops.
