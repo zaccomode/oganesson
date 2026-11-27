@@ -34,6 +34,8 @@ Form groups may contain both form fields and display-only content that may be us
 
 A group's body has a Background 2 (Acrylic) fill, 16px smooth corners and 8px of padding, with 8px between the items it contains. Every item in a group (fields, buttons and display-only content alike) is separated from the next by a 1px Dark Thick Glass horizontal line, 8px from each. A group's title is a Subtitle, 4px above the body, and names the group for assistive technology. Groups are 16px apart.
 
+Fields can depend on others, such as a nickname field that only applies while a "Use a nickname" switch is on. Show such a field directly after the field it depends on, in the same group, and only while it applies, rather than disabling it. It appears and disappears with the reveal motion (see _Animations.md — Reveal Motion_), and its separator line comes and goes with it.
+
 ## Forms
 
 A form is at most 650px wide. It has no minimum width: it shrinks with its container on narrow screens, and its fields stack their labels above their inputs at those widths. All fields and buttons within a form must be contained within at least one form group.

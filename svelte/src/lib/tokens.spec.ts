@@ -45,7 +45,13 @@ describe('tokens.ts mirrors tokens.css', () => {
 		expect(cssVar('--og-ease-movement')).toBe(motion.easeMovement);
 		expect(cssVar('--og-duration-focus-out')).toBe(`${motion.focusOutMs}ms`);
 		expect(cssVar('--og-duration-menu-in')).toBe(`${motion.menuInMs}ms`);
+		expect(cssVar('--og-ease-menu-in')).toBe(motion.easeMenuIn);
 		expect(cssVar('--og-duration-menu-out')).toBe(`${motion.menuOutMs}ms`);
+		expect(cssVar('--og-ease-menu-out')).toBe(motion.easeMenuOut);
+		expect(cssVar('--og-duration-reveal-in')).toBe(`${motion.revealInMs}ms`);
+		expect(cssVar('--og-ease-reveal-in')).toBe(motion.easeRevealIn);
+		expect(cssVar('--og-duration-reveal-out')).toBe(`${motion.revealOutMs}ms`);
+		expect(cssVar('--og-ease-reveal-out')).toBe(motion.easeRevealOut);
 		expect(cssVar('--og-duration-backdrop-in')).toBe(`${motion.backdropInMs}ms`);
 		expect(cssVar('--og-duration-backdrop-out')).toBe(`${motion.backdropOutMs}ms`);
 	});

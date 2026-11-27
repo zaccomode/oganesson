@@ -48,8 +48,8 @@
 	async function openMenu(trigger: HTMLElement) {
 		await userEvent.click(trigger);
 		await waitFor(() => expect(menu()).not.toBeNull());
-		// The outer menu never fades or blurs (that would hide the surface's backdrop blur
-		// in WebKit until the entrance ends); the surface does.
+		// The outer menu never fades or blurs: any filter or opacity on it, even at rest,
+		// cuts the surface's backdrop blur off from the page. The surface does.
 		await expect(getComputedStyle(menu()!).opacity).toBe('1');
 		await expect(getComputedStyle(menu()!).filter).toBe('none');
 		await waitFor(() =>
@@ -149,18 +149,18 @@
 		await expect(dangerLayer.opacity).toBe('1');
 		await waitFor(() => expect(getComputedStyle(first, '::before').opacity).toBe('0'));
 
-		// Grows from the trigger's corner (top right) over 100ms.
+		// Grows from the trigger's corner (top right) over 200ms.
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const motion = getComputedStyle(menu()!);
 		// Scale and shadow on the menu; fade and blur on its surface.
 		await expect(motion.transitionProperty).toBe('scale, box-shadow');
-		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+		await expect(motion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.2s, 0.2s');
 		// Every child fades: the surface and Lisse's inner-shadow overlay beside it.
 		await expect(menu()!.children.length).toBeGreaterThan(1);
 		for (const child of menu()!.children) {
 			const childMotion = getComputedStyle(child);
 			await expect(childMotion.transitionProperty).toBe('opacity, filter');
-			await expect(childMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.1s, 0.1s');
+			await expect(childMotion.transitionDuration).toBe(reduced ? '0s, 0s' : '0.2s, 0.2s');
 		}
 		await expect(motion.transformOrigin).toBe(`${box.width}px 0px`);
 

@@ -21,6 +21,7 @@ export { default as ToolbarSeparator } from './toolbars/ToolbarSeparator.svelte'
 export { default as ScrollEdgeEffect } from './toolbars/ScrollEdgeEffect.svelte';
 export { default as Tooltip } from './tooltip/Tooltip.svelte';
 export { default as TooltipProvider } from './tooltip/TooltipProvider.svelte';
+export { default as Reveal } from './motion/Reveal.svelte';
 export type {
 	ButtonAppearance,
 	ButtonColorway,
@@ -38,5 +39,6 @@ export {
 	type OganessonIcons
 } from './icons/context.js';
 export { squircle, type SquircleOptions } from './internal/squircle.svelte.js';
+export { reveal } from './motion/reveal.js';
 export * as tokens from './tokens.js';
 export type { ColorToken, TextVariant } from './tokens.js';

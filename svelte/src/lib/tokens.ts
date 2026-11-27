@@ -64,9 +64,16 @@ export const motion = {
 	easeMovement: 'ease-out',
 	/** The focus indicator appears instantly and fades out over this. */
 	focusOutMs: 500,
-	/** Menus grow and fade in quickly, and out more slowly. */
-	menuInMs: 100,
-	menuOutMs: 300,
+	/** Menus, select menus and modals: a decelerating entrance, a quicker ease-in-out exit. */
+	menuInMs: 200,
+	easeMenuIn: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+	menuOutMs: 150,
+	easeMenuOut: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+	/** Content appearing or disappearing within its parent, such as a conditional form field. */
+	revealInMs: 200,
+	easeRevealIn: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+	revealOutMs: 150,
+	easeRevealOut: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
 	/** The dimmed background behind modals fades in quickly, and out more slowly. */
 	backdropInMs: 200,
 	backdropOutMs: 300
